@@ -2,6 +2,7 @@
 
 > **Purpose:** Capture the system capabilities required for each of the six primary demo flows, to be consolidated into a Release 1 build scope.
 > **Status:** In progress — Flow 1 complete, Flows 2–6 pending.
+> **Release scope authority:** The authoritative Release 1 scope baseline is [`../release/release-1-capabilities.md`](../release/release-1-capabilities.md). This working document explains the demo-flow derivation behind that scope.
 
 ---
 
@@ -477,6 +478,8 @@
 
 > **Dashboard surfaces — not yet decided.** The capability list references several distinct dashboard and reporting views: an operational summary, a queue management view, a supervisor intake view, a linked-account view, and a champion/challenger analytics view. These do not need to be separate dashboards — the screen model has not been decided. What is decided is that all the functionalities described across these views must exist in the system. How they are organised into screens, tabs, or drill-downs is a design decision to be made later.
 
+> **Integration and live contact scope.** Release 1 demonstrates DCMS-side integration and contact orchestration readiness through adapter boundaries, contracts, simulated responses, state transitions, and audit evidence. Live third-party integrations, production dialler operation, automated SMS/email sending, payment-link providers, and live bank-validation APIs are outside Release 1 scope unless access and delivery scope change.
+
 ### Data Intake and Integration
 
 - Accept structured batch file intake of customer and debt account records
@@ -487,6 +490,8 @@
 - Transmit placement data packages to third-party collection providers via configurable channel (API or structured file)
 - Receive and log acknowledgements from third-party providers
 - Receive and process inbound payment notifications from third-party providers
+- Define and demonstrate outbound host-system action invocation for write-off, account block, closure, account management, card management, and customer detail update events using a simulated host adapter
+- Define and demonstrate general ledger posting events, acknowledgement/rejection handling, reconciliation states, and audit evidence using a simulated GL adapter
 
 ### Validation and Data Quality
 
@@ -518,6 +523,7 @@
 - Apply a benefit status flag (On Benefit / Off Benefit) as a structured, queryable field
 - Score each account against risk and collections segmentation models
 - Record an enrichment audit trail per field: source, timestamp, version reference
+- Record amounts owed to the customer or their representative and make those amounts available as potential offsets against existing debts based on configured business rules
 
 ### Segmentation and Prioritisation
 
@@ -525,13 +531,14 @@
 - Calculate a treatment priority score per account
 - Derive debt age in days from the debt effective date
 - Allow a business user to modify segmentation thresholds, add segments, and adjust priority ordering without code changes
+- Support predictive analysis and trend forecasting inputs for strategy design and debtor/debt segmentation
 
 ### Collection Strategy
 
 - Define collection strategies as configurable, versioned sets of rules — not hardcoded behaviour
 - Present strategies in a visual or structured interface navigable and interpretable by a business user
 - Allow a business user to add, remove, reorder, and configure strategy steps through a form-driven interface with no code editor or IT change request
-- Allow selection of communication templates from the third-party platform's template library within the strategy interface
+- Allow selection of communication templates from a simulated third-party platform template library within the strategy interface
 - Allow configuration of step conditions in business-readable terms
 - Save every change as a new draft version — the live strategy continues without interruption
 - Display live and draft versions side by side with a readable diff
@@ -542,12 +549,16 @@
 - Support deployment to non-production environments before live promotion
 - Allow one-click rollback to any prior version
 - Record every strategy lifecycle event in the audit trail
+- Provide pre-configured or suggested strategy templates for deceased, insolvency, hardship, and persistent debt scenarios
+- Support pre-arrears and non-delinquent customer strategies for early intervention before delinquency
+- Support campaign strategies that send simulated outbound contact requests and automatically capture simulated customer responses such as payment, arrangement, offer, or settlement
 
 ### Historical Simulation and Champion/Challenger
 
 - Replay a historical set of accounts through a proposed strategy in a sandboxed environment
 - Produce a results comparison: contact rate, promise-to-pay rate, call volume, arrangement creation rate
 - Label all simulation results as modelled projections — live data unaffected
+- Support predictive analysis and trend forecasting inputs for champion/challenger configuration
 - Configure a champion/challenger split by percentage ratio, start date, and evaluation period
 - Apply the split to new accounts only — existing accounts unaffected
 - Assign splits randomly and reproducibly — retrospective path identification supported
@@ -561,12 +572,14 @@
 
 - Automatically assign each segmented account to a work queue based on configurable routing rules
 - Route specialist, vulnerability-flagged, and high-value accounts to appropriate queues
+- Account for agent availability, holiday, sickness, geographic working calendars, and non-working days when assigning work and scheduling actions
 - Display queue management view: names, depth, capacity targets, segment mix, SLA targets
 - Flag queues at risk of capacity or SLA breach
 - Display queue ageing: accounts by time band against SLA target
 - Present ageing as a heatmap or ranked list
 - Automatically escalate accounts breaching SLA threshold in priority
 - Allow bulk reassignment of accounts between queues or teams from the supervisor view
+- Allow authorised users to bulk move accounts forward or backward to a selected point within a workflow, recording reason and audit evidence
 - Record every reassignment: actor, timestamp, accounts affected, source, destination, reason
 - Present each agent with a pre-populated, pre-prioritised worklist on login
 - Display a recommended first action per worklist item
@@ -576,6 +589,7 @@
 - Display full case context on opening an item: account history, customer profile, linked accounts, prior communications, notes, and flags — in one screen
 - Identify an inbound caller and surface their account automatically (screen pop)
 - Present ID&V prompts on the agent screen at call start
+- Capture and apply customer contact preferences for preferred times, channels, language, accessibility needs, and channel exclusions when automated contact strategies create outbound requests
 - Transfer a case between agents or queues carrying all history, notes, suppression events, and flags
 - Record the transfer event: sending agent, receiving queue, timestamp
 
@@ -602,17 +616,22 @@
 - Leave no trace of a blocked action in outbound systems
 - Prevent standard agents from overriding runtime blocks
 - Apply end dates to time-limited restrictions; lift automatically on expiry; log the lift event
+- Support fraud as a separately flaggable account state and enforce any resulting account restrictions through the same runtime action-gating model
 
 ### Communications
 
-- Queue outbound letters to a third-party communications platform via the Notifications API
-- Queue outbound SMS messages
+- Queue outbound letter requests to a simulated third-party communications platform / Notifications API boundary
+- Queue outbound SMS requests to a simulated channel boundary
 - Create outbound call tasks for agents
+- Demonstrate dialler handoff through simulated call-task contracts, queueing rules, expected dialler status callbacks, and outcome handling; live outbound calling is outside Release 1 scope
+- Enforce configurable contact frequency limits and permitted contact time windows before creating any outbound contact request
 - Maintain a communications log per account: channel, template reference, trigger source, send timestamp, delivery status
 - Generate correspondence to multiple parties on a joint debt from a single trigger, producing separate correctly addressed copies
 - Automatically generate and queue confirmation communications on arrangement creation and other key lifecycle events
 - Automatically initiate sequenced breach communications workflows without agent action
 - Record every contact event outcome: delivered, no answer, declined, promise to pay
+- Automatically record simulated unsuccessful outbound call outcomes and trigger configured fallback contact through an alternative simulated channel
+- Automatically generate disclosure notifications at configurable points in the journey, including pre-DCA placement
 
 ### Repayment Arrangement Lifecycle
 
@@ -622,8 +641,10 @@
 - Apply configurable grace/tolerance windows before confirming breach
 - Confirm breach automatically when grace period expires with no payment received
 - Record a promise-to-pay outcome and create a new monitoring step for the promised payment
+- Return accounts from a promise-to-pay sub-process to the same point in the main workflow when the promised payment is not received
 - Support arrangement amendment, versioning, and review
 - Pause an arrangement (e.g. during vulnerability or forbearance period)
+- Support Direct Debit setup, coordination, and resubmission workflow boundaries for repayment arrangements; live bank-detail validation and provider API integration are outside Release 1 scope
 
 ### Income and Expenditure
 
@@ -633,15 +654,19 @@
 - Calculate disposable income using a configurable model (formula, floor, ceiling, reference table — all configurable without code)
 - Present repayment options at multiple frequencies calibrated to disposable income
 - Present statutory forbearance options (breathing space, time to pay) alongside plan options
+- Consider recorded amounts owed to the customer as potential offsets when assessing affordability and repayment options, where configured business rules permit
 
 ### Payment Allocation and Reconciliation
 
 - Allocate payments to debt components in a configurable waterfall order (principal, fees, interest)
 - Update account balance on payment allocation
+- Freeze and unfreeze interest by authorised manual action and automatically suppress interest when an account reaches a configured stage
+- Identify overpayments and support role-controlled refund initiation from within DCMS
 - Calculate and record third-party commission or fee where applicable
 - Create a reconciliation record for each payment
 - Handle partial payments and full settlements
 - Send recall instructions to third-party providers on debt resolution; lift placement flag; track reconciliation
+- On recall from a third-party provider, reinstate the account to the most appropriate internal collection strategy automatically
 
 ### Third-Party Provider Management
 
@@ -652,6 +677,8 @@
 
 - Write off residual amounts automatically (e.g. 1p split residual) with a system-generated reason code
 - Support authorised manual write-off with approval workflow
+- Support configurable archive and purge handling for non-delinquent and written-off accounts
+- Support GDPR data anonymisation, archive, and purge controls where required for data lifecycle compliance
 
 ### Operational Dashboard and Reporting
 
@@ -660,6 +687,8 @@
 - Link performance anomalies to the strategy change audit trail
 - Display strategy performance metrics per segment against a configurable baseline
 - Display vulnerability exception reports: overdue reviews, SLA breaches, approaching expiries
+- Generate pushed on-screen and email-style SLA alerts when thresholds are approached or breached
+- Provide reports identifying accounts not actioned within defined SLA timeframes
 - Allow bulk reassignment directly from the dashboard
 - Generate structured, branded governance reports from live data — configurable templates, multiple output formats
 - Role-filtered views: agent, team leader, operations director — from the same data layer
@@ -670,6 +699,9 @@
 - Support at minimum: standard agent, specialist agent, supervisor/team leader, operations director, strategy manager, business administrator
 - All access filtering from a single data layer — not separate data sets per role
 - Dashboard configuration (KPIs, thresholds, baselines) customisable per role without code changes
+- Enforce delegated authority thresholds on manual actions and recommend referral to an appropriately authorised user when the proposed action exceeds the user's authority
+- Allow user-role limits for write-off, reversal, credits, arrangement thresholds, and other controlled actions
+- Allow admin business users to extend configured data capture with additional fields, attributes, reference data, and controlled dropdown values without code changes
 
 ### Audit Trail (System-Wide)
 
