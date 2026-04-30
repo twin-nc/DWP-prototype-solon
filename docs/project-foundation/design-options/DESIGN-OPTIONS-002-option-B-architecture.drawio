@@ -1,117 +1,202 @@
 <mxfile host="app.diagrams.net" modified="2026-04-30T00:00:00.000Z" agent="Claude" version="24.0.0">
   <diagram id="optionB" name="Option B — Medium Custom Layer (RECOMMENDED)">
-    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1270" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
 
-        <mxCell id="title" value="Option B — Medium Custom Layer  ★ RECOMMENDED ★&#10;DCMS domain services orchestrate Solon primitives. Same JVM, but DCMS BPMN/services/schema are DCMS-owned." style="text;html=1;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="40" y="10" width="1320" height="50" as="geometry" />
+        <!-- Title -->
+        <mxCell id="title" value="Option B — Medium Custom Layer  ★ RECOMMENDED (conditional on Blockers 1, 3 and C3) ★&#10;DCMS domain services orchestrate Solon primitives. Same JVM (Java 17). DCMS BPMN / services / schema are DCMS-owned." style="text;html=1;align=center;verticalAlign=middle;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="8" width="1574" height="44" as="geometry" />
         </mxCell>
 
-        <mxCell id="legend" value="LEGEND&#10;Green = Solon-owned    Blue = DCMS-owned    Amber = Shared/Extension seam    Red dashed = Distinguishing feature of this option" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;" vertex="1" parent="1">
-          <mxGeometry x="40" y="60" width="1320" height="30" as="geometry" />
+        <!-- Legend -->
+        <mxCell id="legend" value="LEGEND:  Green fill = Solon-owned    Blue fill = DCMS-owned    Amber fill = Shared / extension seam    Red dashed border = distinguishing feature of this option OR open blocker / risk callout" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="54" width="1574" height="22" as="geometry" />
         </mxCell>
 
-        <mxCell id="user" value="DWP Agent" style="shape=umlActor;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
-          <mxGeometry x="60" y="160" width="40" height="80" as="geometry" />
+        <!-- ═══════════════════════════════════════════════════
+             LAYER 1 — UI STRIP
+             ═══════════════════════════════════════════════════ -->
+        <mxCell id="uiLabel" value="UI LAYER" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fontStyle=1;fontColor=#1565C0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="100" height="20" as="geometry" />
         </mxCell>
 
-        <mxCell id="ui" value="React UI&#10;(Solon visual language)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="140" y="170" width="180" height="60" as="geometry" />
+        <mxCell id="actor" value="DWP Agent" style="shape=umlActor;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;html=1;outlineConnect=0;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;" vertex="1" parent="1">
+          <mxGeometry x="50" y="104" width="36" height="72" as="geometry" />
         </mxCell>
 
-        <mxCell id="bff" value="DCMS BFF (Backend for Frontend)&#10;Aggregates Solon REST + DCMS service responses" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#B22222;dashed=1;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="350" y="170" width="280" height="60" as="geometry" />
+        <mxCell id="ui" value="&lt;b&gt;React UI&lt;/b&gt;&#10;(Solon visual language)&#10;Calls DCMS BFF exclusively" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=10;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="120" y="100" width="200" height="80" as="geometry" />
         </mxCell>
 
-        <mxCell id="bffNote" value="DIFF vs A: BFF insulates UI from Solon API shapes" style="text;html=1;align=center;fontSize=10;fontStyle=2;fontColor=#B22222;" vertex="1" parent="1">
-          <mxGeometry x="350" y="232" width="280" height="20" as="geometry" />
+        <!-- ─── BFF STRIP ─── -->
+        <mxCell id="bffStrip" value="&lt;b&gt;DCMS BFF (Backend for Frontend)&lt;/b&gt;  —  aggregates Solon REST + DCMS service responses into workspace responses  ·  insulates UI from Solon API shape changes" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;fontSize=11;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="198" width="1574" height="32" as="geometry" />
         </mxCell>
 
-        <mxCell id="dcmsBox" value="DCMS Custom Layer  —  in Solon's JVM via revenue-management-be-custom  (Spring beans + DCMS BPMN definitions)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;verticalAlign=top;fontStyle=1;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="40" y="280" width="1320" height="240" as="geometry" />
+        <mxCell id="bffNote" value="Solon REST stability = Blocker 2 (see Open Blockers callout). If Solon REST APIs are not a stable external contract, BFF aggregation model must be redesigned." style="text;html=1;align=left;verticalAlign=middle;fontSize=9;fontColor=#B22222;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="232" width="1574" height="16" as="geometry" />
         </mxCell>
 
-        <mxCell id="bsGateB" value="BreathingSpace&#10;GatingService&#10;&#10;Own schema table&#10;breathing_space_gate_log&#10;&#10;Reads Solon active_suppressions&#10;Returns PERMIT/SUPPRESS/DEFER" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#B22222;dashed=1;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="60" y="320" width="200" height="180" as="geometry" />
+        <!-- ═══════════════════════════════════════════════════
+             LAYER 2 — SOLON REST GATEWAY STRIP
+             ═══════════════════════════════════════════════════ -->
+        <mxCell id="gatewayStrip" value="Solon REST API Gateway  ·  Keycloak Bearer JWT on all calls  ·  BFF calls gateway for Solon data" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1e2d3d;strokeColor=#1e2d3d;fontColor=#ffffff;fontSize=11;fontStyle=1;verticalAlign=middle;" vertex="1" parent="1">
+          <mxGeometry x="40" y="254" width="1574" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="gatewayRoutes" value="/suppression-management  ·  /case-management  ·  /taxpayer-accounting  ·  /human-task-management  ·  /drools-runtime  ·  /contact-management  (BFF uses these for sync queries)" style="text;html=1;align=left;verticalAlign=middle;fontSize=9;fontColor=#88aadd;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="50" y="286" width="1550" height="16" as="geometry" />
         </mxCell>
 
-        <mxCell id="cc" value="Champion/&#10;Challenger&#10;Service&#10;&#10;Own schema" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="280" y="320" width="140" height="180" as="geometry" />
+        <!-- ═══════════════════════════════════════════════════
+             LAYER 3 — DCMS CUSTOM SERVICES BAND (amber)
+             ═══════════════════════════════════════════════════ -->
+        <mxCell id="dcmsBand" value="DCMS Custom Layer  —  revenue-management-be-custom (Spring beans) + DCMS BPMN definitions deployed in Solon's Amplio  ·  same JVM as Solon" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;verticalAlign=top;fontStyle=1;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="308" width="1574" height="230" as="geometry" />
         </mxCell>
 
-        <mxCell id="ie" value="IE Assessment&#10;Service&#10;&#10;Own schema" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="430" y="320" width="140" height="180" as="geometry" />
+        <!-- C2 caveat note -->
+        <mxCell id="c2Note" value="C2 caveat: in-process Spring beans see the full Solon class graph. 'Contained upgrade blast radius via Kafka/REST' is a discipline claim, not architectural separation." style="text;html=1;align=left;verticalAlign=middle;fontSize=9;fontColor=#B22222;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="50" y="328" width="900" height="16" as="geometry" />
         </mxCell>
 
-        <mxCell id="vuln" value="Vulnerability&#10;Classification&#10;Service&#10;&#10;Own schema&#10;(write-through to Solon Data Area)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="580" y="320" width="160" height="180" as="geometry" />
+        <mxCell id="bsGateB" value="&lt;b&gt;BreathingSpace&#10;GatingService&lt;/b&gt;&#10;&#10;Own schema table:&#10;breathing_space_gate_log&#10;&#10;Reads Solon active_suppressions&#10;Returns PERMIT / SUPPRESS / DEFER&#10;&#10;C3 compliance contradiction:&#10;gate-at-effect depends on&#10;suspendActiveInstancesSW=false&#10;per SuppressionType (see callout)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#B22222;dashed=1;strokeWidth=2;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="58" y="350" width="210" height="180" as="geometry" />
         </mxCell>
 
-        <mxCell id="comms" value="Communication&#10;Suppression&#10;Service" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="750" y="320" width="140" height="100" as="geometry" />
+        <mxCell id="ccB" value="&lt;b&gt;Champion/Challenger&#10;Service&lt;/b&gt;&#10;&#10;Own schema&#10;champion_challenger&#10;_assignment&#10;(harm indicator cols)&#10;&#10;A5: explicit gate at&#10;arrangement creation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="280" y="350" width="175" height="180" as="geometry" />
         </mxCell>
 
-        <mxCell id="dcmsBpmn" value="DCMS BPMN definitions&#10;(deployed into Solon's Amplio engine)&#10;DWP_DEBT_RECOVERY, DWP_ARRANGEMENT,&#10;DWP_DCA_HANDOVER, MHCM_RELEASE, …" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#B22222;dashed=1;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="900" y="320" width="220" height="100" as="geometry" />
+        <mxCell id="ieB" value="&lt;b&gt;IE Assessment&#10;Service&lt;/b&gt;&#10;&#10;Own schema&#10;ie_assessment&#10;&#10;CFS standard model&#10;Affordability&#10;calculation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="468" y="350" width="160" height="180" as="geometry" />
         </mxCell>
 
-        <mxCell id="dcmsBpmnNote" value="DIFF vs A: DCMS BPMN are NEW process definitions, not forks of Solon reference processes" style="text;html=1;align=center;fontSize=10;fontStyle=2;fontColor=#B22222;" vertex="1" parent="1">
-          <mxGeometry x="900" y="425" width="220" height="40" as="geometry" />
+        <mxCell id="vulnB" value="&lt;b&gt;Vulnerability&#10;Classification&#10;Service&lt;/b&gt;&#10;&#10;Own schema&#10;vulnerability_record&#10;&#10;S2 risk: dual-write to&#10;Solon Data Area JSONB&#10;— staleness window&#10;violates RULING-010&#10;'immediately'&#10;(see callout)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#B22222;dashed=1;strokeWidth=2;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="640" y="350" width="175" height="180" as="geometry" />
         </mxCell>
 
-        <mxCell id="droolsB" value="DCMS Drools KIE module&#10;(separate from Solon's KIE)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="1140" y="320" width="200" height="100" as="geometry" />
+        <mxCell id="commsB" value="&lt;b&gt;Communication&#10;Suppression Service&lt;/b&gt;&#10;&#10;Category evaluation&#10;+ suppression-reason&#10;classification&#10;&#10;S4: on-lift disposition&#10;of queued comms&#10;UNSPECIFIED&#10;(see callout)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#B22222;dashed=1;strokeWidth=2;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="828" y="350" width="175" height="180" as="geometry" />
         </mxCell>
 
-        <mxCell id="solonBox" value="SOLON TAX v2.3.0  —  reused as platform" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;fontStyle=1;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="40" y="540" width="1320" height="170" as="geometry" />
+        <mxCell id="dcmsBpmnB" value="&lt;b&gt;DCMS BPMN Definitions&lt;/b&gt;&#10;(NEW process definitions&#10;deployed into Solon's Amplio)&#10;&#10;DWP_DEBT_RECOVERY&#10;_PROCESS.bpmn&#10;DWP_ARRANGEMENT.bpmn&#10;DWP_DCA_HANDOVER.bpmn&#10;MHCM_RELEASE&#10;_PROCESS.bpmn&#10;…&#10;NOT forks of Solon reference" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#B22222;dashed=1;strokeWidth=2;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1016" y="350" width="195" height="180" as="geometry" />
         </mxCell>
 
-        <mxCell id="amplio" value="Amplio engine&#10;(runtime for both Solon&#10;reference BPMN and&#10;DCMS BPMN)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="60" y="580" width="180" height="110" as="geometry" />
+        <mxCell id="droolsB" value="&lt;b&gt;DCMS Drools KIE&#10;Module&lt;/b&gt;&#10;&#10;Separate from&#10;Solon's KIE&#10;&#10;DWP-specific rules&#10;No DMN authoring" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1224" y="350" width="160" height="180" as="geometry" />
         </mxCell>
 
-        <mxCell id="ledger" value="Financial ledger,&#10;payment, write-off&#10;(Solon core)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="260" y="580" width="180" height="110" as="geometry" />
+        <mxCell id="batchB" value="&lt;b&gt;DWP Batch Jobs&lt;/b&gt;&#10;revenue-management-&#10;batch-custom&#10;&#10;DM6, bureau feeds,&#10;bulk comms dispatch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="1398" y="350" width="160" height="180" as="geometry" />
         </mxCell>
 
-        <mxCell id="suppr" value="Suppression model&#10;CreateSuppression /&#10;ReleaseSuppression&#10;SuppressionExpiryJob" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="460" y="580" width="180" height="110" as="geometry" />
+        <!-- ═══════════════════════════════════════════════════
+             LAYER 4 — SOLON FOUNDATION (green band)
+             ═══════════════════════════════════════════════════ -->
+        <mxCell id="solonBand" value="SOLON TAX v2.3.0  —  reused as platform  (same JVM as DCMS custom layer, Java 17)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;fontStyle=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="548" width="1574" height="170" as="geometry" />
         </mxCell>
 
-        <mxCell id="kafkaB" value="Kafka command bus&#10;(24-command catalogue&#10;+ DCMS topics)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="660" y="580" width="180" height="110" as="geometry" />
+        <mxCell id="amplioB" value="&lt;b&gt;Amplio Engine&lt;/b&gt;&#10;&#10;Runtime for both Solon&#10;reference BPMN and&#10;DCMS BPMN definitions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="58" y="582" width="180" height="120" as="geometry" />
         </mxCell>
 
-        <mxCell id="batchB" value="Foundation Batch" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="860" y="580" width="160" height="110" as="geometry" />
+        <mxCell id="ledgerB" value="&lt;b&gt;Financial Ledger&lt;/b&gt;&#10;Payment, Write-off&#10;(Solon core)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="258" y="582" width="175" height="120" as="geometry" />
         </mxCell>
 
-        <mxCell id="taskTray" value="Task tray /&#10;Work allocation primitives" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="1040" y="580" width="160" height="110" as="geometry" />
+        <mxCell id="supprB" value="&lt;b&gt;Suppression Module&lt;/b&gt;&#10;&#10;BREATHING_SPACE type:&#10;  maxDays=60&#10;  overrideEndDateSW=false&#10;  native ceiling enforcement&#10;&#10;MHCM type:&#10;  maxDays=0 (no max)&#10;  DCMS-owned release&#10;&#10;SuppressionExpiryJob" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="453" y="582" width="200" height="130" as="geometry" />
         </mxCell>
 
-        <mxCell id="authB" value="Keycloak + OPA&#10;(DWP realm + DCMS Rego)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="1220" y="580" width="140" height="110" as="geometry" />
+        <mxCell id="kafkaB" value="&lt;b&gt;Kafka Command Bus&lt;/b&gt;&#10;&#10;Solon irm.bpmn-engine.*&#10;internal topics&#10;(DCMS must NOT publish)&#10;&#10;+ DCMS topics&#10;(dcms.breathingspace.*&#10; dcms.strategy.*)&#10;&#10;Subject to Blocker 1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="665" y="582" width="180" height="130" as="geometry" />
         </mxCell>
 
-        <mxCell id="db" value="PostgreSQL 16  —  TWO schemas:  solon (Solon-owned)  +  dcms (DCMS-owned, Liquibase-scoped)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#B22222;dashed=1;strokeWidth=2;" vertex="1" parent="1">
-          <mxGeometry x="40" y="730" width="1320" height="50" as="geometry" />
+        <mxCell id="batchSolonB" value="&lt;b&gt;Foundation Batch&lt;/b&gt;&#10;(Solon)&#10;DWP custom batch defs&#10;in batch-custom repo" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="858" y="582" width="170" height="120" as="geometry" />
         </mxCell>
 
-        <mxCell id="dbNote" value="DIFF vs A: dedicated dcms schema for DWP domain services. DIFF vs C: still co-located in same PG instance as Solon." style="text;html=1;align=center;fontSize=10;fontStyle=2;fontColor=#B22222;" vertex="1" parent="1">
-          <mxGeometry x="40" y="785" width="1320" height="20" as="geometry" />
+        <mxCell id="taskTrayB" value="&lt;b&gt;Task Tray&lt;/b&gt;&#10;Work allocation&#10;primitives&#10;(Solon)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="582" width="155" height="120" as="geometry" />
         </mxCell>
 
-        <mxCell id="e1" style="endArrow=classic;html=1;" edge="1" parent="1" source="user" target="ui"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="e2" style="endArrow=classic;html=1;" edge="1" parent="1" source="ui" target="bff"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="e3" style="endArrow=classic;html=1;" edge="1" parent="1" source="bff" target="dcmsBox"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="e4" style="endArrow=classic;html=1;dashed=1;" edge="1" parent="1" source="dcmsBpmn" target="amplio"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="e5" style="endArrow=classic;html=1;dashed=1;" edge="1" parent="1" source="bsGateB" target="suppr"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="e6" style="endArrow=classic;html=1;dashed=1;" edge="1" parent="1" source="dcmsBox" target="kafkaB"><mxGeometry relative="1" as="geometry" /></mxCell>
-        <mxCell id="e7" style="endArrow=classic;html=1;" edge="1" parent="1" source="solonBox" target="db"><mxGeometry relative="1" as="geometry" /></mxCell>
+        <mxCell id="solonDroolsB" value="&lt;b&gt;Solon Drools KIE&lt;/b&gt;&#10;(Solon's own rules)&#10;Separate from&#10;DCMS KIE module" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1208" y="582" width="155" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="authB" value="&lt;b&gt;Keycloak + OPA&lt;/b&gt;&#10;DWP realm&#10;+ DCMS Rego policies&#10;S5: OPA deployment&#10;model undecided" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#B22222;dashed=1;strokeWidth=2;fontSize=9;" vertex="1" parent="1">
+          <mxGeometry x="1376" y="582" width="200" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- ─── Storage band ─── -->
+        <mxCell id="dbB" value="PostgreSQL 16  —  TWO schemas:  solon (Solon-owned, Liquibase-managed by Solon)  +  dcms (DCMS-owned, Liquibase contexts scoped to dcms schema)  ·  co-located in same PG instance (not separate DB)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#B22222;dashed=1;strokeWidth=2;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="728" width="1574" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- ─── Kafka warning strip ─── -->
+        <mxCell id="kafkaWarning" value="⚠  irm.bpmn-engine.*  INTERNAL Kafka topics — DCMS layer must NOT publish to these topics. Use only documented external command catalogue (subject to Blocker 1 verification). DCMS observes Solon event stream as consumer only." style="rounded=0;whiteSpace=wrap;html=1;fillColor=#B22222;strokeColor=#B22222;fontColor=#ffffff;fontSize=10;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="780" width="1574" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════
+             ANNOTATION BOXES
+             ═══════════════════════════════════════════════════ -->
+
+        <!-- C3 compliance contradiction -->
+        <mxCell id="c3Callout" value="&lt;b&gt;⚠ C3 COMPLIANCE CONTRADICTION&lt;/b&gt;&#10;&#10;suspendActiveInstancesSW flag on SuppressionType:&#10;&#10;If = true: Solon auto-suspends BPMN process tokens&#10;on suppression creation → violates RULING-016 §3&#10;guardrails 1 and 4 (voluntary payments, balance&#10;recalculation, audit events must continue to flow).&#10;Gate-at-effect role is bypassed by the engine.&#10;&#10;If = false: Solon records suppression as metadata&#10;only. DCMS BreathingSpaceGatingService carries 100%&#10;of effect-suppression. Solon 'native 60-day ceiling&#10;enforcement' degrades to expiry-record-only.&#10;&#10;Both branches coherent but mutually exclusive.&#10;SA must declare setting per SuppressionType and&#10;reconcile with RULING-016 before lock.&#10;Cannot be deferred to detailed design." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff0f0;strokeColor=#B22222;dashed=1;strokeWidth=3;fontSize=9;verticalAlign=top;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="816" width="500" height="290" as="geometry" />
+        </mxCell>
+
+        <!-- S5 OPA callout -->
+        <mxCell id="s5Callout" value="&lt;b&gt;S5 OPA / Rego Deployment Ambiguity&lt;/b&gt;&#10;&#10;DCMS-specific Rego policies required for:&#10;• OPS_MANAGER-only C/C policy modification&#10;• Vulnerability data restricted to assigned agents&#10;• MHCM status as Restricted (RULING-002 / GDPR Art. 9)&#10;&#10;Two unresolved models:&#10;A) Co-located bundle alongside Solon's OPA policies&#10;   Risk: Solon upgrade may overwrite DCMS policies&#10;B) Separate OPA sidecar&#10;   Risk: policy evaluation order, conflict resolution,&#10;   and request flow must be designed&#10;&#10;For MHCM / vulnerability data: unspecified authz&#10;boundary = likely ICO finding. Must specify&#10;before detailed design lock." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff0f0;strokeColor=#B22222;dashed=1;strokeWidth=2;fontSize=9;verticalAlign=top;align=left;" vertex="1" parent="1">
+          <mxGeometry x="560" y="816" width="400" height="250" as="geometry" />
+        </mxCell>
+
+        <!-- Amplio constraints -->
+        <mxCell id="amplioConstraints" value="&lt;b&gt;Amplio Constraints (all options)&lt;/b&gt;&#10;&#10;• Parallel Gateway: sequential-only&#10;• Script Tasks: FEEL-only (no Groovy / JS)&#10;• Business Rule Tasks → Service Tasks → Drools KIE&#10;• Compensation events: not implemented&#10;  (use explicit error boundary → compensation logic)&#10;• Non-interrupting: timer boundary events only&#10;• MHCM SuppressionType maxDays=0 behaviour&#10;  undocumented — Blocker 3" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fffde7;strokeColor=#f9a825;fontSize=9;verticalAlign=top;align=left;" vertex="1" parent="1">
+          <mxGeometry x="980" y="816" width="310" height="190" as="geometry" />
+        </mxCell>
+
+        <!-- Java version note -->
+        <mxCell id="javaNote" value="&lt;b&gt;Java Version Note&lt;/b&gt;&#10;&#10;Option B inherits Solon's JVM: Java 17.&#10;Java 21 mandate would force Option C&#10;(mixing Java 21 bytecode into Java 17 JVM&#10;is not possible — single JVM model).&#10;&#10;Forward-looking signal (unconfirmed):&#10;Solon Tax expected on Java 25 LTS&#10;(early May 2026). If confirmed:&#10;Lever 1 (Java 21 → force C) dissolves.&#10;Option B materially strengthens.&#10;&#10;Locked against Java 17 baseline until&#10;GA release notes confirm otherwise." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#7b1fa2;fontSize=9;verticalAlign=top;align=left;" vertex="1" parent="1">
+          <mxGeometry x="1306" y="816" width="300" height="210" as="geometry" />
+        </mxCell>
+
+        <!-- Open Blockers callout -->
+        <mxCell id="blockersB" value="&lt;b&gt;⛔ OPEN BLOCKERS — gate integration design lock&lt;/b&gt;&#10;&#10;Blocker 1 (C1): Kafka contract model may not exist as framed.&#10;Abstracted commands (PostPaymentCommand etc.) not in&#10;integration guide §5 or KAFKA_EVENT_CATALOG. Must verify as&#10;complete contract: topic names, payload schemas, response&#10;events, consumer-group isolation. If commands not externally&#10;publishable, Option B contract collapses — DCMS must use&#10;irm.bpmn-engine.* (tighter coupling) or sync REST (Blocker 2).&#10;&#10;Blocker 2: Solon REST API stability for sync queries.&#10;BFF assumes account balance / active suppressions / task state&#10;are stable external contracts. Stability guarantees not&#10;documented. Sub-question: MHCM SuppressionType with&#10;overrideEndDateSW=false — correct behaviour unclear.&#10;&#10;Blocker 3: MHCM SuppressionType behaviour (maximumNumberDays=0).&#10;SuppressionExpiryJob behaviour undocumented.&#10;If interprets 0 as 'already expired' → MHCM suppression&#10;silently lifted without sign-off = breach Reg 21 Debt&#10;Respite Scheme Regulations 2020 (criminal liability).&#10;Verify via test / platform-team confirmation.&#10;&#10;C3 compliance contradiction: see dedicated callout." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff0f0;strokeColor=#B22222;dashed=1;strokeWidth=3;fontSize=9;verticalAlign=top;align=left;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1112" width="630" height="140" as="geometry" />
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e_actor_ui" style="endArrow=block;endFill=1;html=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="actor" target="ui">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_ui_bff" value="REST" style="endArrow=block;endFill=1;html=1;edgeStyle=orthogonalEdgeStyle;fontSize=9;" edge="1" parent="1" source="ui" target="bffStrip">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_bff_gw" value="Solon REST calls" style="endArrow=open;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;fontSize=9;" edge="1" parent="1" source="bffStrip" target="gatewayStrip">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_bff_dcms" value="DCMS service calls" style="endArrow=open;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=9;" edge="1" parent="1" source="bffStrip" target="dcmsBand">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_bsGate_suppr" value="reads active_suppressions" style="endArrow=open;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=9;" edge="1" parent="1" source="bsGateB" target="supprB">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dcmsBpmn_amplio" value="deploys into" style="endArrow=block;endFill=1;html=1;edgeStyle=orthogonalEdgeStyle;dashed=1;fontSize=9;" edge="1" parent="1" source="dcmsBpmnB" target="amplioB">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_dcms_kafka" value="commands / events" style="endArrow=open;endFill=0;html=1;edgeStyle=orthogonalEdgeStyle;fontSize=9;" edge="1" parent="1" source="dcmsBand" target="kafkaB">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e_solon_db" style="endArrow=block;endFill=1;html=1;edgeStyle=orthogonalEdgeStyle;" edge="1" parent="1" source="solonBand" target="dbB">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
       </root>
     </mxGraphModel>
   </diagram>

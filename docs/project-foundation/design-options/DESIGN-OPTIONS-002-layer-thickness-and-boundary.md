@@ -2,7 +2,7 @@
 
 **Document ID:** DESIGN-OPTIONS-002
 **Date:** 2026-04-30
-**Status:** PROPOSED — awaiting Design Critic review, then Solution Architect lock
+**Status:** PROPOSED — Design Critic review complete (2026-04-30); awaiting Solution Architect lock. **Integration design lock BLOCKED** pending resolution of three platform-reality questions and the compliance contradiction surfaced by the Design Critic (see "Platform-Reality Review Findings" and "Design Critic Review Findings" below).
 **Author:** Delivery Designer Agent
 **Supersedes:** Any layer-thickness framing from the pre-pivot period. The peer-Flowable question is closed.
 **Authoritative inputs read:** ADR-018, RULING-016, `solon-tax-platform-reference.md`, `amplio-process-engine-reference.md`, `solon-tax-feasibility-analysis.md`, `docs/memory.md`, `communications-domain-pack.md`, RULING-010.
@@ -32,6 +32,135 @@ RULING-016 changed the design problem from "how do we freeze the engine" to "whe
 Option A (minimal) is tempting for speed but cedes too much DWP-specific behaviour to Solon configuration, leaving champion/challenger, income and expenditure, vulnerability governance, and the gating service structurally awkward. Option C (heavy) rebuilds components — ledger, payment allocation, batch — that Solon provides adequately, removing the platform value with no corresponding gain.
 
 The recommendation flips to Option A if DWP confirms that only a handful of DWP-specific business rules exist and that champion/challenger and vulnerability tiers are out of scope for the initial delivery. It flips to Option C if programme direction changes to require Java 21 or Flyway in the DCMS custom tier on a shared database schema with Solon — making the integration surface too hazardous.
+
+---
+
+## Platform-Reality Review Findings (added 2026-04-30, post solon-tax-platform-expert review)
+
+A platform-expert review against `external_sys_docs/solon/solon_tax_2.3.0_integration_guide.md`, `solon_tax_2.3.0_operations_guide.md`, `api-suppression-management.md`, and the Amplio reference identified factual corrections, missing constraints, and two blockers that must be resolved before integration design is locked. The recommendation (Option B) is unchanged but is conditional on Blocker 1.
+
+### Blockers (must resolve before integration design lock)
+
+| # | Blocker | Owner | Blocks |
+|---|---|---|---|
+| 1 | **Kafka command-name discrepancy.** The "24-command catalogue" cited in the platform reference uses abstracted financial-primitive names (`PostPaymentCommand`, `WriteOffDebtCommand`, `CreatePaymentPlanCommand`, `SendCorrespondenceCommand`, etc.). The integration guide §5 catalogue is dominated by engine-internal `irm.bpmn-engine.*` commands (`CreateHumanTaskCommand`, `TriggerDebtRecoveryProcessCommand`, `SuspendCaseActivityCommand`). It is not confirmed that the abstracted names are externally-publishable Kafka commands. Options A and B treat the 24-command catalogue as the primary inter-layer contract — if the names do not map to externally-triggerable topics, that contract model collapses. | Solution Architect → Solon platform team (or `revenue-management-adapters` source inspection) | Inter-layer contract design under Options A and B |
+| 2 | **Solon REST API stability for sync queries.** The integration guide's synchronous HTTP section is thin (only `ExecuteKieRulesCommand` is documented as a sync API). Option B's BFF assumes Solon REST APIs (`account balance`, `active suppressions`, `task state`) are a stable external contract. Their stability guarantees under Solon upgrades are not documented. | Solution Architect → Solon platform team | Option B BFF layer; Option C ACL contract |
+
+### Factual corrections to existing options
+
+- **Solon natively enforces the standard 60-day Breathing Space ceiling — but NOT MHCM.** The suppression API supports `maximumNumberDays: 60`, `overrideEndDateSW: false`, and a `BREATHING_SPACE` value in `suppressionReasonCL`. For the standard moratorium, configure at the `SuppressionType` level — DCMS does not need to own 60-day enforcement in `BreathingSpaceGatingService`. **The Mental Health Crisis Moratorium (MHCM) is structurally different and remains DCMS-owned**, per RULING-016 §5: it has no fixed end date, lasts for the duration of mental health crisis treatment plus 30 days, and ends only by professional sign-off. This means:
+  - **Two distinct `SuppressionType` configurations** are required in Solon: a standard `BREATHING_SPACE` type with `maximumNumberDays: 60` / `overrideEndDateSW: false`, and an `MHCM` type with `maximumNumberDays: 0` (no maximum) and a regime that does not auto-expire. Whether `overrideEndDateSW: false` correctly blocks indefinite suppressions in the MHCM type is unclear from the docs and must be verified during the Option B detailed design — flagged as a sub-question of Blocker 2.
+  - **MHCM release path stays DCMS-owned**: `MHCM_RELEASE_PROCESS.bpmn` (manual professional sign-off trigger) issues a `ReleaseSuppressionCommand` to Solon. DCMS owns the AMHP/clinician evidence capture, the 30-day post-treatment tail calculation, and re-confirmation cycles.
+  - **`BreathingSpaceGatingService` retains MHCM-specific logic**: distinguishing standard moratorium from MHCM, applying any DWP-specific MHCM overlay (e.g. tighter suppression categories during active crisis vs the 30-day tail), and ensuring no timer-based expiry is silently applied to MHCM cases.
+  - **Vulnerability overlap with MHCM is non-trivial.** A debtor in MHCM is by definition vulnerable under FCA FG21/1; the gating service must evaluate MHCM and vulnerability suppressions as compounding, not alternatives. This is unchanged from the original Option B design but warrants explicit re-confirmation in detailed design.
+- **Option A's Breathing Space extension point is concrete, not free-form.** `SUSPEND_PROCESS_CHECK.bpmn` is the Call Activity child of `DEBT_RECOVERY_PROCESS.bpmn` that runs the timer-based suppression check loop (querying `DEBT_REC_C` suppression). Under Option A, DCMS-specific gating extends this loop, not arbitrary service-task delegate overrides. MHCM handling under Option A is awkward: the check loop is timer-driven, but MHCM has no timer — DCMS must inject an MHCM-aware branch into the check or maintain a parallel non-timed check. This is a further structural argument against Option A for any programme that treats MHCM as first-class.
+- **BPMN reference process names are abstractions.** The 28-process list in the platform reference uses clean abstract names; integration guide §13 lists actual filenames, most of which are tax-authority-specific (`VAT_RETURN.bpmn`, `BUS_REG.bpmn`, `CIT_RETURN.bpmn`). The DCMS-relevant extension targets under Option A are concretely `DEBT_RECOVERY_PROCESS.bpmn` and `SUSPEND_PROCESS_CHECK.bpmn`. Option A's blast radius is therefore narrower than "modified reference BPMN processes" implies — concentrated on these two processes.
+- **Boundary-event constraint is narrower than previously framed.** Only *message* boundary events lack non-interrupting support in Amplio; timer boundary events are fully supported in both interrupting and non-interrupting modes. RULING-016 already dissolves the original concern; recorded for completeness.
+- **Two custom repos exist, not one.** `revenue-management-be-custom` (Spring beans) and `revenue-management-batch-custom` (batch definitions) are separate per the operations guide. Option B's "DWP-specific batch jobs as custom batch definitions" land in `revenue-management-batch-custom`, not `revenue-management-be-custom`.
+
+### Builder guardrails — Amplio constraints not previously surfaced
+
+These are platform-forced constraints on any DCMS BPMN authored under Option A or B. They must be added to builder-facing handoff notes before any DCMS BPMN authoring begins.
+
+1. **Parallel Gateway is sequential-only.** Amplio executes Parallel Gateway branches sequentially. Any DCMS BPMN that depends on concurrent execution (e.g. concurrent notification dispatch, concurrent write-off approval and DCA instruction) will silently serialise. Design accordingly.
+2. **Script Tasks are FEEL-only.** No Groovy or JavaScript. Imperative scripting is unavailable.
+3. **Business Rule Tasks must be Service Tasks.** DMN is not supported. Rule evaluation requires a Service Task wired synchronously to Drools KIE (`POST /drools-runtime/execute-stateless/{containerId}`).
+4. **Compensation events are not implemented.** SAGA-style flows under Option B must use explicit error boundary events routing to compensation logic — not BPMN compensation markers.
+5. **Breathing Space configuration belongs in Solon `SuppressionType` for the standard 60-day moratorium only.** MHCM is a separate `SuppressionType` with no maximum and DCMS-owned release. The gating service evaluates *whether* a moratorium applies and *which* effects to suppress; it does not duplicate the 60-day ceiling for the standard case.
+6. **Use only Kafka topics named in integration guide §5.** Do not derive topic names from the platform reference's abstracted command list without confirming the actual topic in `external_sys_docs/solon/solon_tax_2.3.0_integration_guide.md` §5 (subject to Blocker 1).
+
+### Impact on the recommendation
+
+- **Option B remains the most defensible**, conditional on Blocker 1. If the platform-reference commands are not externally publishable, Option B's contract model must be redesigned around `irm.bpmn-engine.*` topics or shifted to sync REST (which then surfaces Blocker 2).
+- **Option A is marginally less risky than originally framed for the standard 60-day moratorium** (narrower BPMN modification scope) but **becomes more awkward for MHCM** because `SUSPEND_PROCESS_CHECK.bpmn` is timer-driven and MHCM is not. The structural awkwardness of champion/challenger, IE, and vulnerability governance is unchanged.
+- **Option C's self-assessment ("removes most platform value") stands.** Amplio remains the BPMN runtime under Option C, which is the one meaningful platform contribution retained beyond financial APIs. Under Option C, MHCM ownership is fully and cleanly DCMS-side — the cleanest MHCM model of the three options, but at the cost called out in the original Option C analysis.
+
+---
+
+## Design Critic Review Findings (added 2026-04-30, post design-critic pass)
+
+A design-critic review against the integration guide, Kafka event catalog (`KAFKA_EVENT_CATALOG.md`), suppression API reference, Amplio reference, and rulings RULING-005 / RULING-010 / RULING-011 / RULING-014 / RULING-016 surfaced one new critical compliance contradiction, raised the MHCM suppression-type question to blocker level, and identified five significant gaps the SA must resolve before lock. The recommendation of Option B is directionally retained but **cannot be locked** until C1, C3, and S3 below are resolved.
+
+### Critical findings
+
+**C1. The Kafka contract model under Option B may not exist as framed.**
+The platform reference's 24-command catalogue (`PostPaymentCommand`, `WriteOffDebtCommand`, `SendCorrespondenceCommand`, etc.) does not appear in the integration guide §5 or `KAFKA_EVENT_CATALOG.md`. The actual catalogue uses `irm.bpmn-engine.*` topics carrying internal BPMN engine signals (`CreateHumanTaskCommand`, `TriggerDebtRecoveryProcessCommand`, `SuspendCaseActivityCommand`). The doc already flags this as Blocker 1 but understates its consequence. Three structural concerns the SA must treat as part of resolving Blocker 1, not after:
+
+- If the abstracted commands are not externally publishable, Option B's "DCMS publishes commands; Solon raises events" model collapses. DCMS must either issue internal BPMN engine signals (tighter coupling than Option A) or fall back to sync REST (activates Blocker 2).
+- The Kafka catalogue shows no `PaymentPostedEvent`, `DebtWrittenOffEvent`, or equivalent domain-semantic response events on named response topics. Even if commands are externally publishable, DCMS BPMN processes have no documented way to correlate command outcomes asynchronously without using entity-version or suppression-status events as proxies.
+- Blocker 1 must therefore be resolved as a complete contract verification: topic names, payload schemas, response-event existence, and consumer-group isolation guarantees. It is not a name-mapping task.
+
+**C2. Option B's "in-process custom module" and "contained upgrade blast radius" claims are mutually contradictory.**
+Option B states (i) DCMS custom beans run inside Solon's application context via `revenue-management-be-custom` component scan, AND (ii) the contract surface between DCMS and Solon is the Kafka command catalogue and documented REST APIs (so Solon upgrades only affect that surface). These are incompatible. In-process beans see the entire Solon Spring class graph — repositories, services, internal beans. A Solon refactor of `case-management-custom` or a renamed internal bean breaks DCMS at upgrade time even if the documented Kafka/REST surface is unchanged. The blast-radius difference between Options A and B is a matter of intent and discipline, not architectural separation. The recommendation should rest on the cleaner domain-service ownership argument and not on a containment claim it cannot support.
+
+**C3. The Breathing Space `SuppressionType` design contradicts RULING-016 by triggering automatic BPMN process-token suspension.**
+The suppression API reference shows that a `SuppressionTypeActionType` with `"suspendActiveInstancesSW": true` causes Solon to issue `SuspendCaseActivityCommand` → `irm.bpmn-engine.suspend-case-activity` → `case-management-custom`, suspending active BPMN process tokens for the scoped liability. The pre-configured Breathing Space `SuppressionType` example referenced in the Platform-Reality Review section sets this flag true. Effects:
+
+- If `suspendActiveInstancesSW: true`: Solon auto-suspends process tokens on suppression creation. This violates RULING-016 §3 guardrails 1 and 4 — the process must not be halted entirely; voluntary payments, balance recalculation, and required audit trail events must continue to flow. The Breathing Space gating service's gate-at-effect role is bypassed because the engine has already stopped.
+- If `suspendActiveInstancesSW: false`: Solon records the suppression as metadata only; DCMS's `BreathingSpaceGatingService` carries 100% of effect-suppression. Solon's "native enforcement of the 60-day ceiling" claim made in the Platform-Reality Review then degrades — `SuppressionExpiryJob` will still expire the suppression record, but the enforcement of effect prohibition during the 60 days is entirely DCMS-owned.
+
+Both branches are coherent but mutually exclusive. The doc currently asserts both simultaneously: it claims Solon natively enforces the 60-day ceiling (which requires the suppression type to be active and enforcing) AND that the gating service handles all effect suppression at the DCMS layer (which requires the suppression to NOT auto-suspend tokens). Before lock, the SA must declare the `suspendActiveInstancesSW` setting for each DCMS suppression type (standard Breathing Space, MHCM, vulnerability overlay, internal policy holds) and explain how that setting interacts with the gate-at-effect model. The current design cannot be implemented for a compliant moratorium without resolving this.
+
+### Significant findings
+
+**S1. The "debtor-facing effect" boundary is not crisp enough to be applied consistently.**
+The doc enumerates: collection contact, enforcement instruction, deduction-from-benefit instruction, DCA instruction, interest accrual. RULING-016 adds court applications, adverse credit reporting, default notices. RULING-014 guardrail 2 adds **arrangement creation during a moratorium** (a new arrangement is itself a demand for payment). RULING-011 adds **dispatching queued `DEBT_COLLECTION` communications on suppression lift** unless the suppression reason is internal. RULING-005 adds **`ARRANGEMENT_BREACH` record generation** during a moratorium. The current informal definition will produce inconsistent gating decisions: a developer triggering a `StrategyEvaluationEvent` and a downstream `ChampionChallengerReassignmentEvent` during MHCM may not call the gate at all because reassignment isn't visibly "debtor-facing" — yet RULING-016 §2 requires deferred outputs to be flagged `DEFERRED_PENDING_MORATORIUM_END`, which is itself a gate concern. **Before any DCMS BPMN authoring begins, a closed enumeration of gated effect categories must be produced**, derived from RULING-016, RULING-011, RULING-014, and RULING-005. The mandatory base class mitigation (Option B risk row 2) is correct but insufficient without the enumeration.
+
+**S2. The vulnerability-flag dual-write to Solon Data Area introduces a staleness window that RULING-010 does not permit.**
+Option B mirrors vulnerability flags into Solon Taxpayer Data Area JSONB so Amplio FEEL expressions and Drools rules can read them in-process. The mitigation accepts that "FEEL expressions that read Data Area must tolerate a short staleness window." RULING-010 guardrail 1 requires the vulnerable-customer exclusion rule to be evaluated at every relevant service task, and RULING-010 explicitly mandates **immediate** reassignment from CHALLENGER to CHAMPION on a vulnerability status change to IDENTIFIED or above. An Outbox-based eventual write-through does not satisfy "immediately." A newly-vulnerable debtor in the staleness window remains on a CHALLENGER strategy and the audit event (`CC_ASSIGNMENT_OVERRIDDEN`, `reason = VULNERABILITY_POLICY`) is missing. The MHCM population — by definition vulnerable per FCA FG21/1 — is the highest-risk cohort for this gap. **Counter-question for the SA:** why is this mirrored at all rather than the BPMN service task calling `VulnerabilityClassificationService` directly via the same in-process bean call the gating service already uses? The mirroring approach has not been justified against a direct-call alternative.
+
+**S3. MHCM `SuppressionType` behaviour with `maximumNumberDays: 0` is undocumented and must be raised to a standalone blocker.**
+The doc currently lists "MHCM `SuppressionType` configuration" as a sub-question of Blocker 2 in the Open Questions table. This understates it. The behaviour of Solon's `SuppressionExpiryJob` when `maximumNumberDays: 0` is set is not documented in any source in this repository. The job runs daily at 06:00. Two failure modes are possible and neither is observable from the available docs:
+- The job interprets `maximumNumberDays: 0` as "zero days, already expired" and auto-expires MHCM suppressions on first run.
+- The job interprets it as "no maximum" and skips MHCM records correctly.
+If the first interpretation is correct, an MHCM debtor would have their moratorium silently lifted without professional sign-off — a breach of Regulation 21 of the Debt Respite Scheme Regulations 2020 with criminal-liability consequence. **Promote to standalone blocker (Blocker 3 below).**
+
+**S4. Split correspondence ownership under Option B leaves on-lift disposition of queued communications unspecified.**
+RULING-011 requires `DEBT_COLLECTION` communications queued during statutory suppression to be discarded on lift, while those queued during internal policy suppression are held for agent review. Under Option B, transport runs through Solon's `CORRESPONDENCE_PROCESS.bpmn` (Solon owns the queued correspondence entries) but category evaluation and suppression-reason classification live in DCMS's `CommunicationSuppressionService`. The flow on suppression lift — how DCMS inspects Solon's queued correspondence, classifies each entry by the suppression reason that caused it to be queued, and instructs Solon to discard or hold — is not described. The suppression API exposes status, not correspondence queues. Options A and C have cleaner ownership stories on this point (A: pre-dispatch guard inside Solon's process; C: DCMS owns transport too). Option B's split ownership is a structural coupling problem that must be designed out before lock.
+
+**S5. The OPA / Rego policy boundary for DCMS-specific access rules is unspecified across all three options.**
+DCMS-specific authorisation rules — `OPS_MANAGER`-only champion/challenger policy modification (RULING-010 guardrail 2), vulnerability data restricted to assigned agents, MHCM status as Restricted under RULING-002 / GDPR Art. 9 (RULING-016 §5) — require DCMS-specific Rego policies. The doc says "DWP realm, OPA Rego policies for DCMS-specific access rules" without specifying whether DCMS Rego policies deploy alongside Solon's policies in the same OPA instance, into a separate sidecar, or inline. If co-located: a Solon upgrade modifying the OPA policy bundle could overwrite DCMS policies. If separate: policy evaluation order, conflict resolution, and request flow must be designed. For a system handling vulnerability and MHCM data, an unspecified authz policy boundary is a likely ICO finding.
+
+### Advisory findings
+
+- **A1. Option A's "fastest" rating in the Tradeoff Summary is contingent.** It assumes Solon's reference BPMN processes can be re-used with light modification. Integration guide §13 shows the actual BPMN files are tax-authority-named (`VAT_RETURN.bpmn`, `BUS_REG.bpmn`, `CIT_RETURN.bpmn`); only `DEBT_RECOVERY_PROCESS.bpmn`, `CASE_HANDOVER_COLLECTION_AGENCY_PROCESS.bpmn`, `SUSPEND_PROCESS_CHECK.bpmn`, and `PAYMENT_DEFERRAL.bpmn` are debt-relevant. The "fastest" rating depends on the BPMN fit-gap spike returning a favourable result, which is not yet evidence.
+- **A2. Options A and B may collapse to the same architecture in practice.** Both use `revenue-management-be-custom`, run in the same JVM, use the same Kafka topics and Amplio runtime, and share Blocker 1. The stated difference is logical schema separation under B (`dcms` schema vs. shared) — not physical isolation. The SA should declare whether DCMS's beans live in the same Maven module as Solon's `revenue-management-be-custom` beans or in a separate Maven module participating in the same Spring context. If the former, A and B's blast radius and coupling are essentially the same.
+- **A3. Java 25 bytecode compatibility ≠ dependency compatibility.** The Forward-Looking Note correctly states JVM-level backward compatibility but does not address whether Solon's transitive dependencies (Drools KIE, Liquibase, Hazelcast) have been tested against Java 25. JVM compatibility is necessary but not sufficient.
+- **A4. The recommendation's flip-to-C condition is inconsistent with Lever 1.** The recommendation states the flip requires "Java 21 mandate + Flyway in the DCMS custom tier on a shared database schema." Lever 1 says Java 21 alone flips B to C (because in-process model requires single JVM). One of these statements is wrong. The recommendation summary should be reconciled with Lever 1 before lock.
+- **A5. Arrangement-creation gating under RULING-014 is not allocated to any layer in any option.** RULING-014 guardrail 2 requires `createArrangement` to query the live suppression log (not a cached process variable) and reject if a Breathing Space or insolvency suppression is active on the Person. Under Options A and B, the arrangement entry point — whether BPMN start event, REST endpoint, or Spring service method — is not declared as a gate-call site in any of the option designs. This is a statutory requirement; it must be explicitly allocated.
+
+### New blocker (added by Design Critic)
+
+| # | Blocker | Owner | Blocks |
+|---|---|---|---|
+| 3 | **MHCM `SuppressionType` behaviour under `maximumNumberDays: 0`.** Whether `SuppressionExpiryJob` interprets this value as "no maximum" or "already expired" is undocumented. The wrong interpretation auto-expires MHCM suppressions without professional sign-off, breaching Reg 21 of the Debt Respite Scheme Regulations 2020. Cannot be inferred from available source docs and cannot be left to detailed design. | Solution Architect → Solon platform team (verify via test or platform-team confirmation, not by reading docs) | MHCM detailed design under Options A and B; criminal-liability exposure |
+
+### Compliance contradiction requiring resolution
+
+**The `suspendActiveInstancesSW` setting versus RULING-016's gate-at-effect model (C3) is the single most consequential issue raised by this review.** It is not a detail that can be resolved in builder handoff. The SA must explicitly choose, per `SuppressionType`, whether Solon auto-suspends BPMN tokens on suppression creation, and the choice must be reconciled with RULING-016 guardrails before the Option B design is locked.
+
+### Required actions before SA lock
+
+1. Resolve **C1** (Blocker 1) as a complete Kafka contract verification — names, payloads, response events, isolation guarantees.
+2. Resolve **C3** by declaring `suspendActiveInstancesSW` per DCMS suppression type and reconciling with RULING-016.
+3. Resolve **S3** (Blocker 3 above) — verify `SuppressionExpiryJob` behaviour against `maximumNumberDays: 0`.
+4. Reconcile **C2** — drop the "contained upgrade blast radius via Kafka/REST" containment claim or shift the recommendation rationale to the (sound) domain-service ownership argument.
+5. Reconcile **A4** — align the recommendation's flip-to-C condition with Lever 1.
+
+### Required actions before BPMN authoring begins
+
+6. Produce a closed enumeration of gated effect categories (**S1**), derived from RULING-005, RULING-010, RULING-011, RULING-014, RULING-016.
+7. Allocate arrangement-creation gating (**A5**) explicitly to a layer.
+
+### Significant gaps to close in detailed design
+
+8. Replace Data Area mirroring of vulnerability flags with a direct in-process service call, or justify why the staleness window is acceptable against RULING-010's "immediately" requirement (**S2**).
+9. Design the on-lift disposition flow for queued correspondence under split Solon/DCMS ownership (**S4**).
+10. Specify OPA policy deployment model and Solon-upgrade survival for DCMS-specific Rego policies (**S5**).
+
+### Sign-off status
+
+**No-material-risk sign-off NOT issued.** The doc cannot receive sign-off in its current state due to C1, C3, and S3.
 
 ---
 
@@ -358,13 +487,28 @@ No change. The options pass above stands as written.
 | Non-technical DMN authoring: is Drools DRL acceptable for DWP policy team? | Solution Architect → DWP client | Configurability tier design |
 | Champion/challenger and IE engine: are these in scope for initial delivery? | Solution Architect → DWP client | Option selection (flips B → A if both descoped) |
 | DDE-OQ-12 / DDE-OQ-13: Champion/challenger thresholds and vulnerable-customer policy | Delivery Lead → DWP client | ChampionChallengerService configuration detail |
+| **BLOCKER 1** — Kafka command-name discrepancy: do the platform-reference 24 commands map to externally-publishable topics in integration guide §5? | Solution Architect → Solon platform team | Inter-layer contract design (Options A and B) |
+| **BLOCKER 2** — Solon REST API stability guarantees for sync queries used by the BFF (account balance, active suppressions, task state) | Solution Architect → Solon platform team | Option B BFF; Option C ACL |
+| **BLOCKER 3** (added by Design Critic) — MHCM `SuppressionType` behaviour: does `SuppressionExpiryJob` interpret `maximumNumberDays: 0` as "no maximum" or "already expired"? Wrong interpretation auto-expires MHCM without professional sign-off (Reg 21 breach). | Solution Architect → Solon platform team (verify by test) | MHCM detailed design under Options A and B; criminal-liability exposure |
+| **COMPLIANCE CONTRADICTION** (added by Design Critic) — `suspendActiveInstancesSW` setting per DCMS `SuppressionType` must be declared and reconciled with RULING-016's gate-at-effect model. `true` halts the process (RULING-016 §3 violation); `false` makes DCMS gating service the sole effect-suppression mechanism and degrades the "Solon natively enforces 60-day ceiling" claim. | Solution Architect | Option B compliance design |
+| Closed enumeration of gated effect categories (Design Critic S1) — required from RULING-005, RULING-010, RULING-011, RULING-014, RULING-016 before any DCMS BPMN authoring | Solution Architect → Domain Expert | DCMS BPMN authoring under Options A and B |
+| Vulnerability-flag access path (Design Critic S2) — Data Area mirroring (with staleness window) vs. direct in-process service call. RULING-010 requires immediate reassignment; staleness window may breach. | Solution Architect | Option B vulnerability/champion-challenger interaction |
+| On-lift disposition flow for queued correspondence under split Solon-transport / DCMS-classification ownership (Design Critic S4) | Solution Architect | Option B `CommunicationSuppressionService` design |
+| OPA / Rego policy deployment model and Solon-upgrade survival for DCMS-specific authorisation rules (Design Critic S5) | Solution Architect → Solon platform team | All three options' authz design |
+| Arrangement-creation gating allocation (Design Critic A5, RULING-014 guardrail 2) — declare layer that gates `createArrangement` against active suppressions | Solution Architect | Options A and B compliance design |
+| Maven-module deployment boundary between DCMS beans and Solon `revenue-management-be-custom` beans (Design Critic A2) — same module or separate module in shared Spring context? | Solution Architect | Option A vs. Option B differentiation |
 
 ---
 
 ## Handoff Declaration
 
-- **Completed:** Options pass on DCMS layer thickness and boundary placement, with Amplio mandated and RULING-016's gate-at-effect model as the corrected Breathing Space design framing. Two open DWP sign-off questions (DDE-OQ-BS-PROCESS-01, DDE-OQ-BS-PROCESS-02) noted and carried forward.
-- **Files changed:** `docs/project-foundation/design-options/DESIGN-OPTIONS-002-layer-thickness-and-boundary.md` (created)
+- **Completed:** Options pass on DCMS layer thickness and boundary placement, with Amplio mandated and RULING-016's gate-at-effect model as the corrected Breathing Space design framing. Platform-reality review (2026-04-30) added factual corrections, builder guardrails, MHCM/standard-moratorium split, and two blockers gating integration design lock. Design Critic review (2026-04-30) added a third blocker (MHCM `SuppressionType` expiry behaviour), a compliance contradiction (`suspendActiveInstancesSW` vs. RULING-016), and seven significant/advisory gaps the SA must resolve before lock.
+- **Files changed:** `docs/project-foundation/design-options/DESIGN-OPTIONS-002-layer-thickness-and-boundary.md` (created, updated 2026-04-30 with platform-reality findings, then updated 2026-04-30 with design-critic findings)
+- **Open blockers gating integration design lock:**
+  1. Kafka command-name discrepancy between platform reference and integration guide §5 (Options A and B inter-layer contract).
+  2. Solon REST API stability guarantees for sync queries (Option B BFF; Option C ACL).
+  3. MHCM `SuppressionType` behaviour under `maximumNumberDays: 0` (Reg 21 / criminal-liability exposure).
+  4. `suspendActiveInstancesSW` setting per DCMS `SuppressionType` reconciled with RULING-016 gate-at-effect model.
 - **ACs satisfied:** Options produced (3 options, parallel structure), recommendation stated, decision levers named, Breathing Space gating service addressed per option, data ownership addressed per option, interface and dependency impact addressed, key risks per option named, open questions with owners listed.
 - **ACs not satisfied:** None — this is a design artefact, not an implementation AC.
 - **Assumptions made:**
@@ -374,9 +518,9 @@ No change. The options pass above stands as written.
   - RULING-016 is final as filed; only DDE-OQ-BS-PROCESS-01 and DDE-OQ-BS-PROCESS-02 remain open within its scope.
   - Team size and delivery deadline are not constraints per ADR-018.
 - **Missing inputs encountered:** Java version decision (critical — flips option if Java 21 required); DMN authoring hard requirement status; champion/challenger and IE engine in/out-of-scope for initial delivery.
-- **Next role:** Design Critic, then Solution Architect.
-- **What they need:** This document. RULING-016 (breathing space gating). `solon-tax-platform-reference.md` (Solon capabilities and customisation model). `amplio-process-engine-reference.md` (Amplio constraints). The three decision levers (Java version, DMN authoring, champion/challenger scope) should be resolved before the SA locks the option — they are the live levers.
+- **Next role:** Solution Architect (Design Critic pass complete).
+- **What they need:** This document. RULING-005, RULING-010, RULING-011, RULING-014, RULING-016. `external_sys_docs/solon/solon_tax_2.3.0_integration_guide.md` §5 and `KAFKA_EVENT_CATALOG.md` for Blocker 1. `external_sys_docs/solon/api-suppression-management.md` for the C3 compliance contradiction and Blocker 3. `solon-tax-platform-reference.md` and `amplio-process-engine-reference.md` for context. The four blockers above must be resolved before the SA locks an option; the three decision levers (Java version, DMN authoring, champion/challenger scope) remain the live option-flipping levers.
 
 ---
 
-`[BLOCKING] Design Critic Review Required` — Solution Architect must not lock an option without a Design Critic pass on this document.
+`[BLOCKING] Design Critic Review Complete (2026-04-30)` — four blockers and one compliance contradiction filed against this document. Solution Architect must resolve Blockers 1, 2, 3 and the `suspendActiveInstancesSW` contradiction before locking an option.
