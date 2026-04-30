@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0sc42ri" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.32.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.3.0">
+  <bpmn:process id="ProcessDefinitions.MUNICIPAL_TAX_EXAMPLE_AMPLIO" name="Municipal Tax Example Amplio" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" name="Start Event">
+      <bpmn:outgoing>Flow_0tyym9c</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="ProcessInitializer" name="Process Initializer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ProcessInitializer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0tyym9c</bpmn:incoming>
+      <bpmn:outgoing>Flow_1rfamoq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0tyym9c" sourceRef="StartEvent_1" targetRef="ProcessInitializer" />
+    <bpmn:serviceTask id="QuickCompleteAssessment" name="Quick-Complete Assessment" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="post" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/taxpayer-accounting/assessments/quick-complete&#34;" target="url" />
+          <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="150" target="connectionTimeoutInSeconds" />
+          <zeebe:input source="={&#10;    &#34;obligation&#34;: {&#10;        &#34;id&#34;: obligation_id&#10;    },&#10;    &#34;assessmentTypeCode&#34;: assessment_type_code,&#10;    &#34;assessmentBillBehaviorCL&#34;: &#34;CREATE_NEW_BILL&#34;,&#10;    &#34;changeReasonCL&#34;: &#34;ReadyForCompletion&#34;,&#10;    &#34;changeReasonComment&#34;: &#34;By Batch &#34; + task + &#34;, ran: &#34; + string(date(now())),&#10;    &#34;assessmentRelatedEntities&#34;:if subject_to_cancel_assessment_id=null then null else [{&#10;      &#34;entityCL&#34;:&#34;Assessment&#34;,&#10;      &#34;entityId&#34;:canceled_assessment_id,&#10;      &#34;assessmentRelatedEntityRelationshipCL&#34;:&#34;OVERRIDE_CANCELED_ASSESSMENT&#34;&#10;      },{&#34;entityCL&#34;:&#34;ProcessInstance&#34;,&#10;      &#34;entityId&#34;:processInstanceId,&#10;      &#34;assessmentRelatedEntityRelationshipCL&#34;:&#34;GENERATED_BY&#34;}]&#10;}" target="body" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultVariable" />
+          <zeebe:header key="resultExpression" value="={&#10;  assessment_id : response.body.id,&#10;  responseStatus : response.status,&#10;  assessment_status : response.body.assessmentStatusCL,&#10;  bill_id : response.body.bill.id&#10;}" />
+          <zeebe:header key="errorExpression" value="=if responseStatus != null and responseStatus = 201 then&#10;   null&#10;else &#10;  bpmnError(&#34;REST_ERROR&#34;, &#34;Completing assessment call was not successful&#34;)" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_03oy8eu</bpmn:incoming>
+      <bpmn:incoming>Flow_006vopa</bpmn:incoming>
+      <bpmn:outgoing>Flow_18m3t0c</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1rfamoq" sourceRef="ProcessInitializer" targetRef="Gateway_0mhi4xf" />
+    <bpmn:endEvent id="end_event" name="End Event">
+      <bpmn:incoming>Flow_18x5733</bpmn:incoming>
+      <bpmn:incoming>Flow_0k58zbl</bpmn:incoming>
+      <bpmn:incoming>Flow_14k49eb</bpmn:incoming>
+      <bpmn:incoming>Flow_0llnzah</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="SendLetter" name="Send Letter">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishCreateContactCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=assessment_id" target="entityId" />
+          <zeebe:input source="=&#34;MUNTXASSLE&#34;" target="contactTypeCode" />
+          <zeebe:input source="=&#34;EMAIL_OUT&#34;" target="communicationChannelCode" />
+          <zeebe:input source="=&#34;CREATE_CONTACT_LETTER&#34;" target="signalName" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="= [&#10;   { &#10;     name: &#34;assessment_id&#34;, &#10;     value : assessment_id &#10;   },&#10;   { &#10;     name: &#34;is_new_assessment&#34;, &#10;     value : if subject_to_cancel_assessment_id = null then &#34;true&#34; else &#34;false&#34;&#10;   },&#10;   { &#10;     name: &#34;canceled_assessment_id&#34;, &#10;     value : canceled_assessment_id&#10;   }&#10; ]" target="parameters" />
+          <zeebe:input source="=[&#10;  {&#10;    entityId :assessment_id,&#10;    entityCL :&#34;Assessment&#34;&#10;  },{&#10;  &#10;    entityId :bill_id,&#10;    entityCL :&#34;Bill&#34;&#10;  }&#10;]" target="relatedEntities" />
+          <zeebe:input source="=party_role_id" target="partyRoleId" />
+          <zeebe:input source="=&#34;Assessment&#34;" target="entityCL" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0lhs9cn</bpmn:incoming>
+      <bpmn:outgoing>Flow_19c3a4u</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_19c3a4u" sourceRef="SendLetter" targetRef="Event_153dq94" />
+    <bpmn:intermediateCatchEvent id="ErrorLinkCatch" name="Error Link Catch">
+      <bpmn:outgoing>Flow_0k58zbl</bpmn:outgoing>
+      <bpmn:linkEventDefinition id="LinkEventDefinition_1hw57n3" name="REST_ERROR_LINK" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:boundaryEvent id="Event_0av7g9z" attachedToRef="QuickCompleteAssessment">
+      <bpmn:outgoing>Flow_1us749h</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0v0w94o" />
+    </bpmn:boundaryEvent>
+    <bpmn:intermediateThrowEvent id="CompletingAssessmentErrorLinkThrow" name="Error Link">
+      <bpmn:incoming>Flow_1us749h</bpmn:incoming>
+      <bpmn:linkEventDefinition id="LinkEventDefinition_0egv192" name="REST_ERROR_LINK" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_1us749h" sourceRef="Event_0av7g9z" targetRef="CompletingAssessmentErrorLinkThrow" />
+    <bpmn:exclusiveGateway id="Gateway_0ic9pkb">
+      <bpmn:incoming>Flow_18m3t0c</bpmn:incoming>
+      <bpmn:outgoing>Flow_16a0nzo</bpmn:outgoing>
+      <bpmn:outgoing>Flow_18x5733</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_18m3t0c" sourceRef="QuickCompleteAssessment" targetRef="Gateway_0ic9pkb" />
+    <bpmn:sequenceFlow id="Flow_16a0nzo" name="Assessment status = COMPLETED" sourceRef="Gateway_0ic9pkb" targetRef="completeBill">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=assessment_status = "COMPLETED"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_18x5733" name="Assessment status != COMPLETED" sourceRef="Gateway_0ic9pkb" targetRef="end_event">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=assessment_status != "COMPLETED"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0k58zbl" sourceRef="ErrorLinkCatch" targetRef="end_event" />
+    <bpmn:serviceTask id="completeBill" name="Complete bill" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="put" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/taxpayer-accounting/bills/&#34; + bill_id + &#34;/complete&#34;" target="url" />
+          <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="120" target="connectionTimeoutInSeconds" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultVariable" />
+          <zeebe:header key="resultExpression" value="={&#10;  responseStatus : response.status&#10;}" />
+          <zeebe:header key="errorExpression" value="=if responseStatus != null and responseStatus = 200 then&#10;   null&#10;else &#10;  bpmnError(&#34;REST_ERROR&#34;, &#34;Completing bill call was not successful&#34;)" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16a0nzo</bpmn:incoming>
+      <bpmn:outgoing>Flow_052bka9</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_052bka9" sourceRef="completeBill" targetRef="Event_1fnn5zx" />
+    <bpmn:boundaryEvent id="Event_0rder1q" attachedToRef="completeBill">
+      <bpmn:outgoing>Flow_1xh511h</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1rhcijc" />
+    </bpmn:boundaryEvent>
+    <bpmn:intermediateThrowEvent id="CompletingBillErrorLinkThrow" name="Error Link">
+      <bpmn:incoming>Flow_1xh511h</bpmn:incoming>
+      <bpmn:linkEventDefinition id="LinkEventDefinition_0zmq4k1" name="REST_ERROR_LINK" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_1xh511h" sourceRef="Event_0rder1q" targetRef="CompletingBillErrorLinkThrow" />
+    <bpmn:exclusiveGateway id="Gateway_0mhi4xf">
+      <bpmn:incoming>Flow_1rfamoq</bpmn:incoming>
+      <bpmn:outgoing>Flow_0uw17tk</bpmn:outgoing>
+      <bpmn:outgoing>Flow_03oy8eu</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="isAssessmentObsolete" name="Is Assessment Obsolete?" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="put" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/taxpayer-accounting/assessments/&#34; + subject_to_cancel_assessment_id + &#34;/is-obsolete&#34;" target="url" />
+          <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="90" target="connectionTimeoutInSeconds" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultExpression" value="={&#10;  isObsolete : response.body,&#10;  responseStatus : response.status&#10;}" />
+          <zeebe:header key="errorExpression" value="=if responseStatus != null and responseStatus = 200 then&#10;   null&#10;else &#10;  bpmnError(&#34;REST_ERROR&#34;, &#34;Assessment is Obsolete call was not successful&#34;)" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0uw17tk</bpmn:incoming>
+      <bpmn:outgoing>Flow_1csp2io</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0uw17tk" name="Subject To Cancel Assessment Exists" sourceRef="Gateway_0mhi4xf" targetRef="isAssessmentObsolete">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=subject_to_cancel_assessment_id != null</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_03oy8eu" name="Subject To Cancel Assessment does not exist" sourceRef="Gateway_0mhi4xf" targetRef="QuickCompleteAssessment">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=subject_to_cancel_assessment_id = null</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_1nd8c12">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_1csp2io</bpmn:incoming>
+      <bpmn:outgoing>Flow_14k49eb</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0yyewqa</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1csp2io" sourceRef="isAssessmentObsolete" targetRef="Gateway_1nd8c12" />
+    <bpmn:sequenceFlow id="Flow_14k49eb" name="isObsolete = false" sourceRef="Gateway_1nd8c12" targetRef="end_event">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=isObsolete = "false"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0yyewqa" name="isObsolete = true" sourceRef="Gateway_1nd8c12" targetRef="cancelAssessment">
+      <bpmn:extensionElements />
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=isObsolete = "true"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="cancelAssessment" name="Cancel Assessment" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="put" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/taxpayer-accounting/assessments/&#34; + subject_to_cancel_assessment_id + &#34;/cancel&#34;" target="url" />
+          <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="60" target="connectionTimeoutInSeconds" />
+          <zeebe:input source="={&#10;  &#34;changeReasonCL&#34;:&#34;UpdatedParametersOfCalculation&#34;,&#10;  &#34;changeComment&#34;:&#34;Updated By process &#34; + processInstanceId + &#34;, ran: &#34; + string(date(now()))&#10;}" target="body" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultVariable" />
+          <zeebe:header key="resultExpression" value="={&#10;  canceled_assessment_id : response.body.id,&#10;  responseStatus : response.status&#10;}" />
+          <zeebe:header key="errorExpression" value="=if responseStatus != null and responseStatus = 200 then&#10;   null&#10;else &#10;  bpmnError(&#34;REST_ERROR&#34;, &#34;Cancel assessment call was not successful&#34;)" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0yyewqa</bpmn:incoming>
+      <bpmn:outgoing>Flow_006vopa</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_006vopa" sourceRef="cancelAssessment" targetRef="QuickCompleteAssessment" />
+    <bpmn:boundaryEvent id="Event_1eeowgg" attachedToRef="cancelAssessment">
+      <bpmn:outgoing>Flow_1feljxi</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0f42j2r" />
+    </bpmn:boundaryEvent>
+    <bpmn:intermediateThrowEvent id="Event_0wahqvj" name="Error Link">
+      <bpmn:incoming>Flow_1feljxi</bpmn:incoming>
+      <bpmn:linkEventDefinition id="LinkEventDefinition_0k2m1cl" name="REST_ERROR_LINK" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_1feljxi" sourceRef="Event_1eeowgg" targetRef="Event_0wahqvj" />
+    <bpmn:boundaryEvent id="Event_1gm5rbn" attachedToRef="isAssessmentObsolete">
+      <bpmn:outgoing>Flow_1aiwzan</bpmn:outgoing>
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_1unsur9" />
+    </bpmn:boundaryEvent>
+    <bpmn:intermediateThrowEvent id="Event_1xvivar" name="Error Link">
+      <bpmn:incoming>Flow_1aiwzan</bpmn:incoming>
+      <bpmn:linkEventDefinition id="LinkEventDefinition_167khyb" name="REST_ERROR_LINK" />
+    </bpmn:intermediateThrowEvent>
+    <bpmn:sequenceFlow id="Flow_1aiwzan" sourceRef="Event_1gm5rbn" targetRef="Event_1xvivar" />
+    <bpmn:intermediateCatchEvent id="Event_1fnn5zx">
+      <bpmn:incoming>Flow_052bka9</bpmn:incoming>
+      <bpmn:outgoing>Flow_0lhs9cn</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1twdkgc">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT10S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0lhs9cn" sourceRef="Event_1fnn5zx" targetRef="SendLetter" />
+    <bpmn:intermediateCatchEvent id="Event_153dq94" name="Contact Created">
+      <bpmn:incoming>Flow_19c3a4u</bpmn:incoming>
+      <bpmn:outgoing>Flow_0llnzah</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1bb1uyc" messageRef="Message_2tnianq" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0llnzah" sourceRef="Event_153dq94" targetRef="end_event" />
+  </bpmn:process>
+  <bpmn:message id="Message_2tnianq" name="CREATE_CONTACT_LETTER">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ProcessDefinitions.MUNICIPAL_TAX_EXAMPLE_AMPLIO">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="162" y="529" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="154" y="572" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_17xrpd1_di" bpmnElement="ProcessInitializer">
+        <dc:Bounds x="260" y="507" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0mac5l5_di" bpmnElement="QuickCompleteAssessment">
+        <dc:Bounds x="640" y="507" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0xpp3ic_di" bpmnElement="end_event">
+        <dc:Bounds x="1352" y="529" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1384" y="563" width="52" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0n8qajw" bpmnElement="SendLetter">
+        <dc:Bounds x="1230" y="310" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1xjm05u" bpmnElement="ErrorLinkCatch">
+        <dc:Bounds x="1352" y="602" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1331" y="648" width="80" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ffgrhh_di" bpmnElement="CompletingAssessmentErrorLinkThrow">
+        <dc:Bounds x="722" y="622" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="715" y="665" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0ic9pkb_di" bpmnElement="Gateway_0ic9pkb" isMarkerVisible="true">
+        <dc:Bounds x="835" y="522" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ispcbl_di" bpmnElement="completeBill">
+        <dc:Bounds x="980" y="310" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1jjhkkb_di" bpmnElement="CompletingBillErrorLinkThrow">
+        <dc:Bounds x="1062" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1056" y="475" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0mhi4xf_di" bpmnElement="Gateway_0mhi4xf" isMarkerVisible="true">
+        <dc:Bounds x="455" y="522" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1k9cefb_di" bpmnElement="isAssessmentObsolete">
+        <dc:Bounds x="520" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1nd8c12_di" bpmnElement="Gateway_1nd8c12" isMarkerVisible="true">
+        <dc:Bounds x="665" y="95" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16wikdz_di" bpmnElement="cancelAssessment">
+        <dc:Bounds x="640" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_12vuq4s" bpmnElement="Event_0wahqvj">
+        <dc:Bounds x="722" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="715" y="475" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0aqkple" bpmnElement="Event_1xvivar">
+        <dc:Bounds x="602" y="202" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="595" y="245" width="49" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1fnn5zx_di" bpmnElement="Event_1fnn5zx">
+        <dc:Bounds x="1132" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_153dq94_di" bpmnElement="Event_153dq94">
+        <dc:Bounds x="1352" y="412" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1259" y="420" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1y00i44" bpmnElement="Event_1gm5rbn">
+        <dc:Bounds x="602" y="142" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1eeowgg_di" bpmnElement="Event_1eeowgg">
+        <dc:Bounds x="722" y="382" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0rder1q_di" bpmnElement="Event_0rder1q">
+        <dc:Bounds x="1062" y="372" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0av7g9z_di" bpmnElement="Event_0av7g9z">
+        <dc:Bounds x="722" y="569" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0tyym9c_di" bpmnElement="Flow_0tyym9c">
+        <di:waypoint x="198" y="547" />
+        <di:waypoint x="260" y="547" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rfamoq_di" bpmnElement="Flow_1rfamoq">
+        <di:waypoint x="360" y="547" />
+        <di:waypoint x="455" y="547" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19c3a4u_di" bpmnElement="Flow_19c3a4u">
+        <di:waypoint x="1330" y="350" />
+        <di:waypoint x="1370" y="350" />
+        <di:waypoint x="1370" y="412" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1us749h_di" bpmnElement="Flow_1us749h">
+        <di:waypoint x="740" y="605" />
+        <di:waypoint x="740" y="622" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18m3t0c_di" bpmnElement="Flow_18m3t0c">
+        <di:waypoint x="740" y="547" />
+        <di:waypoint x="835" y="547" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16a0nzo_di" bpmnElement="Flow_16a0nzo">
+        <di:waypoint x="860" y="522" />
+        <di:waypoint x="860" y="350" />
+        <di:waypoint x="980" y="350" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="885" y="300" width="69" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_18x5733_di" bpmnElement="Flow_18x5733">
+        <di:waypoint x="885" y="547" />
+        <di:waypoint x="1352" y="547" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="885" y="559" width="69" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0k58zbl_di" bpmnElement="Flow_0k58zbl">
+        <di:waypoint x="1370" y="602" />
+        <di:waypoint x="1370" y="565" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_052bka9_di" bpmnElement="Flow_052bka9">
+        <di:waypoint x="1080" y="350" />
+        <di:waypoint x="1132" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xh511h_di" bpmnElement="Flow_1xh511h">
+        <di:waypoint x="1080" y="408" />
+        <di:waypoint x="1080" y="432" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0uw17tk_di" bpmnElement="Flow_0uw17tk">
+        <di:waypoint x="480" y="522" />
+        <di:waypoint x="480" y="120" />
+        <di:waypoint x="520" y="120" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="385" y="287" width="89" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03oy8eu_di" bpmnElement="Flow_03oy8eu">
+        <di:waypoint x="505" y="547" />
+        <di:waypoint x="640" y="547" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="526" y="559" width="89" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1csp2io_di" bpmnElement="Flow_1csp2io">
+        <di:waypoint x="620" y="120" />
+        <di:waypoint x="665" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14k49eb_di" bpmnElement="Flow_14k49eb">
+        <di:waypoint x="715" y="120" />
+        <di:waypoint x="1420" y="120" />
+        <di:waypoint x="1420" y="547" />
+        <di:waypoint x="1388" y="547" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="736" y="93" width="89" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yyewqa_di" bpmnElement="Flow_0yyewqa">
+        <di:waypoint x="690" y="145" />
+        <di:waypoint x="690" y="320" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="698" y="217" width="84" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_006vopa_di" bpmnElement="Flow_006vopa">
+        <di:waypoint x="690" y="400" />
+        <di:waypoint x="690" y="507" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1feljxi_di" bpmnElement="Flow_1feljxi">
+        <di:waypoint x="740" y="418" />
+        <di:waypoint x="740" y="432" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1aiwzan_di" bpmnElement="Flow_1aiwzan">
+        <di:waypoint x="620" y="178" />
+        <di:waypoint x="620" y="202" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lhs9cn_di" bpmnElement="Flow_0lhs9cn">
+        <di:waypoint x="1168" y="350" />
+        <di:waypoint x="1230" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0llnzah_di" bpmnElement="Flow_0llnzah">
+        <di:waypoint x="1370" y="448" />
+        <di:waypoint x="1370" y="529" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

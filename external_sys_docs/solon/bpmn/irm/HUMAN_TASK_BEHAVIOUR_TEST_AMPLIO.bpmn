@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:conversion="http://camunda.org/schema/conversion/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0y6b6xd" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.21.0" conversion:converterVersion="0.12.4" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.3.0">
+  <bpmn:process id="ProcessDefinitions.HUMAN_TASK_BEHAVIOUR_TEST_AMPLIO" name="HUMAN_TASK_BEHAVIOUR_TEST_AMPLIO" processType="None" isClosed="false" isExecutable="true">
+    <bpmn:startEvent id="StartEvent" name="Start Event">
+      <bpmn:outgoing>Flow_10uh2b7</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="ProcessInitializer" name="Process Initializer" implementation="##WebService">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ProcessInitializer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_10uh2b7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0u32ba0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_10uh2b7" sourceRef="StartEvent" targetRef="ProcessInitializer" />
+    <bpmn:sequenceFlow id="Flow_0u32ba0" sourceRef="ProcessInitializer" targetRef="DemoHumanTask" />
+    <bpmn:eventBasedGateway id="HumanTaskResultGateway" name="Human Task Result Gateway">
+      <bpmn:incoming>Flow_17utcki</bpmn:incoming>
+      <bpmn:outgoing>Flow_1pylw0o</bpmn:outgoing>
+      <bpmn:outgoing>Flow_10hmb94</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:sequenceFlow id="Flow_17utcki" sourceRef="DemoHumanTask" targetRef="HumanTaskResultGateway" />
+    <bpmn:intermediateCatchEvent id="HumanTaskApproved" name="Human Task Approved">
+      <bpmn:extensionElements>
+        <conversion:reference>Message_3ndbb2t</conversion:reference>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1pylw0o</bpmn:incoming>
+      <bpmn:outgoing>Flow_1di2205</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_043eukx" messageRef="Message_3ndbb2t" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="HumanTaskRejected" name="Human Task Rejected">
+      <bpmn:extensionElements>
+        <conversion:reference>Message_2mobs4k</conversion:reference>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_10hmb94</bpmn:incoming>
+      <bpmn:outgoing>Flow_0uyqni5</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0wubobe" messageRef="Message_2mobs4k" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1pylw0o" sourceRef="HumanTaskResultGateway" targetRef="HumanTaskApproved" />
+    <bpmn:sequenceFlow id="Flow_10hmb94" sourceRef="HumanTaskResultGateway" targetRef="HumanTaskRejected" />
+    <bpmn:endEvent id="EndEvent" name="End Event">
+      <bpmn:incoming>Flow_1di2205</bpmn:incoming>
+      <bpmn:incoming>Flow_0uyqni5</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1di2205" sourceRef="HumanTaskApproved" targetRef="EndEvent" />
+    <bpmn:sequenceFlow id="Flow_0uyqni5" sourceRef="HumanTaskRejected" targetRef="EndEvent" />
+    <bpmn:serviceTask id="DemoHumanTask" name="Demo Human Task">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="CreateHumanTaskCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="entityId" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="=humanTaskTypeCode" target="humanTaskTypeCode" />
+          <zeebe:input source="=humanTaskPriorityCL" target="humanTaskPriorityCL" />
+          <zeebe:input source="=comment" target="comment" />
+          <zeebe:input source="=autoStart" target="autoStart" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0u32ba0</bpmn:incoming>
+      <bpmn:outgoing>Flow_17utcki</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmn:message id="Message_3ndbb2t" name="BEHAVETEST_APPROVED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_2mobs4k" name="BEHAVETEST_REJECTED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ProcessDefinitions.HUMAN_TASK_BEHAVIOUR_TEST_AMPLIO">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent">
+        <dc:Bounds x="179" y="199" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="170" y="242" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kr1fyl_di" bpmnElement="ProcessInitializer">
+        <dc:Bounds x="330" y="177" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_034l73z_di" bpmnElement="HumanTaskResultGateway">
+        <dc:Bounds x="785" y="192" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="852" y="207" width="79" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1a0xry0" bpmnElement="HumanTaskApproved">
+        <dc:Bounds x="932" y="82" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="920" y="125" width="62" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_01k471n" bpmnElement="HumanTaskRejected">
+        <dc:Bounds x="942" y="322" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="929" y="284.5" width="62" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1np7c4u_di" bpmnElement="EndEvent">
+        <dc:Bounds x="1092" y="199" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1030" y="210" width="52" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_08jwrgy_di" bpmnElement="DemoHumanTask">
+        <dc:Bounds x="540" y="177" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_10uh2b7_di" bpmnElement="Flow_10uh2b7">
+        <di:waypoint x="215" y="217" />
+        <di:waypoint x="330" y="217" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0u32ba0_di" bpmnElement="Flow_0u32ba0">
+        <di:waypoint x="430" y="217" />
+        <di:waypoint x="540" y="217" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17utcki_di" bpmnElement="Flow_17utcki">
+        <di:waypoint x="640" y="217" />
+        <di:waypoint x="785" y="217" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1pylw0o_di" bpmnElement="Flow_1pylw0o">
+        <di:waypoint x="810" y="192" />
+        <di:waypoint x="810" y="100" />
+        <di:waypoint x="932" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10hmb94_di" bpmnElement="Flow_10hmb94">
+        <di:waypoint x="810" y="242" />
+        <di:waypoint x="810" y="340" />
+        <di:waypoint x="942" y="340" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1di2205_di" bpmnElement="Flow_1di2205">
+        <di:waypoint x="968" y="100" />
+        <di:waypoint x="1110" y="100" />
+        <di:waypoint x="1110" y="199" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0uyqni5_di" bpmnElement="Flow_0uyqni5">
+        <di:waypoint x="978" y="340" />
+        <di:waypoint x="1110" y="340" />
+        <di:waypoint x="1110" y="235" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

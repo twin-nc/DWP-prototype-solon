@@ -1,0 +1,112 @@
+<mxfile host="Electron">
+  <diagram id="six-demo-flows-overview" name="Six Demo Flows Overview">
+    <mxGraphModel dx="1664" dy="1131" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=26;fontStyle=1;fontColor=#14213D;" value="Six Primary Demo Flows" vertex="1">
+          <mxGeometry x="80" y="28" width="1494" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=13;fontStyle=2;fontColor=#5C6670;" value="A scenario-led demonstration of automation, compliance, operational control, and business-led change" vertex="1">
+          <mxGeometry x="80" y="68" width="1494" height="26" as="geometry" />
+        </mxCell>
+
+        <mxCell id="message" parent="1" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;strokeWidth=1.5;fontSize=14;fontStyle=1;fontColor=#334155;" value="The solution does not simply store debt cases. It interprets data, decides next action, protects customers, controls work, and gives managers evidence and oversight." vertex="1">
+          <mxGeometry x="180" y="112" width="1294" height="58" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f1" parent="1" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;fillColor=#DBEAFE;strokeColor=#2563EB;strokeWidth=2.5;fontSize=18;fontStyle=1;verticalAlign=top;spacingTop=16;fontColor=#1E3A8A;" value="1. Intake to First Contact" vertex="1">
+          <mxGeometry x="80" y="210" width="470" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_badge" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#93C5FD;strokeWidth=1;fontSize=12;fontStyle=1;fontColor=#1D4ED8;" value="Automation before agents log in" vertex="1">
+          <mxGeometry x="108" y="254" width="226" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="f1_text" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#1F2937;" value="Scenario: overnight accounts are ingested, validated, enriched, segmented, prioritised, queued, and contacted.&lt;br&gt;&lt;br&gt;Proves: data integration, decisioning, queue distribution, first treatment, supervisor visibility.&lt;br&gt;&lt;br&gt;Moment of truth: hundreds of accounts are ready to work before a single agent starts." vertex="1">
+          <mxGeometry x="108" y="298" width="414" height="132" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f2" parent="1" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;fillColor=#FEE2E2;strokeColor=#DC2626;strokeWidth=2.5;fontSize=18;fontStyle=1;verticalAlign=top;spacingTop=16;fontColor=#991B1B;" value="2. Vulnerability to Resolution" vertex="1">
+          <mxGeometry x="592" y="210" width="470" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="f2_badge" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FEF2F2;strokeColor=#FCA5A5;strokeWidth=1;fontSize=12;fontStyle=1;fontColor=#B91C1C;" value="Protection at the exact moment" vertex="1">
+          <mxGeometry x="620" y="254" width="226" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="f2_text" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#1F2937;" value="Scenario: a customer discloses financial difficulty and mental health concerns during a call.&lt;br&gt;&lt;br&gt;Proves: vulnerability handling, suppression, specialist routing, I&amp;E, affordability, arrangement setup, audit.&lt;br&gt;&lt;br&gt;Moment of truth: outbound collection activity stops as soon as the marker is saved." vertex="1">
+          <mxGeometry x="620" y="298" width="414" height="132" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f3" parent="1" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;fillColor=#FFEDD5;strokeColor=#EA580C;strokeWidth=2.5;fontSize=18;fontStyle=1;verticalAlign=top;spacingTop=16;fontColor=#9A3412;" value="3. Breach to Third-Party Collection Placement" vertex="1">
+          <mxGeometry x="1104" y="210" width="470" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_badge" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#FDBA74;strokeWidth=1;fontSize=12;fontStyle=1;fontColor=#C2410C;" value="Escalation with a paper trail" vertex="1">
+          <mxGeometry x="1132" y="254" width="226" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="f3_text" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#1F2937;" value="Scenario: arrangement payments are missed and internal recovery is exhausted.&lt;br&gt;&lt;br&gt;Proves: breach detection, tolerance rules, contact sequencing, exception queue, third-party collection placement, payment reconciliation.&lt;br&gt;&lt;br&gt;Moment of truth: the full timeline from missed payment to third-party collection placement is visible." vertex="1">
+          <mxGeometry x="1132" y="298" width="414" height="132" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f4" parent="1" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;fillColor=#E0F2FE;strokeColor=#0284C7;strokeWidth=2.5;fontSize=18;fontStyle=1;verticalAlign=top;spacingTop=16;fontColor=#075985;" value="4. Complex Household" vertex="1">
+          <mxGeometry x="80" y="504" width="470" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="f4_badge" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F0F9FF;strokeColor=#7DD3FC;strokeWidth=1;fontSize=12;fontStyle=1;fontColor=#0369A1;" value="Complexity kept coherent" vertex="1">
+          <mxGeometry x="108" y="548" width="226" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="f4_text" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#1F2937;" value="Scenario: one household has multiple people, debts, restrictions, and competing workflows.&lt;br&gt;&lt;br&gt;Proves: relationship management, linked accounts, parallel workflows, restrictions, compliance prompts, correct action scope.&lt;br&gt;&lt;br&gt;Moment of truth: the system prevents a likely compliance mistake in real time." vertex="1">
+          <mxGeometry x="108" y="592" width="414" height="132" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f5" parent="1" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;fillColor=#FEF3C7;strokeColor=#D97706;strokeWidth=2.5;fontSize=18;fontStyle=1;verticalAlign=top;spacingTop=16;fontColor=#92400E;" value="5. Strategy Change Without IT" vertex="1">
+          <mxGeometry x="592" y="504" width="470" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="f5_badge" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#FFFBEB;strokeColor=#FCD34D;strokeWidth=1;fontSize=12;fontStyle=1;fontColor=#B45309;" value="Business-led safe change" vertex="1">
+          <mxGeometry x="620" y="548" width="226" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="f5_text" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#1F2937;" value="Scenario: a strategy manager adds an SMS step and tests it before rollout.&lt;br&gt;&lt;br&gt;Proves: visual configuration, peer review, simulation, champion/challenger, versioning, rollback, governed deployment.&lt;br&gt;&lt;br&gt;Moment of truth: the system shows what would have happened if the strategy had already been live." vertex="1">
+          <mxGeometry x="620" y="592" width="414" height="132" as="geometry" />
+        </mxCell>
+
+        <mxCell id="f6" parent="1" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;fillColor=#DCFCE7;strokeColor=#16A34A;strokeWidth=2.5;fontSize=18;fontStyle=1;verticalAlign=top;spacingTop=16;fontColor=#166534;" value="6. Executive Dashboard" vertex="1">
+          <mxGeometry x="1104" y="504" width="470" height="244" as="geometry" />
+        </mxCell>
+        <mxCell id="f6_badge" parent="1" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=#86EFAC;strokeWidth=1;fontSize=12;fontStyle=1;fontColor=#15803D;" value="Real-time operational control" vertex="1">
+          <mxGeometry x="1132" y="548" width="226" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="f6_text" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=12;fontColor=#1F2937;" value="Scenario: leadership reviews queue health, breach trends, strategy performance, SLA risk, and vulnerable-case handling.&lt;br&gt;&lt;br&gt;Proves: management visibility, drill-down, exception reporting, performance comparison, intervention, governance reporting.&lt;br&gt;&lt;br&gt;Moment of truth: a senior user finds an issue, traces the cause, and acts within minutes." vertex="1">
+          <mxGeometry x="1132" y="592" width="414" height="132" as="geometry" />
+        </mxCell>
+
+        <mxCell id="arrow12" parent="1" source="f1" target="f2" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#94A3B8;endArrow=open;endFill=0;strokeWidth=1.5;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow23" parent="1" source="f2" target="f3" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#94A3B8;endArrow=open;endFill=0;strokeWidth=1.5;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow45" parent="1" source="f4" target="f5" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#94A3B8;endArrow=open;endFill=0;strokeWidth=1.5;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow56" parent="1" source="f5" target="f6" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#94A3B8;endArrow=open;endFill=0;strokeWidth=1.5;" edge="1" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="workspace_band" parent="1" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#CBD5E1;strokeWidth=1.5;fontSize=14;fontStyle=1;fontColor=#334155;" value="Workspace Coverage" vertex="1">
+          <mxGeometry x="180" y="796" width="1294" height="176" as="geometry" />
+        </mxCell>
+        <mxCell id="case_ws" parent="1" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#EFF6FF;strokeColor=#93C5FD;strokeWidth=1.5;fontSize=13;fontStyle=1;fontColor=#1D4ED8;" value="Case Worker Workspace&lt;br&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;Flows 2, 3, 4&lt;br&gt;Agent worklist in Flow 1&lt;/span&gt;" vertex="1">
+          <mxGeometry x="224" y="844" width="360" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="ops_ws" parent="1" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#F0FDF4;strokeColor=#86EFAC;strokeWidth=1.5;fontSize=13;fontStyle=1;fontColor=#15803D;" value="Operations Workspace&lt;br&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;Flows 1, 3, 6&lt;br&gt;Dashboards, exception queues, third-party collection reporting&lt;/span&gt;" vertex="1">
+          <mxGeometry x="646" y="844" width="360" height="82" as="geometry" />
+        </mxCell>
+        <mxCell id="config_ws" parent="1" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FFF7ED;strokeColor=#FDBA74;strokeWidth=1.5;fontSize=13;fontStyle=1;fontColor=#C2410C;" value="Configuration Workspace&lt;br&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;Flow 5&lt;br&gt;Strategy, simulation, approval, versioning&lt;/span&gt;" vertex="1">
+          <mxGeometry x="1068" y="844" width="360" height="82" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bottom_note" parent="1" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#CBD5E1;strokeWidth=1;fontSize=13;fontStyle=1;fontColor=#334155;" value="Demo narrative: start with intake automation, prove safe customer handling, show escalation and complexity, then close with business-led change and real-time operational control." vertex="1">
+          <mxGeometry x="180" y="1008" width="1294" height="54" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

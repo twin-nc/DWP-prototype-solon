@@ -1,0 +1,594 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0q59m0x" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.32.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.3.0">
+  <bpmn:process id="ProcessDefinitions.DIRECT_DEPOSIT_AMPLIO" name="DIRECT_DEPOSIT_AMPLIO" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1i4rcy2</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:intermediateCatchEvent id="DirectDepositSuccessSignal" name="Direct Deposit Success Signal">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1trsbn0</bpmn:incoming>
+      <bpmn:outgoing>Flow_0dsmdt1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0n3bwhl" messageRef="Message_0ckpepc" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="DirectDepositErrorSignal" name="Direct Deposit Error Signal">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0ued9w3</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ra7mnc</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_06m0m94" messageRef="Message_0optvaf" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:eventBasedGateway id="Gateway_1qd2cxb">
+      <bpmn:incoming>Flow_1jrvco6</bpmn:incoming>
+      <bpmn:outgoing>Flow_1trsbn0</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0ued9w3</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:sequenceFlow id="Flow_1trsbn0" sourceRef="Gateway_1qd2cxb" targetRef="DirectDepositSuccessSignal" />
+    <bpmn:sequenceFlow id="Flow_0ued9w3" sourceRef="Gateway_1qd2cxb" targetRef="DirectDepositErrorSignal" />
+    <bpmn:endEvent id="Event_03zj9kw">
+      <bpmn:incoming>Flow_0eop8pj</bpmn:incoming>
+      <bpmn:incoming>Flow_16t6d00</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="FreezeAlreadyApprovedBillSegment" name="Freeze Already Approved Bill Segment">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishFreezeBillSegmentCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="billSegmentId" />
+          <zeebe:input source="=&#34;FROZEN_OK_SIGNAL&#34;" target="signalName" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_00p1pv4</bpmn:incoming>
+      <bpmn:outgoing>Flow_0gjshm5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_1qjca7b">
+      <bpmn:incoming>Flow_09ekplq</bpmn:incoming>
+      <bpmn:incoming>Flow_1yjtgn7</bpmn:incoming>
+      <bpmn:incoming>Flow_1w7rkqn</bpmn:incoming>
+      <bpmn:outgoing>Flow_0eop8pj</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="UpdateDirectDepositStatusFailed" name="Update Direct Deposit Status to Failed">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="UpdateBillSegmentDirectDepositStatusCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="billSegmentId" />
+          <zeebe:input source="=&#34;FAILED&#34;" target="directDepositStatus" />
+          <zeebe:input source="=&#34;FAILED_SIGNAL&#34;" target="signalName" />
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="entityId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0ra7mnc</bpmn:incoming>
+      <bpmn:outgoing>Flow_1po3p6u</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="CreateHumanTask" name="Create Human Task">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="CreateHumanTaskCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="entityId" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="=&#34;DirDepErr&#34;" target="humanTaskTypeCode" />
+          <zeebe:input source="=&#34;PRIORITY_10&#34;" target="humanTaskPriorityCL" />
+          <zeebe:input source="=[&#10;  &#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;RESOLVING_ISSUES_FOR&#34;,&#10;    entityCL : &#34;BillSegment&#34;,&#10;    entityId : billSegmentIdForDirectDeposit&#10;  },&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;RESOLVING_ISSUES_FOR&#34;,&#10;    entityCL : &#34;OverpaymentProcess&#34;,&#10;    entityId : overpaymentProcessId&#10;  },&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;RESOLVING_ISSUES_FOR&#34;,&#10;    entityCL : &#34;Party&#34;,&#10;    entityId : partyId&#10;  }&#10;]" target="relatedEntities" />
+          <zeebe:input source="=&#34;Zeebe created human task for Overpayment Process :&#34; + overpaymentProcessId + &#34; and Bill Segment :&#34; + billSegmentIdForDirectDeposit" target="comment" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0pn0sps</bpmn:incoming>
+      <bpmn:outgoing>Flow_1rvyutl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0ra7mnc" sourceRef="DirectDepositErrorSignal" targetRef="UpdateDirectDepositStatusFailed" />
+    <bpmn:eventBasedGateway id="Gateway_1267i7b">
+      <bpmn:incoming>Flow_1rvyutl</bpmn:incoming>
+      <bpmn:outgoing>Flow_0t463oo</bpmn:outgoing>
+      <bpmn:outgoing>Flow_00t418r</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:intermediateCatchEvent id="DirectDepositRetrySignal" name="Direct Deposit Retry Signal">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0t463oo</bpmn:incoming>
+      <bpmn:outgoing>Flow_1shwstw</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0uoscnj" messageRef="Message_0q8d1br" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0t463oo" sourceRef="Gateway_1267i7b" targetRef="DirectDepositRetrySignal" />
+    <bpmn:intermediateCatchEvent id="DirectDepositNoRetrySignal" name="Direct Deposit No Retry Signal">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_00t418r</bpmn:incoming>
+      <bpmn:outgoing>Flow_1o19w01</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_033lwa4" messageRef="Message_3908hrg" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_00t418r" sourceRef="Gateway_1267i7b" targetRef="DirectDepositNoRetrySignal" />
+    <bpmn:sequenceFlow id="Flow_1o19w01" sourceRef="DirectDepositNoRetrySignal" targetRef="Activity_1xcwi11" />
+    <bpmn:sequenceFlow id="Flow_1rvyutl" sourceRef="CreateHumanTask" targetRef="Gateway_1267i7b" />
+    <bpmn:sequenceFlow id="Flow_1i4rcy2" sourceRef="StartEvent_1" targetRef="ProcessInitializer" />
+    <bpmn:sequenceFlow id="Flow_0eop8pj" sourceRef="Gateway_1qjca7b" targetRef="Event_03zj9kw" />
+    <bpmn:serviceTask id="UpdateDirectDepositStatusCompletedReadySend" name="Update Direct Deposit Status to Ready Send">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="UpdateBillSegmentDirectDepositStatusCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="billSegmentId" />
+          <zeebe:input source="=&#34;READY_TO_SEND&#34;" target="directDepositStatus" />
+          <zeebe:input source="=&#34;READY_TO_SEND_SIGNAL&#34;" target="signalName" />
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="entityId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0ixmbby</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wiwqj0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1wiwqj0" sourceRef="UpdateDirectDepositStatusCompletedReadySend" targetRef="ReadySendSignal" />
+    <bpmn:exclusiveGateway id="Gateway_1il8g3m">
+      <bpmn:incoming>Flow_1uanq8i</bpmn:incoming>
+      <bpmn:incoming>Flow_0fjmdjj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ixmbby</bpmn:outgoing>
+      <bpmn:outgoing>Flow_16t6d00</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0ixmbby" name="exists" sourceRef="Gateway_1il8g3m" targetRef="UpdateDirectDepositStatusCompletedReadySend">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=billSegmentIdForDirectDeposit != null</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1shwstw" sourceRef="DirectDepositRetrySignal" targetRef="CloseException" />
+    <bpmn:sequenceFlow id="Flow_0gjshm5" sourceRef="FreezeAlreadyApprovedBillSegment" targetRef="FrozenOkSignal" />
+    <bpmn:serviceTask id="ProcessInitializer" name="Process Initializer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ProcessInitializer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1i4rcy2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1uanq8i</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1uanq8i" sourceRef="ProcessInitializer" targetRef="Gateway_1il8g3m" />
+    <bpmn:exclusiveGateway id="Gateway_01rqyed" name="Is refund interest bill segment">
+      <bpmn:incoming>Flow_12phie1</bpmn:incoming>
+      <bpmn:outgoing>Flow_09ekplq</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1b4ekyv</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_09ekplq" name="No" sourceRef="Gateway_01rqyed" targetRef="Gateway_1qjca7b">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=isRefundInterest=false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="FreezeNegativeRefundInterestBillSegment" name="Freeze Negative Refund Interest Bill Segment">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishFreezeBillSegmentCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=negativeRefundInterestBillSegmentId" target="billSegmentId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1b4ekyv</bpmn:incoming>
+      <bpmn:outgoing>Flow_1yjtgn7</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1b4ekyv" name="Yes" sourceRef="Gateway_01rqyed" targetRef="FreezeNegativeRefundInterestBillSegment">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=isRefundInterest=true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1yjtgn7" sourceRef="FreezeNegativeRefundInterestBillSegment" targetRef="Gateway_1qjca7b" />
+    <bpmn:serviceTask id="CreateException" name="Create Exception">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="CreateExceptionCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="entityId" />
+          <zeebe:input source="=&#34;OverpaymentProcess&#34;" target="entityCL" />
+          <zeebe:input source="=&#34;DRCTDPST&#34;" target="exceptionTypeCode" />
+          <zeebe:input source="=overpaymentProcessId" target="sourceEntityId" />
+          <zeebe:input source="=&#34;Zeebe created exception for Overpayment Process: &#34; + overpaymentProcessId + &#34; and Bill Segment: &#34; + billSegmentIdForDirectDeposit + &#34;. Error Code: &#34; + errorCode + &#34;, Error Description: &#34; + errorDescription" target="comment" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_09vm22s</bpmn:incoming>
+      <bpmn:outgoing>Flow_1500vlh</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1500vlh" sourceRef="CreateException" targetRef="Activity_1k7yu94" />
+    <bpmn:serviceTask id="CloseException" name="Close Exception">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="CloseExceptionCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;OverpaymentProcess&#34;" target="entityCL" />
+          <zeebe:input source="=overpaymentProcessId" target="sourceEntityId" />
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="entityId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1shwstw</bpmn:incoming>
+      <bpmn:outgoing>Flow_0fjmdjj</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0fjmdjj" sourceRef="CloseException" targetRef="Gateway_1il8g3m" />
+    <bpmn:serviceTask id="UpdateDirectDepositStatusCompletedOK" name="Update Direct Deposit Status to Completed OK">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="UpdateBillSegmentDirectDepositStatusCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="billSegmentId" />
+          <zeebe:input source="=&#34;COMPLETED_OK&#34;" target="directDepositStatus" />
+          <zeebe:input source="=&#34;COMPLETED_OK_SIGNAL&#34;" target="signalName" />
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="entityId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0dsmdt1</bpmn:incoming>
+      <bpmn:outgoing>Flow_0o6m5e1</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0o6m5e1" sourceRef="UpdateDirectDepositStatusCompletedOK" targetRef="CompletedOKSignal" />
+    <bpmn:sequenceFlow id="Flow_0dsmdt1" sourceRef="DirectDepositSuccessSignal" targetRef="UpdateDirectDepositStatusCompletedOK" />
+    <bpmn:serviceTask id="UpdateDirectDepositStatusCompletedNOK" name="Update Direct Deposit Status to Completed NOK">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="UpdateBillSegmentDirectDepositStatusCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="billSegmentId" />
+          <zeebe:input source="=&#34;COMPLETED_NOT_OK&#34;" target="directDepositStatus" />
+          <zeebe:input source="=&#34;COMPLETED_NOT_OK_SIGNAL&#34;" target="signalName" />
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="entityId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0ajo43i</bpmn:incoming>
+      <bpmn:outgoing>Flow_0pcv65e</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0pcv65e" sourceRef="UpdateDirectDepositStatusCompletedNOK" targetRef="CompletedNOKSignal" />
+    <bpmn:intermediateCatchEvent id="ReadySendSignal" name="Ready to Send Signal">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_1wiwqj0</bpmn:incoming>
+      <bpmn:outgoing>Flow_1jrvco6</bpmn:outgoing>
+      <bpmn:signalEventDefinition id="SignalEventDefinition_1qumfr4" signalRef="Signal_0a54f8m" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1jrvco6" sourceRef="ReadySendSignal" targetRef="Gateway_1qd2cxb" />
+    <bpmn:intermediateCatchEvent id="FailedSignal" name="Failed Signal">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_1po3p6u</bpmn:incoming>
+      <bpmn:outgoing>Flow_09vm22s</bpmn:outgoing>
+      <bpmn:signalEventDefinition id="SignalEventDefinition_0gekdi9" signalRef="Signal_1609bur" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_09vm22s" sourceRef="FailedSignal" targetRef="CreateException" />
+    <bpmn:intermediateCatchEvent id="CompletedNOKSignal" name="Completed NOK Signal">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0pcv65e</bpmn:incoming>
+      <bpmn:outgoing>Flow_1w7rkqn</bpmn:outgoing>
+      <bpmn:signalEventDefinition id="SignalEventDefinition_11279xo" signalRef="Signal_2m56it9" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1w7rkqn" sourceRef="CompletedNOKSignal" targetRef="Gateway_1qjca7b" />
+    <bpmn:intermediateCatchEvent id="CompletedOKSignal" name="Completed OK Signal">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0o6m5e1</bpmn:incoming>
+      <bpmn:outgoing>Flow_00p1pv4</bpmn:outgoing>
+      <bpmn:signalEventDefinition id="SignalEventDefinition_08jksd7" signalRef="Signal_0vvo9em" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_00p1pv4" sourceRef="CompletedOKSignal" targetRef="FreezeAlreadyApprovedBillSegment" />
+    <bpmn:serviceTask id="Activity_1xcwi11" name="Close Exception">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="CloseExceptionCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;OverpaymentProcess&#34;" target="entityCL" />
+          <zeebe:input source="=overpaymentProcessId" target="sourceEntityId" />
+          <zeebe:input source="=billSegmentIdForDirectDeposit" target="entityId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1o19w01</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ajo43i</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0ajo43i" sourceRef="Activity_1xcwi11" targetRef="UpdateDirectDepositStatusCompletedNOK" />
+    <bpmn:sequenceFlow id="Flow_16t6d00" name="not exists" sourceRef="Gateway_1il8g3m" targetRef="Event_03zj9kw">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=billSegmentIdForDirectDeposit = null</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="Activity_1k7yu94" name="Get Party" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="post" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/query-management/queries/OP_LIB_PRT/execute?enablePagination=false&#38;page=0&#38;size=100&#34;" target="url" />
+          <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+          <zeebe:input source="={&#10;  &#34;id&#34;: overpaymentProcessId&#10;}" target="body" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultExpression" value="={&#10;  partyId: response.body.content[1].partyId&#10;}" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1500vlh</bpmn:incoming>
+      <bpmn:outgoing>Flow_0pn0sps</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1po3p6u" sourceRef="UpdateDirectDepositStatusFailed" targetRef="FailedSignal" />
+    <bpmn:sequenceFlow id="Flow_0pn0sps" sourceRef="Activity_1k7yu94" targetRef="CreateHumanTask" />
+    <bpmn:intermediateCatchEvent id="FrozenOkSignal" name="Frozen Ok Signal">
+      <bpmn:incoming>Flow_0gjshm5</bpmn:incoming>
+      <bpmn:outgoing>Flow_12phie1</bpmn:outgoing>
+      <bpmn:signalEventDefinition id="SignalEventDefinition_0be44si" signalRef="Signal_048lpci" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_12phie1" sourceRef="FrozenOkSignal" targetRef="Gateway_01rqyed" />
+  </bpmn:process>
+  <bpmn:message id="Message_0optvaf" name="DIRECT_DEPOSIT_ERROR_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_3908hrg" name="DirDepErr_NO_RETRY_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_0ckpepc" name="DIRECT_DEPOSIT_SUCCESS_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_0q8d1br" name="DirDepErr_RETRY_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_0dr0d4e">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=billSegmentIdForDirectDeposit" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:signal id="Signal_0a54f8m" name="=billSegmentIdForDirectDeposit+&#34;_READY_TO_SEND_SIGNAL&#34;" />
+  <bpmn:signal id="Signal_1609bur" name="=billSegmentIdForDirectDeposit+&#34;_FAILED_SIGNAL&#34;" />
+  <bpmn:signal id="Signal_2m56it9" name="=billSegmentIdForDirectDeposit+&#34;_COMPLETED_NOT_OK_SIGNAL&#34;" />
+  <bpmn:signal id="Signal_0vvo9em" name="=billSegmentIdForDirectDeposit+&#34;_COMPLETED_OK_SIGNAL&#34;" />
+  <bpmn:signal id="Signal_048lpci" name="=billSegmentIdForDirectDeposit+&#34;_FROZEN_OK_SIGNAL&#34;" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ProcessDefinitions.DIRECT_DEPOSIT_AMPLIO">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="512" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1a0335w" bpmnElement="DirectDepositSuccessSignal">
+        <dc:Bounds x="902" y="512" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="882" y="558" width="76" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_18bg3aj" bpmnElement="DirectDepositErrorSignal">
+        <dc:Bounds x="752" y="432" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="670.5" y="436" width="71" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1qd2cxb_di" bpmnElement="Gateway_1qd2cxb">
+        <dc:Bounds x="745" y="505" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_03zj9kw_di" bpmnElement="Event_03zj9kw">
+        <dc:Bounds x="1752" y="512" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0lwkzoc_di" bpmnElement="FreezeAlreadyApprovedBillSegment">
+        <dc:Bounds x="1260" y="490" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_18hhxlm" bpmnElement="Gateway_1qjca7b" isMarkerVisible="true">
+        <dc:Bounds x="1625" y="505" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0gjrkib" bpmnElement="UpdateDirectDepositStatusFailed">
+        <dc:Bounds x="720" y="320" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0052gny" bpmnElement="CreateHumanTask">
+        <dc:Bounds x="1140" y="220" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0csxjqw" bpmnElement="Gateway_1267i7b">
+        <dc:Bounds x="1275" y="235" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_15qz8y8" bpmnElement="DirectDepositRetrySignal">
+        <dc:Bounds x="1282" y="122" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1264" y="85" width="71" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_08scutr" bpmnElement="DirectDepositNoRetrySignal">
+        <dc:Bounds x="1362" y="302" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1336" y="265" width="87" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0lyn1wf" bpmnElement="UpdateDirectDepositStatusCompletedReadySend">
+        <dc:Bounds x="520" y="490" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0qkj11x" bpmnElement="Gateway_1il8g3m" isMarkerVisible="true">
+        <dc:Bounds x="385" y="505" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kr1fyl_di" bpmnElement="ProcessInitializer">
+        <dc:Bounds x="240" y="490" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_01rqyed_di" bpmnElement="Gateway_01rqyed" isMarkerVisible="true">
+        <dc:Bounds x="1455" y="505" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1440" y="475" width="83" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_06kgoib" bpmnElement="FreezeNegativeRefundInterestBillSegment">
+        <dc:Bounds x="1600" y="600" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0dr5y4y_di" bpmnElement="CreateException">
+        <dc:Bounds x="850" y="220" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1sa0496" bpmnElement="CloseException">
+        <dc:Bounds x="900" y="100" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0l5yzbr" bpmnElement="UpdateDirectDepositStatusCompletedOK">
+        <dc:Bounds x="1030" y="490" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0ivjuhj" bpmnElement="UpdateDirectDepositStatusCompletedNOK">
+        <dc:Bounds x="1600" y="280" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0oyfo0p_di" bpmnElement="ReadySendSignal">
+        <dc:Bounds x="672" y="512" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="655" y="555" width="73" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_00jy1av" bpmnElement="FailedSignal">
+        <dc:Bounds x="752" y="242" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="737" y="218" width="65" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_14ptvrd" bpmnElement="CompletedNOKSignal">
+        <dc:Bounds x="1632" y="412" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1541" y="417" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0ivtfap" bpmnElement="CompletedOKSignal">
+        <dc:Bounds x="1192" y="512" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1173" y="558" width="73" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_12kkjov" bpmnElement="Activity_1xcwi11">
+        <dc:Bounds x="1450" y="280" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0h5us2o" bpmnElement="Activity_1k7yu94">
+        <dc:Bounds x="990" y="220" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0dkdis1_di" bpmnElement="FrozenOkSignal">
+        <dc:Bounds x="1392" y="512" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1369" y="555" width="86" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1trsbn0_di" bpmnElement="Flow_1trsbn0">
+        <di:waypoint x="795" y="530" />
+        <di:waypoint x="902" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ued9w3_di" bpmnElement="Flow_0ued9w3">
+        <di:waypoint x="770" y="505" />
+        <di:waypoint x="770" y="468" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ra7mnc_di" bpmnElement="Flow_0ra7mnc">
+        <di:waypoint x="770" y="432" />
+        <di:waypoint x="770" y="400" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0t463oo_di" bpmnElement="Flow_0t463oo">
+        <di:waypoint x="1300" y="235" />
+        <di:waypoint x="1300" y="158" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00t418r_di" bpmnElement="Flow_00t418r">
+        <di:waypoint x="1300" y="285" />
+        <di:waypoint x="1300" y="320" />
+        <di:waypoint x="1362" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1o19w01_di" bpmnElement="Flow_1o19w01">
+        <di:waypoint x="1398" y="320" />
+        <di:waypoint x="1450" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1rvyutl_di" bpmnElement="Flow_1rvyutl">
+        <di:waypoint x="1240" y="260" />
+        <di:waypoint x="1275" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1i4rcy2_di" bpmnElement="Flow_1i4rcy2">
+        <di:waypoint x="188" y="530" />
+        <di:waypoint x="240" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0eop8pj_di" bpmnElement="Flow_0eop8pj">
+        <di:waypoint x="1675" y="530" />
+        <di:waypoint x="1752" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wiwqj0_di" bpmnElement="Flow_1wiwqj0">
+        <di:waypoint x="620" y="530" />
+        <di:waypoint x="672" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ixmbby_di" bpmnElement="Flow_0ixmbby">
+        <di:waypoint x="435" y="530" />
+        <di:waypoint x="520" y="530" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="464" y="512" width="29" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1shwstw_di" bpmnElement="Flow_1shwstw">
+        <di:waypoint x="1282" y="140" />
+        <di:waypoint x="1000" y="140" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0gjshm5_di" bpmnElement="Flow_0gjshm5">
+        <di:waypoint x="1360" y="530" />
+        <di:waypoint x="1392" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1uanq8i_di" bpmnElement="Flow_1uanq8i">
+        <di:waypoint x="340" y="530" />
+        <di:waypoint x="385" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09ekplq_di" bpmnElement="Flow_09ekplq">
+        <di:waypoint x="1505" y="530" />
+        <di:waypoint x="1625" y="530" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1559" y="512" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1b4ekyv_di" bpmnElement="Flow_1b4ekyv">
+        <di:waypoint x="1480" y="555" />
+        <di:waypoint x="1480" y="640" />
+        <di:waypoint x="1600" y="640" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1487" y="597" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yjtgn7_di" bpmnElement="Flow_1yjtgn7">
+        <di:waypoint x="1650" y="600" />
+        <di:waypoint x="1650" y="555" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1500vlh_di" bpmnElement="Flow_1500vlh">
+        <di:waypoint x="950" y="260" />
+        <di:waypoint x="990" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fjmdjj_di" bpmnElement="Flow_0fjmdjj">
+        <di:waypoint x="900" y="140" />
+        <di:waypoint x="410" y="140" />
+        <di:waypoint x="410" y="505" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0o6m5e1_di" bpmnElement="Flow_0o6m5e1">
+        <di:waypoint x="1130" y="530" />
+        <di:waypoint x="1192" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dsmdt1_di" bpmnElement="Flow_0dsmdt1">
+        <di:waypoint x="938" y="530" />
+        <di:waypoint x="1030" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pcv65e_di" bpmnElement="Flow_0pcv65e">
+        <di:waypoint x="1650" y="360" />
+        <di:waypoint x="1650" y="412" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jrvco6_di" bpmnElement="Flow_1jrvco6">
+        <di:waypoint x="708" y="530" />
+        <di:waypoint x="745" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_09vm22s_di" bpmnElement="Flow_09vm22s">
+        <di:waypoint x="788" y="260" />
+        <di:waypoint x="850" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1w7rkqn_di" bpmnElement="Flow_1w7rkqn">
+        <di:waypoint x="1650" y="448" />
+        <di:waypoint x="1650" y="505" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00p1pv4_di" bpmnElement="Flow_00p1pv4">
+        <di:waypoint x="1228" y="530" />
+        <di:waypoint x="1260" y="530" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ajo43i_di" bpmnElement="Flow_0ajo43i">
+        <di:waypoint x="1550" y="320" />
+        <di:waypoint x="1600" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16t6d00_di" bpmnElement="Flow_16t6d00">
+        <di:waypoint x="410" y="555" />
+        <di:waypoint x="410" y="740" />
+        <di:waypoint x="1770" y="740" />
+        <di:waypoint x="1770" y="548" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="416" y="633" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1po3p6u_di" bpmnElement="Flow_1po3p6u">
+        <di:waypoint x="770" y="320" />
+        <di:waypoint x="770" y="278" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pn0sps_di" bpmnElement="Flow_0pn0sps">
+        <di:waypoint x="1090" y="260" />
+        <di:waypoint x="1140" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12phie1_di" bpmnElement="Flow_12phie1">
+        <di:waypoint x="1428" y="530" />
+        <di:waypoint x="1455" y="530" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0bigirf" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.33.1" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.2.0">
+  <bpmn:process id="ProcessDefinitions.BUS_REG_AMPLIO" name="BUS_REG_AMPLIO" isExecutable="true">
+    <bpmn:startEvent id="BusinessRegistrationStartEvent" name="">
+      <bpmn:outgoing>Flow_1tbkcgd</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="ProcessInitializer" name="Process Initializer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ProcessInitializer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1tbkcgd</bpmn:incoming>
+      <bpmn:outgoing>Flow_0z01u2q</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:intermediateCatchEvent id="ValidatedISSSignal" name="Validated ISS Signal">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:output source="=signalResult" target="validateFormSignalResult" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1hblhdl</bpmn:incoming>
+      <bpmn:outgoing>Flow_07t5i09</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1qdu4xw" messageRef="Message_1cvhnra" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="ValidateBusRegForm" name="Validate ISS Bus Reg Form">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="IssPublishTransitionFormCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="formId" />
+          <zeebe:input source="=&#34;VALIDATED&#34;" target="entityStatusCL" />
+          <zeebe:input source="=&#34;VALIDATED_SIGNAL&#34;" target="signalName" />
+          <zeebe:input source="=user" target="user" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_032vky2</bpmn:incoming>
+      <bpmn:outgoing>Flow_1hblhdl</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:intermediateCatchEvent id="SubmittedIRMSignal" name="Submitted IRM Signal">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0mf9jdj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0cvdvv1</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_100zaqh" messageRef="Message_3i2mi12" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1tbkcgd" sourceRef="BusinessRegistrationStartEvent" targetRef="ProcessInitializer" />
+    <bpmn:sequenceFlow id="Flow_0z01u2q" sourceRef="ProcessInitializer" targetRef="SubmittedISSSignal" />
+    <bpmn:sequenceFlow id="Flow_1hblhdl" sourceRef="ValidateBusRegForm" targetRef="ValidatedISSSignal" />
+    <bpmn:sequenceFlow id="Flow_0cvdvv1" sourceRef="SubmittedIRMSignal" targetRef="PushISSSubmittedNotification" />
+    <bpmn:serviceTask id="SubmitBusRegToIRM" name="Submit BusReg To IRM">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="SubmitIssFormToIrmCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="issFormId" />
+          <zeebe:input source="=&#34;SUBMITTED_TO_IRM_SIGNAL&#34;" target="signalName" />
+          <zeebe:input source="=false" target="performCheck" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_03awmng</bpmn:incoming>
+      <bpmn:outgoing>Flow_0mf9jdj</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="PushISSSubmittedNotification" name="Push ISS Submitted Notification">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="IssPublishPushNotificationCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="entityId" />
+          <zeebe:input source="=&#34;FormDefinition&#34;" target="entityCL" />
+          <zeebe:input source="=&#34;SUBMITTED&#34;" target="entityStatusCL" />
+          <zeebe:input source="=&#34;FORM_UPD&#34;" target="notificationTypeCode" />
+          <zeebe:input source="=user" target="user" />
+          <zeebe:input source="=&#34;forms.status-update.title.message&#34;" target="titleKey" />
+          <zeebe:input source="=&#34;forms.status-update.body.message&#34;" target="messageKey" />
+          <zeebe:input source="=[&#34;ENTITY_STATUSES&#34;]" target="messageCodelists" />
+          <zeebe:input source="=[&#34;SUBMITTED_TO_IRM&#34;, &#34;VALIDATED&#34;]" target="messageParams" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0cvdvv1</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tqma4l</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="EndEvent_1" />
+    <bpmn:sequenceFlow id="Flow_0mf9jdj" sourceRef="SubmitBusRegToIRM" targetRef="SubmittedIRMSignal" />
+    <bpmn:sequenceFlow id="Flow_07t5i09" sourceRef="ValidatedISSSignal" targetRef="ValidationResultGateway" />
+    <bpmn:intermediateCatchEvent id="SubmittedISSSignal" name="Submitted ISS Signal">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0z01u2q</bpmn:incoming>
+      <bpmn:outgoing>Flow_032vky2</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0qsjppv" messageRef="Message_3pqnav5" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_032vky2" sourceRef="SubmittedISSSignal" targetRef="ValidateBusRegForm" />
+    <bpmn:endEvent id="Event_12qexi8">
+      <bpmn:incoming>Flow_0tqma4l</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0tqma4l" sourceRef="PushISSSubmittedNotification" targetRef="Event_12qexi8" />
+    <bpmn:exclusiveGateway id="ValidationResultGateway">
+      <bpmn:incoming>Flow_07t5i09</bpmn:incoming>
+      <bpmn:outgoing>Flow_03awmng</bpmn:outgoing>
+      <bpmn:outgoing>Flow_10qfsdm</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_03awmng" name="VALID" sourceRef="ValidationResultGateway" targetRef="SubmitBusRegToIRM">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=validateFormSignalResult = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="SuspendFormForExceptions" name="Suspend Form">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="IssPublishTransitionFormCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="formId" />
+          <zeebe:input source="=&#34;SUSPENDED&#34;" target="entityStatusCL" />
+          <zeebe:input source="=&#34;SUSPENDED_SIGNAL&#34;" target="signalName" />
+          <zeebe:input source="=user" target="user" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_10qfsdm</bpmn:incoming>
+      <bpmn:outgoing>Flow_0550xcp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_10qfsdm" name="INVALID" sourceRef="ValidationResultGateway" targetRef="SuspendFormForExceptions">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=validateFormSignalResult = false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0550xcp" sourceRef="SuspendFormForExceptions" targetRef="SuspendedSignalForExceptions" />
+    <bpmn:intermediateCatchEvent id="SuspendedSignalForExceptions" name="Suspended Signal">
+      <bpmn:incoming>Flow_0550xcp</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ndiyvw</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0osc2iu" messageRef="Message_2eng33f" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="Activity_0uyw9ly" name="Push ISS Suspended Notification">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="IssPublishPushNotificationCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="entityId" />
+          <zeebe:input source="=&#34;FormDefinition&#34;" target="entityCL" />
+          <zeebe:input source="=&#34;SUSPENDED&#34;" target="entityStatusCL" />
+          <zeebe:input source="=&#34;FORM_UPD&#34;" target="notificationTypeCode" />
+          <zeebe:input source="=user" target="user" />
+          <zeebe:input source="=&#34;forms.status-update.title.message&#34;" target="titleKey" />
+          <zeebe:input source="=&#34;forms.status-update.body.message&#34;" target="messageKey" />
+          <zeebe:input source="=[&#34;ENTITY_STATUSES&#34;]" target="messageCodelists" />
+          <zeebe:input source="=[&#34;SUSPENDED&#34;, &#34;SUBMITTED&#34;]" target="messageParams" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0ndiyvw</bpmn:incoming>
+      <bpmn:outgoing>Flow_0xv4dfv</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:endEvent id="Event_0imtwf3">
+      <bpmn:incoming>Flow_0xv4dfv</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0ndiyvw" sourceRef="SuspendedSignalForExceptions" targetRef="Activity_0uyw9ly" />
+    <bpmn:sequenceFlow id="Flow_0xv4dfv" sourceRef="Activity_0uyw9ly" targetRef="Event_0imtwf3" />
+  </bpmn:process>
+  <bpmn:message id="Message_3pqnav5" name="SUBMITTED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_1cvhnra" name="VALIDATED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_2eng33f" name="SUSPENDED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_3i2mi12" name="SUBMITTED_TO_IRM_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ProcessDefinitions.BUS_REG_AMPLIO">
+      <bpmndi:BPMNShape id="BusinessRegistrationStartEvent_di" bpmnElement="BusinessRegistrationStartEvent">
+        <dc:Bounds x="152" y="112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="120" y="155" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kr1fyl_di" bpmnElement="ProcessInitializer">
+        <dc:Bounds x="250" y="90" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1c5lnp6" bpmnElement="ValidatedISSSignal">
+        <dc:Bounds x="702" y="112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="691" y="155" width="66" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0azpifc_di" bpmnElement="ValidateBusRegForm">
+        <dc:Bounds x="540" y="90" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_00n4jbg_di" bpmnElement="SubmittedIRMSignal">
+        <dc:Bounds x="1082" y="112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1070" y="155" width="73" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1yebpng" bpmnElement="SubmitBusRegToIRM">
+        <dc:Bounds x="920" y="90" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0ignhzz" bpmnElement="PushISSSubmittedNotification">
+        <dc:Bounds x="1200" y="90" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0swl6sw" bpmnElement="SubmittedISSSignal">
+        <dc:Bounds x="432" y="112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="418" y="155" width="71" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_12qexi8_di" bpmnElement="Event_12qexi8">
+        <dc:Bounds x="1372" y="112" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_03r4syy_di" bpmnElement="ValidationResultGateway" isMarkerVisible="true">
+        <dc:Bounds x="795" y="105" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_112qsvk" bpmnElement="SuspendFormForExceptions">
+        <dc:Bounds x="770" y="210" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1b5aepa" bpmnElement="SuspendedSignalForExceptions">
+        <dc:Bounds x="802" y="342" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="704" y="353" width="90" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_15s40kr" bpmnElement="Activity_0uyw9ly">
+        <dc:Bounds x="770" y="430" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0imtwf3_di" bpmnElement="Event_0imtwf3">
+        <dc:Bounds x="802" y="562" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1tbkcgd_di" bpmnElement="Flow_1tbkcgd">
+        <di:waypoint x="188" y="130" />
+        <di:waypoint x="250" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0z01u2q_di" bpmnElement="Flow_0z01u2q">
+        <di:waypoint x="350" y="130" />
+        <di:waypoint x="432" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1hblhdl_di" bpmnElement="Flow_1hblhdl">
+        <di:waypoint x="640" y="130" />
+        <di:waypoint x="702" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0cvdvv1_di" bpmnElement="Flow_0cvdvv1">
+        <di:waypoint x="1118" y="130" />
+        <di:waypoint x="1200" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0mf9jdj_di" bpmnElement="Flow_0mf9jdj">
+        <di:waypoint x="1020" y="130" />
+        <di:waypoint x="1082" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_07t5i09_di" bpmnElement="Flow_07t5i09">
+        <di:waypoint x="738" y="130" />
+        <di:waypoint x="795" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_032vky2_di" bpmnElement="Flow_032vky2">
+        <di:waypoint x="468" y="130" />
+        <di:waypoint x="540" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tqma4l_di" bpmnElement="Flow_0tqma4l">
+        <di:waypoint x="1300" y="130" />
+        <di:waypoint x="1372" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03awmng_di" bpmnElement="Flow_03awmng">
+        <di:waypoint x="845" y="130" />
+        <di:waypoint x="920" y="130" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="867" y="112" width="31" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_10qfsdm_di" bpmnElement="Flow_10qfsdm">
+        <di:waypoint x="820" y="155" />
+        <di:waypoint x="820" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="828" y="179" width="43" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0550xcp_di" bpmnElement="Flow_0550xcp">
+        <di:waypoint x="820" y="290" />
+        <di:waypoint x="820" y="342" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ndiyvw_di" bpmnElement="Flow_0ndiyvw">
+        <di:waypoint x="820" y="378" />
+        <di:waypoint x="820" y="430" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xv4dfv_di" bpmnElement="Flow_0xv4dfv">
+        <di:waypoint x="820" y="510" />
+        <di:waypoint x="820" y="562" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

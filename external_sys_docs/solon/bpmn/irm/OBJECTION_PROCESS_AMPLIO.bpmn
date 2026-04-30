@@ -1,0 +1,1378 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_03ebkdi" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.32.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.2.0">
+  <bpmn:process id="ProcessDefinitions.OBJECTION_AMPLIO" name="OBJECTION_PROCESS_AMPLIO" isExecutable="true">
+    <bpmn:startEvent id="Event_1l3cvfn">
+      <bpmn:outgoing>Flow_1mf6ii2</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1mf6ii2" sourceRef="Event_1l3cvfn" targetRef="Activity_0pvo9lh" />
+    <bpmn:serviceTask id="Activity_0pvo9lh" name="Process Initializer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ProcessInitializer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1mf6ii2</bpmn:incoming>
+      <bpmn:outgoing>Flow_00o385p</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_00o385p" sourceRef="Activity_0pvo9lh" targetRef="Event_03hq4et" />
+    <bpmn:subProcess id="Activity_1u2lczv">
+      <bpmn:incoming>Flow_1g2a1rk</bpmn:incoming>
+      <bpmn:outgoing>Flow_0y4sk8r</bpmn:outgoing>
+      <bpmn:serviceTask id="SuppressionQuickActivate" name="Activate Suppression for Debt Recovery and P&#38;I for liability in case">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="PublishCreateSuppressionCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=&#34;SUP_OBJ&#34;" target="suppressionTypeCode" />
+            <zeebe:input source="=&#34;SPECIAL_CIRCUMSTANCE&#34;" target="suppressionReasonCL" />
+            <zeebe:input source="=&#34;ProcessInstance&#34;" target="sourceEntityTypeCL" />
+            <zeebe:input source="=processInstanceId" target="sourceEntityId" />
+            <zeebe:input source="=[&#10;  {&#10;    suppressionActionTypeCL : &#34;DEBT_REC_C&#34;&#10;  },&#10;  {&#10;    suppressionActionTypeCL : &#34;PENALTY_INTEREST&#34;&#10;  }&#10;]" target="suppressionActionTypes" />
+            <zeebe:input source="=[&#10;  {&#10;    entityCL : &#34;Liability&#34;,&#10;    entityId : timelinessResult.liabilityId&#10;  }&#10;]" target="suppressionScopes" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0jd3nuw</bpmn:incoming>
+        <bpmn:outgoing>Flow_105nie8</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:intermediateCatchEvent id="Event_1atd3qh" name="Hearing required Signal">
+        <bpmn:extensionElements>
+          <zeebe:ioMapping>
+            <zeebe:output source="=&#34;HEARING_REQUIRED&#34;" target="processStatus" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1vh3a0y</bpmn:incoming>
+        <bpmn:outgoing>Flow_0baaqdn</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_11eka6o" messageRef="Message_3ud6m4o" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_105nie8" sourceRef="SuppressionQuickActivate" targetRef="Activity_1fm9yw2" />
+      <bpmn:eventBasedGateway id="Gateway_1ywi05q">
+        <bpmn:incoming>Flow_1oeg971</bpmn:incoming>
+        <bpmn:outgoing>Flow_1vh3a0y</bpmn:outgoing>
+        <bpmn:outgoing>Flow_0i4cza8</bpmn:outgoing>
+      </bpmn:eventBasedGateway>
+      <bpmn:sequenceFlow id="Flow_1vh3a0y" sourceRef="Gateway_1ywi05q" targetRef="Event_1atd3qh" />
+      <bpmn:serviceTask id="Activity_1c3te74" name="Perform hearing with Debtor and record Minutes" zeebe:modelerTemplate="createHumanTaskCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="CreateHumanTaskCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=caseId" target="entityId" />
+            <zeebe:input source="=processInstanceId" target="processInstanceId" />
+            <zeebe:input source="=&#34;HUMAN_TASK_HEARING_COMPLETED_SIGNAL&#34;" target="signalName" />
+            <zeebe:input source="=&#34;PerfoHear&#34;" target="humanTaskTypeCode" />
+            <zeebe:input source="=&#34;PRIORITY_10&#34;" target="humanTaskPriorityCL" />
+            <zeebe:input source="=[&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;ProcessInstance&#34;,&#10;    entityId : processInstanceId   &#10;  } &#10;]" target="relatedEntities" />
+            <zeebe:input source="=&#34;Zeebe created&#34;" target="comment" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0baaqdn</bpmn:incoming>
+        <bpmn:outgoing>Flow_1qv3z49</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_0baaqdn" sourceRef="Event_1atd3qh" targetRef="Activity_1c3te74" />
+      <bpmn:intermediateCatchEvent id="Event_1rwu8ap" name="Hearing not required Signal">
+        <bpmn:extensionElements>
+          <zeebe:properties />
+          <zeebe:ioMapping>
+            <zeebe:output source="=&#34;HEARING_NOT_REQUIRED&#34;" target="processStatus" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0i4cza8</bpmn:incoming>
+        <bpmn:outgoing>Flow_0amggmo</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_0il5gc5" messageRef="Message_10v50u3" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_0i4cza8" sourceRef="Gateway_1ywi05q" targetRef="Event_1rwu8ap" />
+      <bpmn:serviceTask id="Activity_0j76t6h" name="Contact debtor to determine if hearing is required" zeebe:modelerTemplate="createHumanTaskCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="CreateHumanTaskCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=caseId" target="entityId" />
+            <zeebe:input source="=processInstanceId" target="processInstanceId" />
+            <zeebe:input source="=&#34;HearRequir&#34;" target="humanTaskTypeCode" />
+            <zeebe:input source="=&#34;PRIORITY_10&#34;" target="humanTaskPriorityCL" />
+            <zeebe:input source="=[&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;ProcessInstance&#34;,&#10;    entityId : processInstanceId   &#10;  } &#10;]" target="relatedEntities" />
+            <zeebe:input source="=&#34;Zeebe created&#34;" target="comment" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_02h47cu</bpmn:incoming>
+        <bpmn:outgoing>Flow_1oeg971</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1oeg971" sourceRef="Activity_0j76t6h" targetRef="Gateway_1ywi05q" />
+      <bpmn:exclusiveGateway id="Gateway_104vmeq">
+        <bpmn:incoming>Flow_1nh6fdm</bpmn:incoming>
+        <bpmn:incoming>Flow_0yiqnj3</bpmn:incoming>
+        <bpmn:outgoing>Flow_0w1fp9r</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_0w1fp9r" sourceRef="Gateway_104vmeq" targetRef="Activity_12sqwnz" />
+      <bpmn:sequenceFlow id="Flow_1qv3z49" sourceRef="Activity_1c3te74" targetRef="Event_0lvc6vt" />
+      <bpmn:sequenceFlow id="Flow_0amggmo" sourceRef="Event_1rwu8ap" targetRef="Activity_1adpdbj" />
+      <bpmn:startEvent id="Event_0fgiabh">
+        <bpmn:outgoing>Flow_157yve8</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:serviceTask id="VerifyTimelinessOfNoticeOfObjectionCommand" name="Verify timeliness of notice of Objection">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="VerifyTimelinessCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=caseId" target="caseId" />
+            <zeebe:input source="=&#34;VERIFY_TIMELINESS_SIGNAL&#34;" target="signalName" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_157yve8</bpmn:incoming>
+        <bpmn:outgoing>Flow_1ug1yok</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_157yve8" sourceRef="Event_0fgiabh" targetRef="VerifyTimelinessOfNoticeOfObjectionCommand" />
+      <bpmn:exclusiveGateway id="Gateway_136oxb2">
+        <bpmn:incoming>Flow_0wyf63q</bpmn:incoming>
+        <bpmn:outgoing>Flow_1124h0e</bpmn:outgoing>
+        <bpmn:outgoing>Flow_1g97old</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_1ug1yok" sourceRef="VerifyTimelinessOfNoticeOfObjectionCommand" targetRef="VerifyTimelinessSent" />
+      <bpmn:serviceTask id="SetMilestoneDueDateCommand" name="Set Obj. Milestone due date: Submission Date + 30 working days">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="SetMilestoneDueDateCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=caseId" target="caseId" />
+            <zeebe:input source="=&#34;MILESTONE_DUE_DATE_SIGNAL&#34;" target="signalName" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1124h0e</bpmn:incoming>
+        <bpmn:outgoing>Flow_0hycyjq</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1124h0e" name="Objection admissable" sourceRef="Gateway_136oxb2" targetRef="SetMilestoneDueDateCommand">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=timelinessResult.hasCaseScope</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:endEvent id="Event_1q9qsif">
+        <bpmn:incoming>Flow_1npdqo9</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:intermediateCatchEvent id="MilestoneDueDateSent" name="Milestone Due Date Sent">
+        <bpmn:extensionElements />
+        <bpmn:incoming>Flow_0hycyjq</bpmn:incoming>
+        <bpmn:outgoing>Flow_13bgxgy</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1av94k3" messageRef="Message_2kb87hv" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_0hycyjq" sourceRef="SetMilestoneDueDateCommand" targetRef="MilestoneDueDateSent" />
+      <bpmn:intermediateCatchEvent id="ObjectionInadmissableSignal" name="Objection Inadmissable Signal">
+        <bpmn:extensionElements>
+          <zeebe:properties />
+          <zeebe:ioMapping>
+            <zeebe:output source="=&#34;INADMISSABLE&#34;" target="processStatus" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0r8cmm9</bpmn:incoming>
+        <bpmn:outgoing>Flow_1qzdrw1</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_043eukx" messageRef="Message_0ms4j1n" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:intermediateCatchEvent id="ObjectionAdmissableSignal" name="Objection Admissable Signal">
+        <bpmn:extensionElements>
+          <zeebe:properties />
+          <zeebe:ioMapping>
+            <zeebe:output source="=&#34;ADMISSABLE&#34;" target="processStatus" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_06u181u</bpmn:incoming>
+        <bpmn:outgoing>Flow_0jd3nuw</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_0xpiiuj" messageRef="Message_3sdn9ck" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_0jd3nuw" sourceRef="ObjectionAdmissableSignal" targetRef="SuppressionQuickActivate" />
+      <bpmn:intermediateCatchEvent id="VerifyTimelinessSent" name="Verify Timeliness Sent">
+        <bpmn:extensionElements>
+          <zeebe:properties />
+          <zeebe:ioMapping>
+            <zeebe:output source="=signalResult" target="timelinessResult" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1ug1yok</bpmn:incoming>
+        <bpmn:outgoing>Flow_0wyf63q</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1vvx98b" messageRef="Message_2aq1fef" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_0wyf63q" sourceRef="VerifyTimelinessSent" targetRef="Gateway_136oxb2" />
+      <bpmn:eventBasedGateway id="Debit1ResultGateway">
+        <bpmn:incoming>Flow_1ieke1i</bpmn:incoming>
+        <bpmn:outgoing>Flow_0r8cmm9</bpmn:outgoing>
+        <bpmn:outgoing>Flow_06u181u</bpmn:outgoing>
+      </bpmn:eventBasedGateway>
+      <bpmn:sequenceFlow id="Flow_0r8cmm9" sourceRef="Debit1ResultGateway" targetRef="ObjectionInadmissableSignal" />
+      <bpmn:sequenceFlow id="Flow_06u181u" sourceRef="Debit1ResultGateway" targetRef="ObjectionAdmissableSignal" />
+      <bpmn:sequenceFlow id="Flow_13bgxgy" sourceRef="MilestoneDueDateSent" targetRef="VerifyCompletenessAndCorrectnessOfNoticeOfObjection" />
+      <bpmn:serviceTask id="VerifyCompletenessAndCorrectnessOfNoticeOfObjection" name="Verify completeness and correctness of Notice of Objection" zeebe:modelerTemplate="createHumanTaskCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="CreateHumanTaskCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=caseId" target="entityId" />
+            <zeebe:input source="=processInstanceId" target="processInstanceId" />
+            <zeebe:input source="=&#34;VerCoplObj&#34;" target="humanTaskTypeCode" />
+            <zeebe:input source="=&#34;PRIORITY_10&#34;" target="humanTaskPriorityCL" />
+            <zeebe:input source="=[&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;ProcessInstance&#34;,&#10;    entityId : processInstanceId   &#10;  } &#10;]" target="relatedEntities" />
+            <zeebe:input source="=&#34;Zeebe created&#34;" target="comment" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_13bgxgy</bpmn:incoming>
+        <bpmn:outgoing>Flow_1ieke1i</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1ieke1i" sourceRef="VerifyCompletenessAndCorrectnessOfNoticeOfObjection" targetRef="Debit1ResultGateway" />
+      <bpmn:exclusiveGateway id="Gateway_0n5pt88">
+        <bpmn:incoming>Flow_1g97old</bpmn:incoming>
+        <bpmn:incoming>Flow_1qzdrw1</bpmn:incoming>
+        <bpmn:outgoing>Flow_08odov5</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_08odov5" sourceRef="Gateway_0n5pt88" targetRef="SendReceiptConfirmationLetter" />
+      <bpmn:sequenceFlow id="Flow_1g97old" sourceRef="Gateway_136oxb2" targetRef="Gateway_0n5pt88">
+        <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=timelinessResult.hasCaseScope = false</bpmn:conditionExpression>
+      </bpmn:sequenceFlow>
+      <bpmn:sequenceFlow id="Flow_1qzdrw1" sourceRef="ObjectionInadmissableSignal" targetRef="Gateway_0n5pt88" />
+      <bpmn:serviceTask id="SendReceiptConfirmationLetter" name="Send Receipt Confirmation Letter">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="PublishCreateContactCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=caseId" target="entityId" />
+            <zeebe:input source="=&#34;RECCONFLET&#34;" target="contactTypeCode" />
+            <zeebe:input source="=&#34;EMAIL_OUT&#34;" target="communicationChannelCode" />
+            <zeebe:input source="=&#34;CREATE_CONTACT_LETTER&#34;" target="signalName" />
+            <zeebe:input source="=processInstanceId" target="processInstanceId" />
+            <zeebe:input source="=[&#10;  { &#10;     name: &#34;case_id&#34;, &#10;     value : caseId &#10;   }&#10;]" target="parameters" />
+            <zeebe:input source="=[&#10;  {&#10;    entityId :caseId,&#10;    entityCL :&#34;Case&#34;&#10;  }&#10;]" target="relatedEntities" />
+            <zeebe:input source="=partyRoleId" target="partyRoleId" />
+            <zeebe:input source="=&#34;Case&#34;" target="entityCL" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_08odov5</bpmn:incoming>
+        <bpmn:outgoing>Flow_0zr4613</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_0zr4613" sourceRef="SendReceiptConfirmationLetter" targetRef="ContactCreated" />
+      <bpmn:serviceTask id="AddContactToTheRelatedEntitiesRCL" name="Add Contact to the related entities" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="io.camunda:http-json:1" />
+          <zeebe:ioMapping>
+            <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+            <zeebe:input source="post" target="method" />
+            <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/cases/&#34; + caseId + &#34;/related-entity&#34;" target="url" />
+            <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+            <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+            <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+            <zeebe:input source="={&#10;  &#34;caseEntityRelationshipTypeCL&#34;: &#34;RELATED_CONTACTS&#34;,&#10;  &#34;entityCL&#34;: &#34;Contact&#34;,&#10;  &#34;entityId&#34;: contactId&#10;}" target="body" />
+          </zeebe:ioMapping>
+          <zeebe:taskHeaders />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0svv65l</bpmn:incoming>
+        <bpmn:outgoing>Flow_185riaw</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_185riaw" sourceRef="AddContactToTheRelatedEntitiesRCL" targetRef="SendInadmissableObjectionLetter" />
+      <bpmn:intermediateCatchEvent id="ContactCreated" name="Contact Created">
+        <bpmn:extensionElements>
+          <zeebe:properties />
+          <zeebe:ioMapping>
+            <zeebe:output source="=signalResult" target="contactId" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0zr4613</bpmn:incoming>
+        <bpmn:outgoing>Flow_0svv65l</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1ua09nk" messageRef="Message_02e6v9m" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_0svv65l" sourceRef="ContactCreated" targetRef="AddContactToTheRelatedEntitiesRCL" />
+      <bpmn:serviceTask id="SendInadmissableObjectionLetter" name="Send Inadmissable Objection Letter">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="PublishCreateContactCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=caseId" target="entityId" />
+            <zeebe:input source="=&#34;INADOBJLET&#34;" target="contactTypeCode" />
+            <zeebe:input source="=&#34;EMAIL_OUT&#34;" target="communicationChannelCode" />
+            <zeebe:input source="=&#34;CREATE_CONTACT_LETTER_IOL&#34;" target="signalName" />
+            <zeebe:input source="=processInstanceId" target="processInstanceId" />
+            <zeebe:input source="=[&#10;  { &#10;     name: &#34;case_id&#34;, &#10;     value : caseId &#10;  }&#10;]" target="parameters" />
+            <zeebe:input source="=[&#10;  {&#10;    entityId :caseId,&#10;    entityCL :&#34;Case&#34;&#10;  }&#10;]" target="relatedEntities" />
+            <zeebe:input source="=partyRoleId" target="partyRoleId" />
+            <zeebe:input source="=&#34;Case&#34;" target="entityCL" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_185riaw</bpmn:incoming>
+        <bpmn:outgoing>Flow_1llc5r9</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1llc5r9" sourceRef="SendInadmissableObjectionLetter" targetRef="ContactCreatedIOL" />
+      <bpmn:serviceTask id="AddContactToTheRelatedEntitiesIOL" name="Add Contact to the related entities" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="io.camunda:http-json:1" />
+          <zeebe:ioMapping>
+            <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+            <zeebe:input source="post" target="method" />
+            <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/cases/&#34; + caseId + &#34;/related-entity&#34;" target="url" />
+            <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+            <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+            <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+            <zeebe:input source="={&#10;  &#34;caseEntityRelationshipTypeCL&#34;: &#34;RELATED_CONTACTS&#34;,&#10;  &#34;entityCL&#34;: &#34;Contact&#34;,&#10;  &#34;entityId&#34;: contactId&#10;}" target="body" />
+          </zeebe:ioMapping>
+          <zeebe:taskHeaders />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_06vbp89</bpmn:incoming>
+        <bpmn:outgoing>Flow_0lahitg</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_0lahitg" sourceRef="AddContactToTheRelatedEntitiesIOL" targetRef="Activity_0ouffp8" />
+      <bpmn:intermediateCatchEvent id="ContactCreatedIOL" name="Contact Created">
+        <bpmn:extensionElements>
+          <zeebe:properties />
+          <zeebe:ioMapping>
+            <zeebe:output source="=signalResult" target="contactId" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1llc5r9</bpmn:incoming>
+        <bpmn:outgoing>Flow_06vbp89</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1312hj5" messageRef="Message_1g6b01a" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_06vbp89" sourceRef="ContactCreatedIOL" targetRef="AddContactToTheRelatedEntitiesIOL" />
+      <bpmn:intermediateCatchEvent id="Event_0ug1s2b" name="Contact Created">
+        <bpmn:extensionElements>
+          <zeebe:properties />
+          <zeebe:ioMapping>
+            <zeebe:output source="=signalResult" target="contactId" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0lcot6r</bpmn:incoming>
+        <bpmn:outgoing>Flow_0hu5f9e</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1m4qsa3" messageRef="Message_02e6v9m" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:serviceTask id="Activity_1fm9yw2" name="Send Receipt Confirmation Letter">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="PublishCreateContactCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=caseId" target="entityId" />
+            <zeebe:input source="=&#34;RECCONFLET&#34;" target="contactTypeCode" />
+            <zeebe:input source="=&#34;EMAIL_OUT&#34;" target="communicationChannelCode" />
+            <zeebe:input source="=&#34;CREATE_CONTACT_LETTER&#34;" target="signalName" />
+            <zeebe:input source="=processInstanceId" target="processInstanceId" />
+            <zeebe:input source="=[&#10;  { &#10;     name: &#34;case_id&#34;, &#10;     value : caseId &#10;   }&#10;]" target="parameters" />
+            <zeebe:input source="=[&#10;  {&#10;    entityId :caseId,&#10;    entityCL :&#34;Case&#34;&#10;  }&#10;]" target="relatedEntities" />
+            <zeebe:input source="=partyRoleId" target="partyRoleId" />
+            <zeebe:input source="=&#34;Case&#34;" target="entityCL" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_105nie8</bpmn:incoming>
+        <bpmn:outgoing>Flow_0lcot6r</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_0lcot6r" sourceRef="Activity_1fm9yw2" targetRef="Event_0ug1s2b" />
+      <bpmn:sequenceFlow id="Flow_0hu5f9e" sourceRef="Event_0ug1s2b" targetRef="Activity_1tfde9w" />
+      <bpmn:serviceTask id="Activity_1tfde9w" name="Add Contact to the related entities" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="io.camunda:http-json:1" />
+          <zeebe:ioMapping>
+            <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+            <zeebe:input source="post" target="method" />
+            <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/cases/&#34; + caseId + &#34;/related-entity&#34;" target="url" />
+            <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+            <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+            <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+            <zeebe:input source="={&#10;  &#34;caseEntityRelationshipTypeCL&#34;: &#34;RELATED_CONTACTS&#34;,&#10;  &#34;entityCL&#34;: &#34;Contact&#34;,&#10;  &#34;entityId&#34;: contactId&#10;}" target="body" />
+          </zeebe:ioMapping>
+          <zeebe:taskHeaders />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0hu5f9e</bpmn:incoming>
+        <bpmn:outgoing>Flow_02h47cu</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_02h47cu" sourceRef="Activity_1tfde9w" targetRef="Activity_0j76t6h" />
+      <bpmn:endEvent id="Event_0ungdl0">
+        <bpmn:incoming>Flow_1vca54k</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:serviceTask id="Activity_1kl919m" name="Release Suppression for Debt Recovery and P&#38;I for liability in case">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="PublishReleaseSuppressionCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=&#34;ProcessInstance&#34;" target="entityType" />
+            <zeebe:input source="=processInstanceId" target="entityId" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1ox0vlk</bpmn:incoming>
+        <bpmn:outgoing>Flow_1uqp92r</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1uqp92r" sourceRef="Activity_1kl919m" targetRef="Activity_0bqtsc2" />
+      <bpmn:eventBasedGateway id="Gateway_1icns31">
+        <bpmn:incoming>Flow_197uqir</bpmn:incoming>
+        <bpmn:outgoing>Flow_1ve2h7w</bpmn:outgoing>
+        <bpmn:outgoing>Flow_0tyns6u</bpmn:outgoing>
+      </bpmn:eventBasedGateway>
+      <bpmn:intermediateCatchEvent id="Event_1vg6pbp" name="Objection Rejected Signal">
+        <bpmn:extensionElements>
+          <zeebe:ioMapping>
+            <zeebe:output source="=&#34;OBJECTION_REJECTED&#34;" target="processStatus" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1ve2h7w</bpmn:incoming>
+        <bpmn:outgoing>Flow_13nmcaw</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1ig2gv1" messageRef="Message_120mc7a" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_1ve2h7w" sourceRef="Gateway_1icns31" targetRef="Event_1vg6pbp" />
+      <bpmn:intermediateCatchEvent id="Event_14blf5f" name="Objection Granted Signal">
+        <bpmn:extensionElements>
+          <zeebe:ioMapping>
+            <zeebe:output source="=&#34;OBJECTION_GRANTED&#34;" target="processStatus" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0tyns6u</bpmn:incoming>
+        <bpmn:outgoing>Flow_1nk1nu4</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_03svomj" messageRef="Message_1pgt5eg" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_0tyns6u" sourceRef="Gateway_1icns31" targetRef="Event_14blf5f" />
+      <bpmn:sequenceFlow id="Flow_1nk1nu4" sourceRef="Event_14blf5f" targetRef="Activity_03308do" />
+      <bpmn:exclusiveGateway id="Gateway_1jkfk0m">
+        <bpmn:incoming>Flow_0x0p3fo</bpmn:incoming>
+        <bpmn:incoming>Flow_0nxua4l</bpmn:incoming>
+        <bpmn:outgoing>Flow_1ox0vlk</bpmn:outgoing>
+      </bpmn:exclusiveGateway>
+      <bpmn:sequenceFlow id="Flow_13nmcaw" sourceRef="Event_1vg6pbp" targetRef="Activity_10lcf1p" />
+      <bpmn:sequenceFlow id="Flow_1ox0vlk" sourceRef="Gateway_1jkfk0m" targetRef="Activity_1kl919m" />
+      <bpmn:serviceTask id="Activity_12sqwnz" name="Make and record Objection decision" zeebe:modelerTemplate="createHumanTaskCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="CreateHumanTaskCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=caseId" target="entityId" />
+            <zeebe:input source="=processInstanceId" target="processInstanceId" />
+            <zeebe:input source="=&#34;ObjDecsion&#34;" target="humanTaskTypeCode" />
+            <zeebe:input source="=&#34;PRIORITY_10&#34;" target="humanTaskPriorityCL" />
+            <zeebe:input source="=[&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;ProcessInstance&#34;,&#10;    entityId : processInstanceId   &#10;  } &#10;]" target="relatedEntities" />
+            <zeebe:input source="=&#34;Zeebe created&#34;" target="comment" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0w1fp9r</bpmn:incoming>
+        <bpmn:outgoing>Flow_197uqir</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_197uqir" sourceRef="Activity_12sqwnz" targetRef="Gateway_1icns31" />
+      <bpmn:serviceTask id="Activity_03308do" name="Implement Objection decision " zeebe:modelerTemplate="createHumanTaskCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="CreateHumanTaskCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=caseId" target="entityId" />
+            <zeebe:input source="=processInstanceId" target="processInstanceId" />
+            <zeebe:input source="=&#34;HUMAN_TASK_DECISION_IMPLEMENTED_SIGNAL&#34;" target="signalName" />
+            <zeebe:input source="=&#34;ImplObjDec&#34;" target="humanTaskTypeCode" />
+            <zeebe:input source="=&#34;PRIORITY_10&#34;" target="humanTaskPriorityCL" />
+            <zeebe:input source="=[&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;ProcessInstance&#34;,&#10;    entityId : processInstanceId   &#10;  } &#10;]" target="relatedEntities" />
+            <zeebe:input source="=&#34;Zeebe created&#34;" target="comment" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1nk1nu4</bpmn:incoming>
+        <bpmn:outgoing>Flow_1ee3nn3</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1ee3nn3" sourceRef="Activity_03308do" targetRef="Event_0qrwmnv" />
+      <bpmn:sequenceFlow id="Flow_14ee5uz" sourceRef="Activity_0bqtsc2" targetRef="Activity_1hyq77w" />
+      <bpmn:serviceTask id="Activity_0bqtsc2" name="Create decision letter on objection" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="io.camunda:http-json:1" />
+          <zeebe:ioMapping>
+            <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+            <zeebe:input source="post" target="method" />
+            <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/contact-management/contacts&#34;" target="url" />
+            <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+            <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+            <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+            <zeebe:input source="={&#10;   &#34;communicationChannelCode&#34;:&#34;EMAIL_OUT&#34;,&#10;   &#34;contactTypeDetails&#34;:{&#10;      &#34;contactTypeCode&#34;:&#34;DECILETTER&#34;&#10;   },&#10;   &#34;parameters&#34;:[&#10;      {&#10;         &#34;name&#34;:&#34;case_id&#34;,&#10;         &#34;value&#34;: caseId&#10;      }&#10;   ],&#10;   &#34;recipientPartyRole&#34;:{&#10;      &#34;id&#34;: partyRoleId&#10;   },&#10;   &#34;relatedEntities&#34;:[&#10;      {&#10;         &#34;entityCL&#34;:&#34;Case&#34;,&#10;         &#34;entityId&#34;:caseId&#10;      }&#10;   ]&#10;}" target="body" />
+          </zeebe:ioMapping>
+          <zeebe:taskHeaders>
+            <zeebe:header key="resultExpression" value="={&#10;  contactId : response.body.id&#10;}" />
+          </zeebe:taskHeaders>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1uqp92r</bpmn:incoming>
+        <bpmn:outgoing>Flow_14ee5uz</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="Activity_1hyq77w" name="Generate Decision Letter Contact" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="io.camunda:http-json:1" />
+          <zeebe:ioMapping>
+            <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+            <zeebe:input source="put" target="method" />
+            <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/contact-management/contacts/&#34; + contactId + &#34;/generate&#34;" target="url" />
+            <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+            <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+            <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+            <zeebe:input source="={&#10;  &#34;changeComment&#34;: &#34;Process Engine&#34;,&#10;  &#34;changeReasonCL&#34;: &#34;Other&#34;&#10;}" target="body" />
+          </zeebe:ioMapping>
+          <zeebe:taskHeaders />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_14ee5uz</bpmn:incoming>
+        <bpmn:outgoing>Flow_1y11qjr</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1y11qjr" sourceRef="Activity_1hyq77w" targetRef="Activity_1018lhk" />
+      <bpmn:serviceTask id="Activity_1018lhk" name="Edit and send decision letter to debtor" zeebe:modelerTemplate="createHumanTaskCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="CreateHumanTaskCommand" />
+          <zeebe:ioMapping>
+            <zeebe:input source="=caseId" target="entityId" />
+            <zeebe:input source="=processInstanceId" target="processInstanceId" />
+            <zeebe:input source="=&#34;HUMAN_TASK_DECISION_LETTER_SENT_SIGNAL&#34;" target="signalName" />
+            <zeebe:input source="=&#34;EdtSndLtr&#34;" target="humanTaskTypeCode" />
+            <zeebe:input source="=&#34;PRIORITY_10&#34;" target="humanTaskPriorityCL" />
+            <zeebe:input source="=[&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;ProcessInstance&#34;,&#10;    entityId : processInstanceId   &#10;  } &#10;]" target="relatedEntities" />
+            <zeebe:input source="=&#34;Zeebe created&#34;" target="comment" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1y11qjr</bpmn:incoming>
+        <bpmn:outgoing>Flow_1jy84xx</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_1jy84xx" sourceRef="Activity_1018lhk" targetRef="Event_1htzgoz" />
+      <bpmn:scriptTask id="Activity_1h4y3ay" name="Complete Process">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=&#34;COMPLETED&#34;" resultVariable="processStatus" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0bw41gp</bpmn:incoming>
+        <bpmn:outgoing>Flow_1vca54k</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:sequenceFlow id="Flow_1vca54k" sourceRef="Activity_1h4y3ay" targetRef="Event_0ungdl0" />
+      <bpmn:intermediateCatchEvent id="Event_1htzgoz" name="Decision Letter Sent Signal">
+        <bpmn:extensionElements>
+          <zeebe:ioMapping>
+            <zeebe:output source="=&#34;DECISION_LETTER_SENT&#34;" target="processStatus" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1jy84xx</bpmn:incoming>
+        <bpmn:outgoing>Flow_17494r6</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1u9sheg" messageRef="Message_10tkntm" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_17494r6" sourceRef="Event_1htzgoz" targetRef="Activity_02teis4" />
+      <bpmn:serviceTask id="Activity_02mndy7" name="Complete Case Activity" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="io.camunda:http-json:1" />
+          <zeebe:ioMapping>
+            <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+            <zeebe:input source="put" target="method" />
+            <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/case-activities/&#34; + entityId + &#34;/complete&#34;" target="url" />
+            <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+            <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+            <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+          </zeebe:ioMapping>
+          <zeebe:taskHeaders />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_19nwh47</bpmn:incoming>
+        <bpmn:outgoing>Flow_11yps9b</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="Activity_1sedyfb" name="Complete Case" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="io.camunda:http-json:1" />
+          <zeebe:ioMapping>
+            <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+            <zeebe:input source="put" target="method" />
+            <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/cases/&#34; + caseId + &#34;/actions/COMPLETED&#34;" target="url" />
+            <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+            <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+            <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+          </zeebe:ioMapping>
+          <zeebe:taskHeaders />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_11yps9b</bpmn:incoming>
+        <bpmn:outgoing>Flow_0bw41gp</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_11yps9b" sourceRef="Activity_02mndy7" targetRef="Activity_1sedyfb" />
+      <bpmn:sequenceFlow id="Flow_0bw41gp" sourceRef="Activity_1sedyfb" targetRef="Activity_1h4y3ay" />
+      <bpmn:serviceTask id="Activity_0ouffp8" name="Complete Case Activity" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="io.camunda:http-json:1" />
+          <zeebe:ioMapping>
+            <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+            <zeebe:input source="put" target="method" />
+            <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/case-activities/&#34; + entityId + &#34;/complete&#34;" target="url" />
+            <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+            <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+            <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+          </zeebe:ioMapping>
+          <zeebe:taskHeaders />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0lahitg</bpmn:incoming>
+        <bpmn:outgoing>Flow_0k4rrfl</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:serviceTask id="Activity_0ekmyt4" name="Complete Case" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="io.camunda:http-json:1" />
+          <zeebe:ioMapping>
+            <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+            <zeebe:input source="put" target="method" />
+            <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/cases/&#34; + caseId + &#34;/actions/COMPLETED&#34;" target="url" />
+            <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+            <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+            <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+          </zeebe:ioMapping>
+          <zeebe:taskHeaders />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0k4rrfl</bpmn:incoming>
+        <bpmn:outgoing>Flow_0m8g1p8</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:scriptTask id="Activity_0q9twny" name="Complete Process">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=&#34;COMPLETED&#34;" resultVariable="processStatus" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0m8g1p8</bpmn:incoming>
+        <bpmn:outgoing>Flow_1npdqo9</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:sequenceFlow id="Flow_0k4rrfl" sourceRef="Activity_0ouffp8" targetRef="Activity_0ekmyt4" />
+      <bpmn:sequenceFlow id="Flow_0m8g1p8" sourceRef="Activity_0ekmyt4" targetRef="Activity_0q9twny" />
+      <bpmn:sequenceFlow id="Flow_1npdqo9" sourceRef="Activity_0q9twny" targetRef="Event_1q9qsif" />
+      <bpmn:intermediateCatchEvent id="Event_0lvc6vt" name="Hearing Completed Signal">
+        <bpmn:extensionElements>
+          <zeebe:ioMapping>
+            <zeebe:output source="=&#34;HEARING_COMPLETED&#34;" target="processStatus" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1qv3z49</bpmn:incoming>
+        <bpmn:outgoing>Flow_1nh6fdm</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_11b38nv" messageRef="Message_0s77tad" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_1nh6fdm" sourceRef="Event_0lvc6vt" targetRef="Gateway_104vmeq" />
+      <bpmn:intermediateCatchEvent id="Event_0qrwmnv" name="Decision Implemented Signal">
+        <bpmn:extensionElements>
+          <zeebe:ioMapping>
+            <zeebe:output source="=&#34;DECISION_IMPLEMENTED&#34;" target="processStatus" />
+          </zeebe:ioMapping>
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_1ee3nn3</bpmn:incoming>
+        <bpmn:outgoing>Flow_0x0p3fo</bpmn:outgoing>
+        <bpmn:messageEventDefinition id="MessageEventDefinition_1hel9gk" messageRef="Message_127l37m" />
+      </bpmn:intermediateCatchEvent>
+      <bpmn:sequenceFlow id="Flow_0x0p3fo" sourceRef="Event_0qrwmnv" targetRef="Gateway_1jkfk0m" />
+      <bpmn:serviceTask id="Activity_02teis4" name="Add Contact to the related entities" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+        <bpmn:extensionElements>
+          <zeebe:taskDefinition type="io.camunda:http-json:1" />
+          <zeebe:ioMapping>
+            <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+            <zeebe:input source="post" target="method" />
+            <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/cases/&#34; + caseId + &#34;/related-entity&#34;" target="url" />
+            <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+            <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+            <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+            <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+            <zeebe:input source="={&#10;  &#34;caseEntityRelationshipTypeCL&#34;: &#34;RELATED_CONTACTS&#34;,&#10;  &#34;entityCL&#34;: &#34;Contact&#34;,&#10;  &#34;entityId&#34;: contactId&#10;}" target="body" />
+          </zeebe:ioMapping>
+          <zeebe:taskHeaders />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_17494r6</bpmn:incoming>
+        <bpmn:outgoing>Flow_19nwh47</bpmn:outgoing>
+      </bpmn:serviceTask>
+      <bpmn:sequenceFlow id="Flow_19nwh47" sourceRef="Activity_02teis4" targetRef="Activity_02mndy7" />
+      <bpmn:scriptTask id="Activity_1adpdbj" name="Set Process Status To Hearing Completed">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=&#34;HEARING_COMPLETED&#34;" resultVariable="processStatus" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_0amggmo</bpmn:incoming>
+        <bpmn:outgoing>Flow_0yiqnj3</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:sequenceFlow id="Flow_0yiqnj3" sourceRef="Activity_1adpdbj" targetRef="Gateway_104vmeq" />
+      <bpmn:scriptTask id="Activity_10lcf1p" name="Set Process Status To Decision Implemented">
+        <bpmn:extensionElements>
+          <zeebe:script expression="=&#34;DECISION_IMPLEMENTED&#34;" resultVariable="processStatus" />
+        </bpmn:extensionElements>
+        <bpmn:incoming>Flow_13nmcaw</bpmn:incoming>
+        <bpmn:outgoing>Flow_0nxua4l</bpmn:outgoing>
+      </bpmn:scriptTask>
+      <bpmn:sequenceFlow id="Flow_0nxua4l" sourceRef="Activity_10lcf1p" targetRef="Gateway_1jkfk0m" />
+    </bpmn:subProcess>
+    <bpmn:endEvent id="Event_1ahh2g8">
+      <bpmn:incoming>Flow_09pffr2</bpmn:incoming>
+      <bpmn:incoming>Flow_0y4sk8r</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="SendWithdrawalObjectionLetter" name="Send Withdrawal Objection Letter">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishCreateContactCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=caseId" target="entityId" />
+          <zeebe:input source="=&#34;WITHOBJLET&#34;" target="contactTypeCode" />
+          <zeebe:input source="=&#34;EMAIL_OUT&#34;" target="communicationChannelCode" />
+          <zeebe:input source="=&#34;CREATE_CONTACT_LETTER_WOL&#34;" target="signalName" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="=[&#10;  { &#10;     name: &#34;case_id&#34;, &#10;     value : caseId &#10;   }&#10;]" target="parameters" />
+          <zeebe:input source="=[&#10;  {&#10;    entityId :caseId,&#10;    entityCL :&#34;Case&#34;&#10;  }&#10;]" target="relatedEntities" />
+          <zeebe:input source="=partyRoleId" target="partyRoleId" />
+          <zeebe:input source="=&#34;Case&#34;" target="entityCL" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0udrej3</bpmn:incoming>
+      <bpmn:outgoing>Flow_179fg4t</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:intermediateCatchEvent id="Event_176hh96" name="Contact Created">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+        <zeebe:ioMapping>
+          <zeebe:output source="=signalResult" target="contactId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_179fg4t</bpmn:incoming>
+      <bpmn:outgoing>Flow_0bl8a54</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_15vzgcv" messageRef="Message_0calggj" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="Activity_1gzywj0" name="Add Contact to the related entities" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="post" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/cases/&#34; + caseId + &#34;/related-entity&#34;" target="url" />
+          <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+          <zeebe:input source="={&#10;  &#34;caseEntityRelationshipTypeCL&#34;: &#34;RELATED_CONTACTS&#34;,&#10;  &#34;entityCL&#34;: &#34;Contact&#34;,&#10;  &#34;entityId&#34;: contactId&#10;}" target="body" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0bl8a54</bpmn:incoming>
+      <bpmn:outgoing>Flow_09pffr2</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="SuppressionRelease" name="Suppression Release">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishReleaseSuppressionCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;ProcessInstance&#34;" target="entityType" />
+          <zeebe:input source="=processInstanceId" target="entityId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1jnles3</bpmn:incoming>
+      <bpmn:outgoing>Flow_0udrej3</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_09pffr2" sourceRef="Activity_1gzywj0" targetRef="Event_1ahh2g8" />
+    <bpmn:sequenceFlow id="Flow_0udrej3" sourceRef="SuppressionRelease" targetRef="SendWithdrawalObjectionLetter" />
+    <bpmn:sequenceFlow id="Flow_179fg4t" sourceRef="SendWithdrawalObjectionLetter" targetRef="Event_176hh96" />
+    <bpmn:sequenceFlow id="Flow_0bl8a54" sourceRef="Event_176hh96" targetRef="Activity_1gzywj0" />
+    <bpmn:sequenceFlow id="Flow_1jnles3" sourceRef="CancelCaseSignal" targetRef="SuppressionRelease" />
+    <bpmn:sequenceFlow id="Flow_0y4sk8r" sourceRef="Activity_1u2lczv" targetRef="Event_1ahh2g8" />
+    <bpmn:boundaryEvent id="CancelCaseSignal" name="Cancel Case Signal" attachedToRef="Activity_1u2lczv">
+      <bpmn:outgoing>Flow_1jnles3</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_03dk2uq" messageRef="Message_1ulu2sg" />
+    </bpmn:boundaryEvent>
+    <bpmn:intermediateCatchEvent id="Event_03hq4et">
+      <bpmn:incoming>Flow_00o385p</bpmn:incoming>
+      <bpmn:outgoing>Flow_1g2a1rk</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1o15i7a">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT5S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1g2a1rk" sourceRef="Event_03hq4et" targetRef="Activity_1u2lczv" />
+  </bpmn:process>
+  <bpmn:message id="Message_02e6v9m" name="CREATE_CONTACT_LETTER">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_0v1utjb" name="ACTIVATE_SUPPRESSION_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_0ms4j1n" name="VerCoplObj_INADMISSABLE_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_10v50u3" name="HearRequir_HEARING_NOT_REQUIRED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_1ulu2sg" name="CANCELED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_2aq1fef" name="VERIFY_TIMELINESS_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_1g6b01a" name="CREATE_CONTACT_LETTER_IOL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_0calggj" name="CREATE_CONTACT_LETTER_WOL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_3ud6m4o" name="HearRequir_HEARING_REQUIRED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_3sdn9ck" name="VerCoplObj_ADMISSABLE_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_2kb87hv" name="MILESTONE_DUE_DATE_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_2nlj3cr" name="PerfoHear_COMPLETING_HEARING_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_1pgt5eg" name="ObjDecsion_OBJECTION_GRANTED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_120mc7a" name="ObjDecsion_OBJECTION_REJECTED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_127l37m" name="ImplObjDec_DECISION_IMPLEMENTED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_10tkntm" name="EdtSndLtr_DECISION_LETTER_SENT_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_0s77tad" name="PerfoHear_HEARING_COMPLETED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ProcessDefinitions.OBJECTION_AMPLIO">
+      <bpmndi:BPMNShape id="Event_1l3cvfn_di" bpmnElement="Event_1l3cvfn" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
+        <dc:Bounds x="182" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0ux5827" bpmnElement="Activity_0pvo9lh">
+        <dc:Bounds x="270" y="310" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1u2lczv_di" bpmnElement="Activity_1u2lczv" isExpanded="true">
+        <dc:Bounds x="460" y="100" width="2710" height="950" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0jxi0o5" bpmnElement="SuppressionQuickActivate">
+        <dc:Bounds x="1920" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1atd3qh_di" bpmnElement="Event_1atd3qh" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="2702" y="582" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2680" y="625" width="82" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0so9kmy" bpmnElement="Gateway_1ywi05q">
+        <dc:Bounds x="2645" y="465" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_092iiph" bpmnElement="Activity_1c3te74">
+        <dc:Bounds x="2790" y="560" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0orkunq" bpmnElement="Event_1rwu8ap" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="2782" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2766" y="515" width="75" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1tyhxl9" bpmnElement="Activity_0j76t6h">
+        <dc:Bounds x="2470" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_104vmeq_di" bpmnElement="Gateway_104vmeq" isMarkerVisible="true">
+        <dc:Bounds x="3005" y="465" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0totwxs" bpmnElement="Event_0fgiabh" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
+        <dc:Bounds x="482" y="472" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0jumhd6_di" bpmnElement="VerifyTimelinessOfNoticeOfObjectionCommand">
+        <dc:Bounds x="597" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_136oxb2_di" bpmnElement="Gateway_136oxb2" isMarkerVisible="true">
+        <dc:Bounds x="922" y="465" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_01cn957_di" bpmnElement="SetMilestoneDueDateCommand">
+        <dc:Bounds x="1150" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1q9qsif_di" bpmnElement="Event_1q9qsif" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="2402" y="195" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_01v4sut" bpmnElement="MilestoneDueDateSent" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1349" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1338" y="515" width="71" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1a0xry0" bpmnElement="ObjectionInadmissableSignal" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1699" y="372" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1746" y="376" width="65" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1gatfxn" bpmnElement="ObjectionAdmissableSignal" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1802" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1792" y="515" width="56" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0xca209" bpmnElement="VerifyTimelinessSent" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="799" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="780" y="520" width="83" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0r5gdrc_di" bpmnElement="Debit1ResultGateway">
+        <dc:Bounds x="1692" y="465" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1te2ir6" bpmnElement="VerifyCompletenessAndCorrectnessOfNoticeOfObjection">
+        <dc:Bounds x="1517" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1305dwj" bpmnElement="Gateway_0n5pt88" isMarkerVisible="true">
+        <dc:Bounds x="1175" y="305" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0n8qajw" bpmnElement="SendReceiptConfirmationLetter">
+        <dc:Bounds x="1227" y="173" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1ehh0ud" bpmnElement="AddContactToTheRelatedEntitiesRCL">
+        <dc:Bounds x="1427" y="173" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0mrii48" bpmnElement="ContactCreated" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1359" y="195" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1338" y="241" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0ippp7y" bpmnElement="SendInadmissableObjectionLetter">
+        <dc:Bounds x="1580" y="173" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0sbv19e" bpmnElement="AddContactToTheRelatedEntitiesIOL">
+        <dc:Bounds x="1800" y="173" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1hmzyd0" bpmnElement="ContactCreatedIOL" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1722" y="195" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1701" y="241" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0zk12s1" bpmnElement="Event_0ug1s2b" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="2222" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2201" y="518" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0bhn8mw" bpmnElement="Activity_1fm9yw2">
+        <dc:Bounds x="2070" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_14in2s1" bpmnElement="Activity_1tfde9w">
+        <dc:Bounds x="2300" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0vdpiks" bpmnElement="Event_0ungdl0" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="3072" y="802" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_01ulajg" bpmnElement="Activity_1kl919m">
+        <dc:Bounds x="1730" y="780" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1icns31_di" bpmnElement="Gateway_1icns31">
+        <dc:Bounds x="1245" y="795" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1vg6pbp_di" bpmnElement="Event_1vg6pbp" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1372" y="802" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1352" y="845" width="78" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_14blf5f_di" bpmnElement="Event_14blf5f" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1322" y="912" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1296" y="955" width="90" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1jkfk0m_di" bpmnElement="Gateway_1jkfk0m" isMarkerVisible="true">
+        <dc:Bounds x="1602" y="795" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1z0uqjy" bpmnElement="Activity_12sqwnz">
+        <dc:Bounds x="1087" y="780" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0u23j1c" bpmnElement="Activity_03308do">
+        <dc:Bounds x="1410" y="890" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1s1lew4_di" bpmnElement="Activity_0bqtsc2">
+        <dc:Bounds x="1880" y="780" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1uyzrn2" bpmnElement="Activity_1hyq77w">
+        <dc:Bounds x="2020" y="780" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0if5z8r" bpmnElement="Activity_1018lhk">
+        <dc:Bounds x="2180" y="780" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0xr7u07" bpmnElement="Activity_1h4y3ay">
+        <dc:Bounds x="2920" y="780" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1g6gr8f" bpmnElement="Event_1htzgoz" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="2332" y="802" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2321" y="845" width="75" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1bkxafn" bpmnElement="Activity_02mndy7">
+        <dc:Bounds x="2600" y="780" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0r13rlw" bpmnElement="Activity_1sedyfb">
+        <dc:Bounds x="2760" y="780" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_03y59cl" bpmnElement="Activity_0ouffp8">
+        <dc:Bounds x="1950" y="173" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1qro3nv" bpmnElement="Activity_0ekmyt4">
+        <dc:Bounds x="2100" y="173" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0kythg3" bpmnElement="Activity_0q9twny">
+        <dc:Bounds x="2240" y="173" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_04efxdr" bpmnElement="Event_0lvc6vt" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="2952" y="582" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="2930" y="625" width="88" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1anqr6n" bpmnElement="Event_0qrwmnv" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1609" y="912" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1595" y="958" width="64" height="40" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_12j9bg3" bpmnElement="Activity_02teis4">
+        <dc:Bounds x="2440" y="780" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1rt8v3y" bpmnElement="Activity_1adpdbj">
+        <dc:Bounds x="2860" y="450" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0k1jghm" bpmnElement="Activity_10lcf1p">
+        <dc:Bounds x="1460" y="780" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_105nie8_di" bpmnElement="Flow_105nie8">
+        <di:waypoint x="2020" y="490" />
+        <di:waypoint x="2070" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vh3a0y_di" bpmnElement="Flow_1vh3a0y">
+        <di:waypoint x="2670" y="515" />
+        <di:waypoint x="2670" y="600" />
+        <di:waypoint x="2702" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0baaqdn_di" bpmnElement="Flow_0baaqdn">
+        <di:waypoint x="2738" y="600" />
+        <di:waypoint x="2790" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0i4cza8_di" bpmnElement="Flow_0i4cza8">
+        <di:waypoint x="2695" y="490" />
+        <di:waypoint x="2782" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1oeg971_di" bpmnElement="Flow_1oeg971">
+        <di:waypoint x="2570" y="490" />
+        <di:waypoint x="2645" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0w1fp9r_di" bpmnElement="Flow_0w1fp9r">
+        <di:waypoint x="3055" y="490" />
+        <di:waypoint x="3090" y="490" />
+        <di:waypoint x="3090" y="690" />
+        <di:waypoint x="1137" y="690" />
+        <di:waypoint x="1137" y="780" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qv3z49_di" bpmnElement="Flow_1qv3z49">
+        <di:waypoint x="2890" y="600" />
+        <di:waypoint x="2952" y="600" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0amggmo_di" bpmnElement="Flow_0amggmo">
+        <di:waypoint x="2818" y="490" />
+        <di:waypoint x="2860" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_157yve8_di" bpmnElement="Flow_157yve8">
+        <di:waypoint x="518" y="490" />
+        <di:waypoint x="597" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ug1yok_di" bpmnElement="Flow_1ug1yok">
+        <di:waypoint x="697" y="490" />
+        <di:waypoint x="799" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1124h0e_di" bpmnElement="Flow_1124h0e">
+        <di:waypoint x="972" y="490" />
+        <di:waypoint x="1150" y="490" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1019" y="456" width="56" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hycyjq_di" bpmnElement="Flow_0hycyjq">
+        <di:waypoint x="1250" y="490" />
+        <di:waypoint x="1349" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jd3nuw_di" bpmnElement="Flow_0jd3nuw">
+        <di:waypoint x="1838" y="490" />
+        <di:waypoint x="1920" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wyf63q_di" bpmnElement="Flow_0wyf63q">
+        <di:waypoint x="835" y="490" />
+        <di:waypoint x="922" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0r8cmm9_di" bpmnElement="Flow_0r8cmm9">
+        <di:waypoint x="1717" y="465" />
+        <di:waypoint x="1717" y="408" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06u181u_di" bpmnElement="Flow_06u181u">
+        <di:waypoint x="1742" y="490" />
+        <di:waypoint x="1802" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13bgxgy_di" bpmnElement="Flow_13bgxgy">
+        <di:waypoint x="1385" y="490" />
+        <di:waypoint x="1517" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ieke1i_di" bpmnElement="Flow_1ieke1i">
+        <di:waypoint x="1617" y="490" />
+        <di:waypoint x="1692" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08odov5_di" bpmnElement="Flow_08odov5">
+        <di:waypoint x="1200" y="305" />
+        <di:waypoint x="1200" y="213" />
+        <di:waypoint x="1227" y="213" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1g97old_di" bpmnElement="Flow_1g97old">
+        <di:waypoint x="947" y="465" />
+        <di:waypoint x="947" y="330" />
+        <di:waypoint x="1175" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1qzdrw1_di" bpmnElement="Flow_1qzdrw1">
+        <di:waypoint x="1717" y="372" />
+        <di:waypoint x="1717" y="330" />
+        <di:waypoint x="1225" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zr4613_di" bpmnElement="Flow_0zr4613">
+        <di:waypoint x="1327" y="213" />
+        <di:waypoint x="1359" y="213" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_185riaw_di" bpmnElement="Flow_185riaw">
+        <di:waypoint x="1527" y="213" />
+        <di:waypoint x="1580" y="213" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0svv65l_di" bpmnElement="Flow_0svv65l">
+        <di:waypoint x="1395" y="213" />
+        <di:waypoint x="1427" y="213" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1llc5r9_di" bpmnElement="Flow_1llc5r9">
+        <di:waypoint x="1680" y="213" />
+        <di:waypoint x="1722" y="213" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lahitg_di" bpmnElement="Flow_0lahitg">
+        <di:waypoint x="1900" y="213" />
+        <di:waypoint x="1950" y="213" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_06vbp89_di" bpmnElement="Flow_06vbp89">
+        <di:waypoint x="1758" y="213" />
+        <di:waypoint x="1800" y="213" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lcot6r_di" bpmnElement="Flow_0lcot6r">
+        <di:waypoint x="2170" y="490" />
+        <di:waypoint x="2222" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0hu5f9e_di" bpmnElement="Flow_0hu5f9e">
+        <di:waypoint x="2258" y="490" />
+        <di:waypoint x="2300" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02h47cu_di" bpmnElement="Flow_02h47cu">
+        <di:waypoint x="2400" y="490" />
+        <di:waypoint x="2470" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1uqp92r_di" bpmnElement="Flow_1uqp92r">
+        <di:waypoint x="1830" y="820" />
+        <di:waypoint x="1880" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ve2h7w_di" bpmnElement="Flow_1ve2h7w">
+        <di:waypoint x="1295" y="820" />
+        <di:waypoint x="1372" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tyns6u_di" bpmnElement="Flow_0tyns6u">
+        <di:waypoint x="1270" y="845" />
+        <di:waypoint x="1270" y="930" />
+        <di:waypoint x="1322" y="930" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nk1nu4_di" bpmnElement="Flow_1nk1nu4">
+        <di:waypoint x="1358" y="930" />
+        <di:waypoint x="1410" y="930" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13nmcaw_di" bpmnElement="Flow_13nmcaw">
+        <di:waypoint x="1408" y="820" />
+        <di:waypoint x="1460" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ox0vlk_di" bpmnElement="Flow_1ox0vlk">
+        <di:waypoint x="1652" y="820" />
+        <di:waypoint x="1730" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_197uqir_di" bpmnElement="Flow_197uqir">
+        <di:waypoint x="1187" y="820" />
+        <di:waypoint x="1245" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ee3nn3_di" bpmnElement="Flow_1ee3nn3">
+        <di:waypoint x="1510" y="930" />
+        <di:waypoint x="1609" y="930" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_14ee5uz_di" bpmnElement="Flow_14ee5uz">
+        <di:waypoint x="1980" y="820" />
+        <di:waypoint x="2020" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1y11qjr_di" bpmnElement="Flow_1y11qjr">
+        <di:waypoint x="2120" y="820" />
+        <di:waypoint x="2180" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1jy84xx_di" bpmnElement="Flow_1jy84xx">
+        <di:waypoint x="2280" y="820" />
+        <di:waypoint x="2332" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1vca54k_di" bpmnElement="Flow_1vca54k">
+        <di:waypoint x="3020" y="820" />
+        <di:waypoint x="3072" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_17494r6_di" bpmnElement="Flow_17494r6">
+        <di:waypoint x="2368" y="820" />
+        <di:waypoint x="2440" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_1uajn2t" bpmnElement="Flow_11yps9b">
+        <di:waypoint x="2700" y="820" />
+        <di:waypoint x="2760" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0bw41gp_di" bpmnElement="Flow_0bw41gp">
+        <di:waypoint x="2860" y="820" />
+        <di:waypoint x="2920" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_1vdoljj" bpmnElement="Flow_0k4rrfl">
+        <di:waypoint x="2050" y="213" />
+        <di:waypoint x="2100" y="213" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_1leg9v4" bpmnElement="Flow_0m8g1p8">
+        <di:waypoint x="2200" y="213" />
+        <di:waypoint x="2240" y="213" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1npdqo9_di" bpmnElement="Flow_1npdqo9">
+        <di:waypoint x="2340" y="213" />
+        <di:waypoint x="2402" y="213" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nh6fdm_di" bpmnElement="Flow_1nh6fdm">
+        <di:waypoint x="2988" y="600" />
+        <di:waypoint x="3030" y="600" />
+        <di:waypoint x="3030" y="515" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0x0p3fo_di" bpmnElement="Flow_0x0p3fo">
+        <di:waypoint x="1627" y="912" />
+        <di:waypoint x="1627" y="845" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19nwh47_di" bpmnElement="Flow_19nwh47">
+        <di:waypoint x="2540" y="820" />
+        <di:waypoint x="2600" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0yiqnj3_di" bpmnElement="Flow_0yiqnj3">
+        <di:waypoint x="2960" y="490" />
+        <di:waypoint x="3005" y="490" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0nxua4l_di" bpmnElement="Flow_0nxua4l">
+        <di:waypoint x="1560" y="820" />
+        <di:waypoint x="1602" y="820" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="BPMNShape_0isxtcf" bpmnElement="Event_1ahh2g8" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="3742" y="362" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1527vtx" bpmnElement="SendWithdrawalObjectionLetter">
+        <dc:Bounds x="3470" y="150" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0zfuiir" bpmnElement="Event_176hh96" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="3622" y="172" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3599" y="148" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_131pqi1" bpmnElement="Activity_1gzywj0">
+        <dc:Bounds x="3710" y="150" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1aoiyn9" bpmnElement="SuppressionRelease">
+        <dc:Bounds x="3310" y="150" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0azolll" bpmnElement="Event_03hq4et">
+        <dc:Bounds x="392" y="332" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1ro0l5n_di" bpmnElement="CancelCaseSignal" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="3152" y="172" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="3198" y="196" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1mf6ii2_di" bpmnElement="Flow_1mf6ii2">
+        <di:waypoint x="218" y="350" />
+        <di:waypoint x="270" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00o385p_di" bpmnElement="Flow_00o385p">
+        <di:waypoint x="370" y="350" />
+        <di:waypoint x="392" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_14xxexp" bpmnElement="Flow_09pffr2">
+        <di:waypoint x="3760" y="230" />
+        <di:waypoint x="3760" y="362" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0euje2e" bpmnElement="Flow_0udrej3">
+        <di:waypoint x="3410" y="190" />
+        <di:waypoint x="3470" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0jqp7ms" bpmnElement="Flow_179fg4t">
+        <di:waypoint x="3570" y="190" />
+        <di:waypoint x="3622" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0vxp9jr" bpmnElement="Flow_0bl8a54">
+        <di:waypoint x="3658" y="190" />
+        <di:waypoint x="3710" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0qcld0e" bpmnElement="Flow_1jnles3">
+        <di:waypoint x="3188" y="190" />
+        <di:waypoint x="3310" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0y4sk8r_di" bpmnElement="Flow_0y4sk8r">
+        <di:waypoint x="3170" y="380" />
+        <di:waypoint x="3742" y="380" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1g2a1rk_di" bpmnElement="Flow_1g2a1rk">
+        <di:waypoint x="428" y="350" />
+        <di:waypoint x="460" y="350" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

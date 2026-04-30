@@ -1,0 +1,238 @@
+<mxfile host="Electron">
+  <diagram id="OcVfRUCk97iDkex9OwGG" name="Page-1">
+    <mxGraphModel dx="1414" dy="961" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══ TITLE ═══ -->
+        <mxCell id="100" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;"
+          value="Collection System — Configuration Architecture" vertex="1">
+          <mxGeometry x="50" y="10" width="1070" height="32" as="geometry" />
+        </mxCell>
+
+        <mxCell id="70" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=11;fontStyle=2;fontColor=#555555;"
+          value="Configuration Workspace — each policy bundle cuts across all three configuration layers, contributing process definitions, task types &amp; rules, and foundational reference data  ·  See Business Control &amp; Experience Layer architecture for the full picture"
+          vertex="1">
+          <mxGeometry x="50" y="44" width="1070" height="16" as="geometry" />
+        </mxCell>
+
+        <mxCell id="99" parent="1"
+          style="endArrow=none;startArrow=none;html=1;strokeColor=#D0D7DE;strokeWidth=1;"
+          edge="1" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="20"   y="65" as="sourcePoint" />
+            <mxPoint x="1149" y="65" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ═══ COLUMN HEADERS — policy bundle names ═══ -->
+
+        <mxCell id="hdr00" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=1;fontColor=#888888;verticalAlign=bottom;"
+          value="LAYER" vertex="1">
+          <mxGeometry x="20" y="70" width="170" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- Fraud Policy Bundle -->
+        <mxCell id="hdr_fraud" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=13;fontStyle=1;verticalAlign=middle;"
+          value="Fraud Policy Bundle" vertex="1">
+          <mxGeometry x="196" y="70" width="313" height="38" as="geometry" />
+        </mxCell>
+
+        <!-- Repayment Plan Policy Bundle -->
+        <mxCell id="hdr_repay" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8eaf6;strokeColor=#3949ab;strokeWidth=2;fontSize=13;fontStyle=1;verticalAlign=middle;"
+          value="Repayment Plan Policy Bundle" vertex="1">
+          <mxGeometry x="515" y="70" width="313" height="38" as="geometry" />
+        </mxCell>
+
+        <!-- Vulnerability Policy Bundle -->
+        <mxCell id="hdr_vuln" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#7b1fa2;strokeWidth=2;fontSize=13;fontStyle=1;verticalAlign=middle;"
+          value="Vulnerability Policy Bundle" vertex="1">
+          <mxGeometry x="834" y="70" width="313" height="38" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════
+             ROW 1 — PROCESS MANAGEMENT
+        ═══════════════════════════════ -->
+
+        <mxCell id="row1_hdr" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=13;fontStyle=1;verticalAlign=top;"
+          value="Process Management" vertex="1">
+          <mxGeometry x="20" y="114" width="170" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="row1_sub" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontStyle=2;fontColor=#4a6da7;"
+          value="Process Configurator" vertex="1">
+          <mxGeometry x="28" y="134" width="154" height="13" as="geometry" />
+        </mxCell>
+        <mxCell id="row1_note" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontStyle=2;fontColor=#7a9abf;"
+          value="nestable · process of processes" vertex="1">
+          <mxGeometry x="28" y="148" width="154" height="13" as="geometry" />
+        </mxCell>
+
+        <!-- PM × Fraud -->
+        <mxCell id="c_pm_fraud" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8f0;strokeColor=#d79b00;strokeWidth=1;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Fraud — Process Level" vertex="1">
+          <mxGeometry x="196" y="114" width="313" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="t_pm_fraud" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Fraud detection strategy  (BPMN process definition)&lt;br&gt;• Escalation &amp; referral flows to specialist teams&lt;br&gt;• Champion / challenger fraud strategy variants&lt;br&gt;• Strategy deployment &amp; version control" vertex="1">
+          <mxGeometry x="204" y="136" width="297" height="162" as="geometry" />
+        </mxCell>
+
+        <!-- PM × Repayment Plan -->
+        <mxCell id="c_pm_repay" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f4f5fc;strokeColor=#3949ab;strokeWidth=1;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Repayment Plan — Process Level" vertex="1">
+          <mxGeometry x="515" y="114" width="313" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="t_pm_repay" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Repayment plan setup &amp; review process flows&lt;br&gt;• I&amp;E-triggered re-assessment strategy&lt;br&gt;• Broken arrangement &amp; recovery processes&lt;br&gt;• Plan expiry &amp; debt clearance strategies" vertex="1">
+          <mxGeometry x="523" y="136" width="297" height="162" as="geometry" />
+        </mxCell>
+
+        <!-- PM × Vulnerability -->
+        <mxCell id="c_pm_vuln" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf4fc;strokeColor=#7b1fa2;strokeWidth=1;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Vulnerability — Process Level" vertex="1">
+          <mxGeometry x="834" y="114" width="313" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="t_pm_vuln" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Vulnerability management process definition&lt;br&gt;• Breathing Space (statutory 60-day) strategy&lt;br&gt;• Review &amp; renewal process flows&lt;br&gt;• Escalation to specialist vulnerability teams" vertex="1">
+          <mxGeometry x="842" y="136" width="297" height="162" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════
+             ROW 2 — TASKS & RULES
+        ═══════════════════════════════ -->
+
+        <mxCell id="row2_hdr" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=13;fontStyle=1;verticalAlign=top;"
+          value="Tasks &amp; Rules" vertex="1">
+          <mxGeometry x="20" y="312" width="170" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="row2_sub" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontStyle=2;fontColor=#5a8a45;"
+          value="Task Configurator" vertex="1">
+          <mxGeometry x="28" y="332" width="154" height="13" as="geometry" />
+        </mxCell>
+        <mxCell id="row2_note" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontStyle=2;fontColor=#7aaa65;"
+          value="nestable · task of tasks" vertex="1">
+          <mxGeometry x="28" y="346" width="154" height="13" as="geometry" />
+        </mxCell>
+
+        <!-- TR × Fraud -->
+        <mxCell id="c_tr_fraud" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8f0;strokeColor=#d79b00;strokeWidth=1;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Fraud — Task Level" vertex="1">
+          <mxGeometry x="196" y="312" width="313" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tr_fraud" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Fraud investigation human task type&lt;br&gt;• Evidence review &amp; outcome recording task&lt;br&gt;• Drools rules: fraud indicator evaluation&lt;br&gt;• Task form: fraud case management UI" vertex="1">
+          <mxGeometry x="204" y="334" width="297" height="162" as="geometry" />
+        </mxCell>
+
+        <!-- TR × Repayment Plan -->
+        <mxCell id="c_tr_repay" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f4f5fc;strokeColor=#3949ab;strokeWidth=1;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Repayment Plan — Task Level" vertex="1">
+          <mxGeometry x="515" y="312" width="313" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tr_repay" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• I&amp;E assessment human task type&lt;br&gt;• Affordability calculation Drools rules&lt;br&gt;• Plan negotiation &amp; approval task&lt;br&gt;• Task form: I&amp;E capture &amp; plan creation UI" vertex="1">
+          <mxGeometry x="523" y="334" width="297" height="162" as="geometry" />
+        </mxCell>
+
+        <!-- TR × Vulnerability -->
+        <mxCell id="c_tr_vuln" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf4fc;strokeColor=#7b1fa2;strokeWidth=1;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Vulnerability — Task Level" vertex="1">
+          <mxGeometry x="834" y="312" width="313" height="192" as="geometry" />
+        </mxCell>
+        <mxCell id="t_tr_vuln" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Vulnerability assessment human task type&lt;br&gt;• Drools rules: vulnerability flag evaluation&lt;br&gt;• Review scheduling &amp; outcome task&lt;br&gt;• Task form: vulnerability profile UI" vertex="1">
+          <mxGeometry x="842" y="334" width="297" height="162" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════
+             ROW 3 — FOUNDATIONS
+        ═══════════════════════════════ -->
+
+        <mxCell id="row3_hdr" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=13;fontStyle=1;verticalAlign=top;"
+          value="Foundations" vertex="1">
+          <mxGeometry x="20" y="510" width="170" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="row3_sub" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontStyle=2;fontColor=#b07800;"
+          value="Foundations Configurator" vertex="1">
+          <mxGeometry x="28" y="530" width="154" height="13" as="geometry" />
+        </mxCell>
+        <mxCell id="row3_note" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontStyle=2;fontColor=#c09820;"
+          value="shared reference data &amp; codelists" vertex="1">
+          <mxGeometry x="28" y="544" width="154" height="13" as="geometry" />
+        </mxCell>
+
+        <!-- FD × Fraud -->
+        <mxCell id="c_fd_fraud" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8f0;strokeColor=#d79b00;strokeWidth=1;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Fraud — Foundations" vertex="1">
+          <mxGeometry x="196" y="510" width="313" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fd_fraud" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Fraud categories &amp; sub-types codelist&lt;br&gt;• Freeze &amp; restriction type codes&lt;br&gt;• Referral organisation reference data&lt;br&gt;• Fraud outcome classification codes" vertex="1">
+          <mxGeometry x="204" y="532" width="297" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- FD × Repayment Plan -->
+        <mxCell id="c_fd_repay" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f4f5fc;strokeColor=#3949ab;strokeWidth=1;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Repayment Plan — Foundations" vertex="1">
+          <mxGeometry x="515" y="510" width="313" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fd_repay" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Payment frequencies codelist&lt;br&gt;• I&amp;E expenditure category reference data&lt;br&gt;• Minimum payment threshold configuration&lt;br&gt;• Plan type &amp; arrangement codes" vertex="1">
+          <mxGeometry x="523" y="532" width="297" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- FD × Vulnerability -->
+        <mxCell id="c_fd_vuln" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#faf4fc;strokeColor=#7b1fa2;strokeWidth=1;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Vulnerability — Foundations" vertex="1">
+          <mxGeometry x="834" y="510" width="313" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="t_fd_vuln" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Vulnerability &amp; restriction type codes&lt;br&gt;• Breathing Space reason codelist&lt;br&gt;• Support organisation reference data&lt;br&gt;• Vulnerability review frequency config" vertex="1">
+          <mxGeometry x="842" y="532" width="297" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- ═══ FOOTER NOTE ═══ -->
+        <mxCell id="footer" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=9;fontStyle=2;fontColor=#888888;"
+          value="Layers are nestable: a Process can contain sub-Processes; a Task can contain sub-Tasks.  Policy bundles are configured as a unit — the Foundations Configurator, Task Configurator, and Process Configurator each handle their slice of the same bundle." vertex="1">
+          <mxGeometry x="20" y="678" width="1127" height="16" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0lvt87y" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.31.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.2.0">
+  <bpmn:process id="ProcessDefinitions.NOTIFY_OVERDUE_DEBTORS_AMPLIO" name="NOTIFY_OVERDUE_DEBTORS_AMPLIO" isExecutable="true">
+    <bpmn:startEvent id="NotifyOverdueDebptorsStartEvent">
+      <bpmn:outgoing>Flow_0qyz028</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="NotifyOverdueDebptorsEndEvent">
+      <bpmn:incoming>Flow_1onsy47</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0qyz028" sourceRef="NotifyOverdueDebptorsStartEvent" targetRef="ProcessInitializer" />
+    <bpmn:serviceTask id="SendLetter" name="Send Letter" zeebe:modelerTemplate="createContactCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishCreateContactCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="entityId" />
+          <zeebe:input source="=&#34;TaskExecution&#34;" target="entityCL" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="=&#34;CREATE_CONTACT_LETTER&#34;" target="signalName" />
+          <zeebe:input source="=&#34;OVRD_DEBTS&#34;" target="contactTypeCode" />
+          <zeebe:input source="=&#34;SMS_OUT&#34;" target="communicationChannelCode" />
+          <zeebe:input source="=[]" target="relatedEntities" />
+          <zeebe:input source="= [&#10;   { &#10;     name: &#34;party_role_id&#34;, &#10;     value : party_role_id &#10;   },&#10;   { &#10;     name: &#34;obligation_action_id&#34;, &#10;     value : obligation_action_id &#10;   },&#10;   { &#10;     name: &#34;overdue_bill_segment_ids&#34;, &#10;     value : overdue_bill_segment_ids &#10;   }&#10; ]" target="parameters" />
+          <zeebe:input source="=party_role_id" target="partyRoleId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1s5w1kw</bpmn:incoming>
+      <bpmn:outgoing>Flow_1v5j7de</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1v5j7de" sourceRef="SendLetter" targetRef="Event_03d8dqj" />
+    <bpmn:sequenceFlow id="Flow_1s5w1kw" sourceRef="Event_0g464hf" targetRef="SendLetter" />
+    <bpmn:intermediateCatchEvent id="Event_0g464hf">
+      <bpmn:incoming>Flow_0dfzyzp</bpmn:incoming>
+      <bpmn:outgoing>Flow_1s5w1kw</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1awmuct">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT15S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="ProcessInitializer" name="Process Initializer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ProcessInitializer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0qyz028</bpmn:incoming>
+      <bpmn:outgoing>Flow_0dfzyzp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0dfzyzp" sourceRef="ProcessInitializer" targetRef="Event_0g464hf" />
+    <bpmn:intermediateCatchEvent id="Event_03d8dqj" name="Contact Created">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_1v5j7de</bpmn:incoming>
+      <bpmn:outgoing>Flow_1onsy47</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1436uaw" messageRef="Message_2lbca7a" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1onsy47" sourceRef="Event_03d8dqj" targetRef="NotifyOverdueDebptorsEndEvent" />
+  </bpmn:process>
+  <bpmn:message id="Message_2lbca7a" name="CREATE_CONTACT_LETTER">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ProcessDefinitions.NOTIFY_OVERDUE_DEBTORS_AMPLIO">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="NotifyOverdueDebptorsStartEvent">
+        <dc:Bounds x="152" y="79" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_16o9vva" bpmnElement="SendLetter">
+        <dc:Bounds x="430" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0qjuquz_di" bpmnElement="Event_0g464hf">
+        <dc:Bounds x="362" y="79" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kr1fyl_di" bpmnElement="ProcessInitializer">
+        <dc:Bounds x="230" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_03d8dqj_di" bpmnElement="Event_03d8dqj">
+        <dc:Bounds x="602" y="79" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="584" y="122" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0k0bnfu_di" bpmnElement="NotifyOverdueDebptorsEndEvent">
+        <dc:Bounds x="712" y="79" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0qyz028_di" bpmnElement="Flow_0qyz028">
+        <di:waypoint x="188" y="97" />
+        <di:waypoint x="230" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v5j7de_di" bpmnElement="Flow_1v5j7de">
+        <di:waypoint x="530" y="97" />
+        <di:waypoint x="602" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1s5w1kw_di" bpmnElement="Flow_1s5w1kw">
+        <di:waypoint x="398" y="97" />
+        <di:waypoint x="430" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dfzyzp_di" bpmnElement="Flow_0dfzyzp">
+        <di:waypoint x="330" y="97" />
+        <di:waypoint x="362" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1onsy47_di" bpmnElement="Flow_1onsy47">
+        <di:waypoint x="638" y="97" />
+        <di:waypoint x="712" y="97" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

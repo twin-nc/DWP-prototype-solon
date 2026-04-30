@@ -1,0 +1,329 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" xmlns:color="http://www.omg.org/spec/BPMN/non-normative/color/1.0" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_14xfhmy" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.32.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.2.0">
+  <bpmn:process id="ProcessDefinitions.CASE_DEMAND_LETTER_AMPLIO" name="Case Demand Letter Amplio" isExecutable="true">
+    <bpmn:startEvent id="CaseDemandLetterStartEvent">
+      <bpmn:outgoing>Flow_1dovi9w</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="CaseDemandLetterEndEvent">
+      <bpmn:incoming>Flow_0msmm9e</bpmn:incoming>
+      <bpmn:incoming>Flow_08mamn8</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1dovi9w" sourceRef="CaseDemandLetterStartEvent" targetRef="ProcessInitializer" />
+    <bpmn:serviceTask id="CreateBillSegmentCommand" name="Create Bill Segment">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="CreateBillSegmentCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=caseId" target="caseId" />
+          <zeebe:input source="=&#34;BILL_SEGMENT_CREATED_SIGNAL&#34;" target="signalName" />
+          <zeebe:input source="=&#34;TAX_FTP&#34;" target="billSegmentType" />
+          <zeebe:input source="=20" target="fee" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="=&#34;Liability&#34;" target="relatedEntityCL" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1mog8pf</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tg4n44</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="ProcessInitializer" name="Process Initializer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ProcessInitializer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1dovi9w</bpmn:incoming>
+      <bpmn:outgoing>Flow_1mog8pf</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1mog8pf" sourceRef="ProcessInitializer" targetRef="CreateBillSegmentCommand" />
+    <bpmn:intermediateCatchEvent id="BillSegmentCreatedSignal" name="Bill Segment Created">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+        <zeebe:ioMapping>
+          <zeebe:output source="=signalResult" target="billSegmentResult" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0tg4n44</bpmn:incoming>
+      <bpmn:outgoing>Flow_087b34t</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0n3bwhl" messageRef="Message_0gccl9g" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_087b34t" sourceRef="BillSegmentCreatedSignal" targetRef="ConfigureCaseScope" />
+    <bpmn:serviceTask id="ConfigureCaseScope" name="Configure Case Scope">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ConfigureCaseScopeCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=caseId" target="caseId" />
+          <zeebe:input source="=&#34;CASE_SCOPE_CONFIGURED_SIGNAL&#34;" target="signalName" />
+          <zeebe:input source="=&#34;TAX_FTP&#34;" target="billSegmentType" />
+          <zeebe:input source="=20" target="fee" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="=billSegmentResult.billSegmentId" target="billSegmentId" />
+          <zeebe:input source="=billSegmentResult.liabilityId" target="liabilityId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_087b34t</bpmn:incoming>
+      <bpmn:outgoing>Flow_1er615u</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1er615u" sourceRef="ConfigureCaseScope" targetRef="CaseScopeConfigured" />
+    <bpmn:intermediateCatchEvent id="CaseScopeConfigured" name="Case Scope Configured">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1er615u</bpmn:incoming>
+      <bpmn:outgoing>Flow_0msmm9e</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_10vo8hw" messageRef="Message_31553oi" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0msmm9e" sourceRef="CaseScopeConfigured" targetRef="GetCaseScopeBillSegmentsByIdRest" />
+    <bpmn:serviceTask id="GetCaseScopeBillSegmentsByIdRest" name="Get Case Scope Bill Segments" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="get" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/cases/&#34; + caseId + &#34;/bill-segments&#34;" target="url" />
+          <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultExpression" value="={&#10;  response : response.body&#10;}" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0msmm9e</bpmn:incoming>
+      <bpmn:outgoing>Flow_0pu8imd</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0pu8imd" sourceRef="GetCaseScopeBillSegmentsByIdRest" targetRef="ProcessJSONData" />
+    <bpmn:serviceTask id="ProcessJSONData" name="Process JSON Data">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ProcessJSONData" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=response" target="response" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0pu8imd</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ecn0dp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="SendDemandContact" name="Send Demand Letter">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishCreateContactCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=caseId" target="entityId" />
+          <zeebe:input source="=&#34;DEMANDLETR&#34;" target="contactTypeCode" />
+          <zeebe:input source="=&#34;EMAIL_OUT&#34;" target="communicationChannelCode" />
+          <zeebe:input source="=&#34;CREATE_CONTACT_LETTER&#34;" target="signalName" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="= [&#10;   { &#10;     name: &#34;case_id&#34;, &#10;     value : caseId &#10;   },&#10;   { &#10;     name: &#34;case_balance&#34;, &#10;     value : response.totalCaseBalance.amount&#10;   },&#10;   { &#10;     name: &#34;pid&#34;, &#10;     value : processInstanceId&#10;   },&#10;   { &#10;     name: &#34;case_liability_bill_segments&#34;, &#10;     value : billSegmentData&#10;   },&#10;   { &#10;     name: &#34;liability&#34;, &#10;     value : firstLiabilityId&#10;   }&#10; ]" target="parameters" />
+          <zeebe:input source="=[&#10;  {&#10;    entityId :caseId,&#10;    entityCL :&#34;Case&#34;&#10;  }&#10;]" target="relatedEntities" />
+          <zeebe:input source="=billSegmentResult.partyRoleId" target="partyRoleId" />
+          <zeebe:input source="=&#34;Case&#34;" target="entityCL" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ecn0dp</bpmn:incoming>
+      <bpmn:outgoing>Flow_1q80oe7</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1ecn0dp" sourceRef="ProcessJSONData" targetRef="SendDemandContact" />
+    <bpmn:serviceTask id="TriggerDebtRecoveryProcess" name="Trigger Debt Recovery Process">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="TriggerDebtRecoveryProcessCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=parentCaseId" target="parentCaseId" />
+          <zeebe:input source="=&#34;I_DEM_LET_SENT_SIGNAL&#34;" target="parentCaseSignalName" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0i3795r</bpmn:incoming>
+      <bpmn:outgoing>Flow_1sx759b</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1sx759b" sourceRef="TriggerDebtRecoveryProcess" targetRef="Activity_0952tjc" />
+    <bpmn:serviceTask id="Activity_0952tjc" name="Complete Case Activity" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="put" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/case-activities/&#34; + correlationKeyId + &#34;/complete&#34;" target="url" />
+          <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1sx759b</bpmn:incoming>
+      <bpmn:outgoing>Flow_08mamn8</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_08mamn8" sourceRef="Activity_0952tjc" targetRef="CaseDemandLetterEndEvent" />
+    <bpmn:sequenceFlow id="Flow_0tg4n44" sourceRef="CreateBillSegmentCommand" targetRef="BillSegmentCreatedSignal" />
+    <bpmn:sequenceFlow id="Flow_1q80oe7" sourceRef="SendDemandContact" targetRef="ContactCreated" />
+    <bpmn:serviceTask id="AddContactToTheRelatedEntities" name="Add Contact to the related entities" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="post" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/cases/&#34; + caseId + &#34;/related-entity&#34;" target="url" />
+          <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+          <zeebe:input source="={&#10;  &#34;caseEntityRelationshipTypeCL&#34;: &#34;RELATED_CONTACTS&#34;,&#10;  &#34;entityCL&#34;: &#34;Contact&#34;,&#10;  &#34;entityId&#34;: contactId&#10;}" target="body" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0oevdvd</bpmn:incoming>
+      <bpmn:outgoing>Flow_0i3795r</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:intermediateCatchEvent id="ContactCreated" name="Contact Created">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+        <zeebe:ioMapping>
+          <zeebe:output source="=signalResult" target="contactId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1q80oe7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0oevdvd</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1ua09nk" messageRef="Message_02e6v9m" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0oevdvd" sourceRef="ContactCreated" targetRef="AddContactToTheRelatedEntities" />
+    <bpmn:sequenceFlow id="Flow_0i3795r" sourceRef="AddContactToTheRelatedEntities" targetRef="TriggerDebtRecoveryProcess" />
+  </bpmn:process>
+  <bpmn:message id="Message_0optvaf">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_0gccl9g" name="BILL_SEGMENT_CREATED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_31553oi" name="CASE_SCOPE_CONFIGURED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_02e6v9m" name="CREATE_CONTACT_LETTER">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ProcessDefinitions.CASE_DEMAND_LETTER_AMPLIO">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="CaseDemandLetterStartEvent" bioc:stroke="#205022" bioc:fill="#c8e6c9" color:background-color="#c8e6c9" color:border-color="#205022">
+        <dc:Bounds x="179" y="129" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_016jv3v_di" bpmnElement="CaseDemandLetterEndEvent" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="2132" y="129" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kr1fyl_di" bpmnElement="CreateBillSegmentCommand">
+        <dc:Bounds x="460" y="107" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0f0mjrj" bpmnElement="ProcessInitializer">
+        <dc:Bounds x="280" y="107" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1a0335w" bpmnElement="BillSegmentCreatedSignal" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="632" y="129" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="618" y="174.5" width="63" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0e78yc9" bpmnElement="ConfigureCaseScope">
+        <dc:Bounds x="730" y="107" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1f6t8sk" bpmnElement="CaseScopeConfigured" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="882" y="129" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="875" y="77" width="60" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ntm0nq_di" bpmnElement="GetCaseScopeBillSegmentsByIdRest">
+        <dc:Bounds x="980" y="107" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0gz8zc1_di" bpmnElement="ProcessJSONData">
+        <dc:Bounds x="1140" y="107" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0n8qajw" bpmnElement="SendDemandContact">
+        <dc:Bounds x="1300" y="107" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1o0n6dh_di" bpmnElement="TriggerDebtRecoveryProcess">
+        <dc:Bounds x="1780" y="107" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1jf70nq_di" bpmnElement="Activity_0952tjc">
+        <dc:Bounds x="1940" y="107" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0ndo586" bpmnElement="AddContactToTheRelatedEntities">
+        <dc:Bounds x="1610" y="107" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0mrii48" bpmnElement="ContactCreated" bioc:stroke="#6b3c00" bioc:fill="#ffe0b2" color:background-color="#ffe0b2" color:border-color="#6b3c00">
+        <dc:Bounds x="1482" y="129" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1461" y="175" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1dovi9w_di" bpmnElement="Flow_1dovi9w">
+        <di:waypoint x="215" y="147" />
+        <di:waypoint x="280" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1mog8pf_di" bpmnElement="Flow_1mog8pf">
+        <di:waypoint x="380" y="147" />
+        <di:waypoint x="460" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_087b34t_di" bpmnElement="Flow_087b34t">
+        <di:waypoint x="668" y="147" />
+        <di:waypoint x="730" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1er615u_di" bpmnElement="Flow_1er615u">
+        <di:waypoint x="830" y="147" />
+        <di:waypoint x="882" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0msmm9e_di" bpmnElement="Flow_0msmm9e">
+        <di:waypoint x="918" y="147" />
+        <di:waypoint x="980" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pu8imd_di" bpmnElement="Flow_0pu8imd">
+        <di:waypoint x="1080" y="147" />
+        <di:waypoint x="1140" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ecn0dp_di" bpmnElement="Flow_1ecn0dp">
+        <di:waypoint x="1240" y="147" />
+        <di:waypoint x="1300" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1sx759b_di" bpmnElement="Flow_1sx759b">
+        <di:waypoint x="1880" y="147" />
+        <di:waypoint x="1940" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08mamn8_di" bpmnElement="Flow_08mamn8">
+        <di:waypoint x="2040" y="147" />
+        <di:waypoint x="2132" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tg4n44_di" bpmnElement="Flow_0tg4n44">
+        <di:waypoint x="560" y="147" />
+        <di:waypoint x="632" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1q80oe7_di" bpmnElement="Flow_1q80oe7">
+        <di:waypoint x="1400" y="147" />
+        <di:waypoint x="1482" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_03918go" bpmnElement="Flow_0oevdvd">
+        <di:waypoint x="1518" y="147" />
+        <di:waypoint x="1610" y="147" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0i3795r_di" bpmnElement="Flow_0i3795r">
+        <di:waypoint x="1710" y="147" />
+        <di:waypoint x="1780" y="147" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

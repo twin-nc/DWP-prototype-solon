@@ -1,0 +1,436 @@
+<mxfile host="Electron">
+  <diagram id="config-layer-v1" name="Configuration Layer">
+    <mxGraphModel dx="1664" dy="1131" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══════════════════════════════════════════════ TITLE ═══ -->
+        <mxCell id="100" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=20;fontStyle=1;"
+          value="Configuration Layer — Architecture Overview" vertex="1">
+          <mxGeometry x="60" y="10" width="1534" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════ CONFIGURATION LAYER ZONE ═══ -->
+        <mxCell id="101" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f4ff;strokeColor=#4a6da7;strokeWidth=2;dashed=1;dashPattern=8 4;arcSize=2;"
+          value="" vertex="1">
+          <mxGeometry x="40" y="50" width="1574" height="576" as="geometry" />
+        </mxCell>
+        <mxCell id="102" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#2d4a8a;"
+          value="CONFIGURATION LAYER  —  built on top of Solon Tax" vertex="1">
+          <mxGeometry x="60" y="54" width="700" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- ─── Row 1 label ─── -->
+        <mxCell id="103" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=2;fontColor=#555555;"
+          value="Configuration &amp; UI  ·  browser-based tooling for supervisors, configurators, and agents" vertex="1">
+          <mxGeometry x="60" y="78" width="800" height="14" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════ ROW 1 — Configuration &amp; UI (y=95, h=210) ══════════════ -->
+
+        <!-- Strategy Engine -->
+        <mxCell id="201" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;strokeWidth=2;fontSize=13;fontStyle=1;verticalAlign=top;"
+          value="Strategy Engine" vertex="1">
+          <mxGeometry x="60" y="95" width="368" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="201s" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontStyle=2;fontColor=#4a6da7;"
+          value="Process Configurator" vertex="1">
+          <mxGeometry x="70" y="115" width="200" height="13" as="geometry" />
+        </mxCell>
+        <mxCell id="202" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Step Library &amp; Fragment Store&lt;br&gt;• Strategy Assembler (visual canvas)&lt;br&gt;• Strategy Compiler  (JSON → BPMN XML)&lt;br&gt;• Deployment Pipeline  (draft → review → active)&lt;br&gt;• Simulation Engine  (replay historical journeys)&lt;br&gt;• Champion / Challenger Setup &amp; Results UI&lt;br&gt;• Strategy Version History &amp; Rollback" vertex="1">
+          <mxGeometry x="70" y="131" width="350" height="165" as="geometry" />
+        </mxCell>
+
+        <!-- Task Configurator -->
+        <mxCell id="210" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e0f7fa;strokeColor=#00838F;strokeWidth=2;fontSize=13;fontStyle=1;verticalAlign=top;"
+          value="Task Configurator" vertex="1">
+          <mxGeometry x="440" y="95" width="368" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="210s" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontStyle=2;fontColor=#00838F;"
+          value="Task Configurator" vertex="1">
+          <mxGeometry x="450" y="115" width="200" height="13" as="geometry" />
+        </mxCell>
+        <mxCell id="211" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Step Library Editor  (create / edit / version)&lt;br&gt;• Human Task Type Configurator&lt;br&gt;• Drools Rule Builder  (rule authoring UI)&lt;br&gt;• Task Form Designer  (agent view per task type)&lt;br&gt;• Task Parameter Schema Editor" vertex="1">
+          <mxGeometry x="450" y="131" width="350" height="165" as="geometry" />
+        </mxCell>
+
+        <!-- Policy Bundles -->
+        <mxCell id="220" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;fontSize=13;fontStyle=1;verticalAlign=top;"
+          value="Policy Bundles" vertex="1">
+          <mxGeometry x="820" y="95" width="368" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="220s" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontStyle=2;fontColor=#b07800;"
+          value="cross-cutting DWP policy configuration" vertex="1">
+          <mxGeometry x="830" y="115" width="280" height="13" as="geometry" />
+        </mxCell>
+        <mxCell id="221" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Vulnerability Management UI&lt;br&gt;• Breathing Space Management UI  (statutory 60-day)&lt;br&gt;• Repayment Plan &amp; I&amp;E UI&lt;br&gt;• Fraud &amp; Dispute UI&lt;br&gt;• Policy Bundle packaging  (process + task + config)" vertex="1">
+          <mxGeometry x="830" y="131" width="350" height="165" as="geometry" />
+        </mxCell>
+
+        <!-- Agent &amp; Operations UI -->
+        <mxCell id="230" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;strokeWidth=2;fontSize=13;fontStyle=1;verticalAlign=top;"
+          value="Agent &amp; Operations UI" vertex="1">
+          <mxGeometry x="1200" y="95" width="394" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="230s" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=9;fontStyle=2;fontColor=#5a8a45;"
+          value="incl. Foundations Configurator" vertex="1">
+          <mxGeometry x="1210" y="115" width="220" height="13" as="geometry" />
+        </mxCell>
+        <mxCell id="231" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;"
+          value="• Agent Desktop  (timeline, ID&amp;V, vulnerability, actions)&lt;br&gt;• Supervisor Dashboard  (SLA, queues, campaign KPIs)&lt;br&gt;• MI &amp; Analytics  (strategy performance, C/C, third-party collection)&lt;br&gt;• Foundations Configurator  (codelists, RBAC, users)&lt;br&gt;• Self-Service Portal Extensions  (debt, payments, I&amp;E)" vertex="1">
+          <mxGeometry x="1210" y="131" width="376" height="165" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow: UI row → Core Services row -->
+        <mxCell id="240" edge="1" parent="1"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#888888;fontColor=#666666;fontSize=9;fontStyle=2;endArrow=open;endFill=0;startArrow=open;startFill=0;dashed=1;"
+          value="internal service calls">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="308" as="sourcePoint" />
+            <mxPoint x="820" y="333" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ─── Row 2 label ─── -->
+        <mxCell id="300lbl" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=2;fontColor=#555555;"
+          value="Core Services  ·  containerised microservices, event-driven, stateless where possible" vertex="1">
+          <mxGeometry x="60" y="315" width="700" height="14" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════ ROW 2 — Core Services (y=333, h=155) ══════════════ -->
+
+        <!-- Contact &amp; Communications -->
+        <mxCell id="301" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#4CAF50;strokeWidth=2;fontSize=12;fontStyle=1;verticalAlign=top;"
+          value="Contact &amp; Communications" vertex="1">
+          <mxGeometry x="60" y="333" width="368" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="302" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;"
+          value="• Contact Orchestration Service&lt;br&gt;• Channel Adapters  (SMS · Email · Letter · Dialler)&lt;br&gt;• Dialler Integration Service  (CTI)&lt;br&gt;• Contact Suppression Service&lt;br&gt;• Template Management Service" vertex="1">
+          <mxGeometry x="70" y="354" width="350" height="126" as="geometry" />
+        </mxCell>
+
+        <!-- Work, Queue &amp; Agent -->
+        <mxCell id="310" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#4CAF50;strokeWidth=2;fontSize=12;fontStyle=1;verticalAlign=top;"
+          value="Work, Queue &amp; Agent" vertex="1">
+          <mxGeometry x="440" y="333" width="368" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="311" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;"
+          value="• Queue Distribution Service  (skill-based routing)&lt;br&gt;• SLA Tracking Service  (timers, thresholds, escalation)&lt;br&gt;• Agent Scripting Service  (step-by-step guided flows)&lt;br&gt;• Work Item Assignment Engine&lt;br&gt;• Real-time Queue State Service" vertex="1">
+          <mxGeometry x="450" y="354" width="350" height="126" as="geometry" />
+        </mxCell>
+
+        <!-- Risk, I&amp;E &amp; Compliance -->
+        <mxCell id="320" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#4CAF50;strokeWidth=2;fontSize=12;fontStyle=1;verticalAlign=top;"
+          value="Risk, I&amp;E &amp; Compliance" vertex="1">
+          <mxGeometry x="820" y="333" width="368" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="321" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;"
+          value="• Vulnerability Protocol Enforcement&lt;br&gt;• Breathing Space Handler  (DRS, 60-day max)&lt;br&gt;• I&amp;E Capture &amp; Affordability Calculation&lt;br&gt;• CRA / Credit Bureau Integration&lt;br&gt;• Vulnerability Review Scheduler" vertex="1">
+          <mxGeometry x="830" y="354" width="350" height="126" as="geometry" />
+        </mxCell>
+
+        <!-- Strategy, Analytics &amp; third-party collection -->
+        <mxCell id="330" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#4CAF50;strokeWidth=2;fontSize=12;fontStyle=1;verticalAlign=top;"
+          value="Strategy, Analytics &amp; third-party collection" vertex="1">
+          <mxGeometry x="1200" y="333" width="394" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="331" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=10;"
+          value="• Split Assignment Service  (champion / challenger)&lt;br&gt;• Outcome Aggregation &amp; Statistical Significance&lt;br&gt;• Metrics Collection Service&lt;br&gt;• Third-Party Collection Placement Rules Engine &amp; File Service&lt;br&gt;• Third-Party Collection Reconciliation &amp; Commission Service" vertex="1">
+          <mxGeometry x="1210" y="354" width="376" height="126" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow: Core Services → Storage -->
+        <mxCell id="340" edge="1" parent="1"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#888888;fontColor=#666666;fontSize=9;fontStyle=2;endArrow=open;endFill=0;startArrow=open;startFill=0;dashed=1;"
+          value="read / write">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="491" as="sourcePoint" />
+            <mxPoint x="820" y="511" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ─── Row 3 label ─── -->
+        <mxCell id="400lbl" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;fontSize=10;fontStyle=2;fontColor=#555555;"
+          value="Persistent Storage  ·  exclusively owned by the configuration layer; Solon data accessed via REST API only" vertex="1">
+          <mxGeometry x="60" y="497" width="850" height="14" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════════ ROW 3 — Storage (y=514, h=104) ══════════════ -->
+
+        <mxCell id="401" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Strategy &amp; Config DB" vertex="1">
+          <mxGeometry x="60" y="514" width="373" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="401t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;"
+          value="Strategies · Step Library · Templates · Deployment Records" vertex="1">
+          <mxGeometry x="60" y="548" width="373" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="402" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Operational DB" vertex="1">
+          <mxGeometry x="443" y="514" width="373" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="402t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;"
+          value="Vulnerability Registry · C/C Assignment DB · Queue State" vertex="1">
+          <mxGeometry x="443" y="548" width="373" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="403" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Analytics &amp; third-party collection DB" vertex="1">
+          <mxGeometry x="826" y="514" width="373" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="403t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;"
+          value="KPI Metrics · C/C Results · Third-Party Collection Records &amp; Commission" vertex="1">
+          <mxGeometry x="826" y="548" width="373" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="404" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Audit &amp; Compliance DB" vertex="1">
+          <mxGeometry x="1209" y="514" width="385" height="104" as="geometry" />
+        </mxCell>
+        <mxCell id="404t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=9;"
+          value="Breathing Space Log · I&amp;E History · Fraud Records" vertex="1">
+          <mxGeometry x="1209" y="548" width="385" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════ REST API GATEWAY BAND ═══ -->
+        <mxCell id="500" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1e2d3d;strokeColor=#1e2d3d;strokeWidth=2;arcSize=3;"
+          value="" vertex="1">
+          <mxGeometry x="40" y="632" width="1574" height="66" as="geometry" />
+        </mxCell>
+        <mxCell id="501" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=12;fontStyle=1;fontColor=#ffffff;"
+          value="Solon REST API Gateway  ·  Keycloak Bearer JWT on all calls  ·  irm-origin-client: FORMS for service-to-service" vertex="1">
+          <mxGeometry x="60" y="632" width="1150" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="502" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=9;fontColor=#88aadd;"
+          value="/registration  ·  /process-management  ·  /case-management  ·  /human-task-management  ·  /suppression-management  ·  /taxpayer-accounting  ·  /contact-management  ·  /risk-analysis  ·  /operational-plan-management  ·  /reference-data  ·  /drools-runtime" vertex="1">
+          <mxGeometry x="60" y="660" width="1540" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Down arrow: Config Layer → Gateway -->
+        <mxCell id="510" edge="1" parent="1"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#4a6da7;fontColor=#4a6da7;fontSize=10;fontStyle=1;endArrow=block;endFill=1;"
+          value="REST calls">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="620" as="sourcePoint" />
+            <mxPoint x="820" y="632" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Down arrow: Gateway → Solon -->
+        <mxCell id="511" edge="1" parent="1"
+          style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#7b1fa2;fontColor=#7b1fa2;fontSize=10;fontStyle=1;endArrow=block;endFill=1;"
+          value="routes to">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="820" y="698" as="sourcePoint" />
+            <mxPoint x="820" y="710" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+
+        <!-- ═══════════════════════════════ SOLON TAX FOUNDATION ZONE ═══ -->
+        <mxCell id="600" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#7b1fa2;strokeWidth=2;dashed=1;dashPattern=8 4;arcSize=2;"
+          value="" vertex="1">
+          <mxGeometry x="40" y="706" width="1574" height="442" as="geometry" />
+        </mxCell>
+        <mxCell id="601" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;fontSize=14;fontStyle=1;fontColor=#6a1b9a;"
+          value="SOLON TAX  —  Foundation Platform  (v2.1.0)" vertex="1">
+          <mxGeometry x="60" y="710" width="700" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="602" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=right;verticalAlign=middle;fontSize=10;fontStyle=2;fontColor=#9c4db8;"
+          value="Keycloak · Kubernetes · Amplio BPMN Engine · Drools · Jasper Reports · Kafka (internal)" vertex="1">
+          <mxGeometry x="760" y="710" width="830" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════ SOLON ROW 1 — Core platform services (y=736, h=135) ══════════ -->
+        <!-- 6 boxes, each ~252px wide, gap=8px -->
+
+        <!-- Registration -->
+        <mxCell id="701" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#7b1fa2;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Registration" vertex="1">
+          <mxGeometry x="60" y="736" width="252" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="701t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;"
+          value="Parties &amp; PartyRoles&lt;br&gt;IRM Users · Org Units&lt;br&gt;Obligations · Revenue Type Registrations&lt;br&gt;Assets · Claimants · Bank Accounts" vertex="1">
+          <mxGeometry x="68" y="757" width="236" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Process Management -->
+        <mxCell id="702" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#7b1fa2;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Process Management" vertex="1">
+          <mxGeometry x="320" y="736" width="252" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="702t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;"
+          value="Process Definitions (BPMN XML)&lt;br&gt;Process Types · Instances&lt;br&gt;Process Flows · Node Instances&lt;br&gt;Scheduled Processes (cron)" vertex="1">
+          <mxGeometry x="328" y="757" width="236" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Case Management -->
+        <mxCell id="703" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#7b1fa2;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Case Management" vertex="1">
+          <mxGeometry x="580" y="736" width="252" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="703t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;"
+          value="Cases · Case Types · Activities&lt;br&gt;Case Worker Profiles · Scope&lt;br&gt;Debt Balance · Eligible Workers&lt;br&gt;Third-Party Collection Handover" vertex="1">
+          <mxGeometry x="588" y="757" width="236" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Human Task Management -->
+        <mxCell id="704" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#7b1fa2;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Human Task Mgmt" vertex="1">
+          <mxGeometry x="840" y="736" width="252" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="704t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;"
+          value="Human Task Types · Tasks&lt;br&gt;Task Completion (BPMN signal-back)&lt;br&gt;Eligible Users · Task Groups&lt;br&gt;Worker Profiles" vertex="1">
+          <mxGeometry x="848" y="757" width="236" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Suppression Management -->
+        <mxCell id="705" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#7b1fa2;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Suppression Mgmt" vertex="1">
+          <mxGeometry x="1100" y="736" width="252" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="705t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;"
+          value="Suppression Types · Suppressions&lt;br&gt;Vulnerability (open-ended)&lt;br&gt;Breathing Space (60-day max)&lt;br&gt;Auto-pauses active BPMN processes" vertex="1">
+          <mxGeometry x="1108" y="757" width="236" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Taxpayer Accounting -->
+        <mxCell id="706" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#7b1fa2;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Taxpayer Accounting" vertex="1">
+          <mxGeometry x="1360" y="736" width="254" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="706t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;"
+          value="Liabilities · Bill Segments&lt;br&gt;Payment Events · Payment Plans&lt;br&gt;Financial Transactions&lt;br&gt;Write-off · Refund · Offset" vertex="1">
+          <mxGeometry x="1368" y="757" width="238" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- ══════════ SOLON ROW 2 — Additional confirmed APIs (y=882, h=135) ══════════ -->
+        <!-- 5 boxes, each ~304px wide, gap=8px -->
+
+        <!-- Contact Management -->
+        <mxCell id="711" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#7b1fa2;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Contact Management" vertex="1">
+          <mxGeometry x="60" y="882" width="304" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="711t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;"
+          value="Communication Channels · Contact Types&lt;br&gt;Contacts  (create + generate/dispatch)&lt;br&gt;Contact Templates  (Jasper Reports)&lt;br&gt;Attachment DMS integration" vertex="1">
+          <mxGeometry x="68" y="903" width="288" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Risk Analysis -->
+        <mxCell id="712" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#7b1fa2;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Risk Analysis" vertex="1">
+          <mxGeometry x="372" y="882" width="304" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="712t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;"
+          value="Candidate List Types · Candidate Lists&lt;br&gt;Candidates  (riskScore 0–9999.99)&lt;br&gt;Intervention Initiation  (triggers case creation)&lt;br&gt;Risk Screening  (BPMN-internal)" vertex="1">
+          <mxGeometry x="380" y="903" width="288" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Operational Plan Management -->
+        <mxCell id="713" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#7b1fa2;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Operational Plan Mgmt" vertex="1">
+          <mxGeometry x="684" y="882" width="304" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="713t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;"
+          value="Operational Plan Types · Plans&lt;br&gt;Objectives · Weighted Targets&lt;br&gt;Target Dimension Values&lt;br&gt;Campaign KPIs  (linkedCases, completion%)" vertex="1">
+          <mxGeometry x="692" y="903" width="288" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Reference Data -->
+        <mxCell id="714" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#7b1fa2;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Reference Data" vertex="1">
+          <mxGeometry x="996" y="882" width="304" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="714t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;"
+          value="Codelists · Codelist Items&lt;br&gt;Categories · Cache Invalidation&lt;br&gt;All *CL fields across all APIs&lt;br&gt;resolve to records here" vertex="1">
+          <mxGeometry x="1004" y="903" width="288" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- Drools Runtime -->
+        <mxCell id="715" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ede7f6;strokeColor=#7b1fa2;strokeWidth=2;fontSize=11;fontStyle=1;verticalAlign=top;"
+          value="Drools Runtime" vertex="1">
+          <mxGeometry x="1308" y="882" width="306" height="135" as="geometry" />
+        </mxCell>
+        <mxCell id="715t" parent="1"
+          style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=9;"
+          value="Stateless rule execution&lt;br&gt;Rule session management&lt;br&gt;I&amp;E affordability · Risk score inputs&lt;br&gt;Vulnerability flag evaluation" vertex="1">
+          <mxGeometry x="1316" y="903" width="290" height="105" as="geometry" />
+        </mxCell>
+
+        <!-- ══════ BPMN INTERNAL BUS NOTE ══════ -->
+        <mxCell id="800" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c62828;strokeWidth=1;fontSize=10;fontStyle=2;verticalAlign=middle;align=center;"
+          value="⚠  Solon Internal Kafka Bus  (irm.bpmn-engine.*)  —  BPMN engine private command channel.  The configuration layer does NOT publish to these topics." vertex="1">
+          <mxGeometry x="60" y="1030" width="1554" height="44" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

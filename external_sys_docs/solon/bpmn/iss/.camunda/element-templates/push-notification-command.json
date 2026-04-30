@@ -1,0 +1,157 @@
+{
+  "$schema": "https://unpkg.com/@camunda/zeebe-element-templates-json-schema/resources/schema.json",
+  "name": "Push Notification",
+  "id": "pushNotificationCommand",
+  "description": "Sends a command to push a notification",
+  "version": 1,
+  "icon": {
+    "contents": "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+"
+  },
+  "appliesTo": [
+    "bpmn:Task"
+  ],
+  "properties": [
+    {
+      "type": "Hidden",
+      "value": "PublishPushNotificationCommand",
+      "binding": {
+        "type": "zeebe:taskDefinition:type"
+      }
+    },
+    {
+      "label": "Entity ID",
+      "description": "The entity id to associate the notification with",
+      "value": "=entityId",
+      "type": "String",
+      "feel" : "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "entityId"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Entity CL",
+      "description": "Entity CL tha describes the entity type",
+      "value": "",
+      "type": "String",
+      "feel" : "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "entityCL"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Entity Status CL",
+      "description": "Status of the entity",
+      "value": "",
+      "type": "String",
+      "feel" : "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "entityStatusCL"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Notification Type Code",
+      "description": "Code of the notification type",
+      "value": "",
+      "type": "String",
+      "feel" : "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "notificationTypeCode"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "User",
+      "description": "Username of the user that submitted the form",
+      "value": "=user",
+      "type": "String",
+      "feel" : "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "user"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Title Key",
+      "description": "Key for the title to use for the notification",
+      "value": "",
+      "type": "String",
+      "feel" : "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "titleKey"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Message Key",
+      "description": "Key for the message to use for the notification",
+      "value": "",
+      "type": "String",
+      "feel" : "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "messageKey"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Message Codelists",
+      "description": "Codelists to use for the message. Should always be an array",
+      "value": "",
+      "type": "String",
+      "feel" : "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "messageCodelists"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    },
+    {
+      "label": "Message Parameters",
+      "description": "Parameters to use for the message. Should always be an array",
+      "value": "",
+      "type": "String",
+      "feel" : "optional",
+      "optional": false,
+      "binding": {
+        "type": "zeebe:input",
+        "name": "messageParams"
+      },
+      "constraints": {
+        "notEmpty": true
+      }
+    }
+  ]
+}

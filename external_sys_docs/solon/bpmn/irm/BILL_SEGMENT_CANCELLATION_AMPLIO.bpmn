@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1amkv17" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.32.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.2.0">
+  <bpmn:process id="ProcessDefinitions.BILL_SEGMENT_CANCELLATION_AMPLIO" name="BILL_SEGMENT_CANCELLATION_AMPLIO" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_17fm3rz</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_17fm3rz" sourceRef="StartEvent_1" targetRef="ProcessInitializer" />
+    <bpmn:sequenceFlow id="Flow_0k08di0" sourceRef="GetProcessFlowByIdRest" targetRef="GetBillSegmentByIdRest" />
+    <bpmn:serviceTask id="PushBeforeCancellationNotification" name="Push Notification user approval for cancellation is pending" zeebe:modelerTemplate="pushNotificationCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishPushNotificationCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=billSegmentId" target="entityId" />
+          <zeebe:input source="=&#34;BillSegment&#34;" target="entityCL" />
+          <zeebe:input source="=processFlowBody.entityStatusCL" target="entityStatusCL" />
+          <zeebe:input source="=&#34;BS_CNL_PND&#34;" target="notificationTypeCode" />
+          <zeebe:input source="=user" target="user" />
+          <zeebe:input source="= &#34;process-flow.bill-segment.pending-cancellation.title.message&#34;" target="titleKey" />
+          <zeebe:input source="=&#34;process-flow.bill-segment.pending-cancellation.body.message&#34;" target="messageKey" />
+          <zeebe:input source="=[&#34;ENTITY_STATUSES&#34;]" target="messageCodelists" />
+          <zeebe:input source="=[processFlowBody.entityStatusCL]" target="messageParams" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08z1j5u</bpmn:incoming>
+      <bpmn:outgoing>Flow_0zg0i3z</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_08z1j5u" sourceRef="GetBillSegmentByIdRest" targetRef="PushBeforeCancellationNotification" />
+    <bpmn:exclusiveGateway id="DebitOrCreditGateway" name="Is BS amount&#62;=0">
+      <bpmn:incoming>Flow_0zg0i3z</bpmn:incoming>
+      <bpmn:outgoing>Flow_0pydguq</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1bp6mt7</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0zg0i3z" sourceRef="PushBeforeCancellationNotification" targetRef="DebitOrCreditGateway" />
+    <bpmn:serviceTask id="DebitLV1Task" name="Debit Lv1 approval" zeebe:modelerTemplate="createHumanTaskCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="CreateHumanTaskCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="entityId" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="=&#34;HUMAN_TASK_CANCEL_DEBIT_APPROVAL&#34;" target="signalName" />
+          <zeebe:input source="=&#34;DBTLV1CANC&#34;" target="humanTaskTypeCode" />
+          <zeebe:input source="=&#34;PRIORITY_10&#34;" target="humanTaskPriorityCL" />
+          <zeebe:input source="=[&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;ProcessFlow&#34;,&#10;    entityId : entityId&#10;  },&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;ProcessInstance&#34;,&#10;    entityId : processInstanceId&#10;  }&#10;]" target="relatedEntities" />
+          <zeebe:input source="=&#34;Zeebe created&#34;" target="comment" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0pydguq</bpmn:incoming>
+      <bpmn:outgoing>Flow_1r2d75d</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0pydguq" name="Yes" sourceRef="DebitOrCreditGateway" targetRef="DebitLV1Task">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=bsAmount &gt;= 0</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:eventBasedGateway id="Debit1ResultGateway">
+      <bpmn:incoming>Flow_1r2d75d</bpmn:incoming>
+      <bpmn:outgoing>Flow_08q6h4x</bpmn:outgoing>
+      <bpmn:outgoing>Flow_13t6fe2</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:intermediateCatchEvent id="DebitLV1ApprovalSignal" name="Debit Cancel Approve Signal">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+        <zeebe:ioMapping>
+          <zeebe:output source="=&#34;APPROVED&#34;" target="processFlowStatus" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_08q6h4x</bpmn:incoming>
+      <bpmn:outgoing>Flow_1a5li0x</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0n3bwhl" messageRef="Message_2645t0q" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1r2d75d" sourceRef="DebitLV1Task" targetRef="Debit1ResultGateway" />
+    <bpmn:sequenceFlow id="Flow_08q6h4x" sourceRef="Debit1ResultGateway" targetRef="DebitLV1ApprovalSignal" />
+    <bpmn:intermediateCatchEvent id="DebitLV1RejectedSignal" name="Debit Cancel Reject Signal">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+        <zeebe:ioMapping>
+          <zeebe:output source="=&#34;REJECTED&#34;" target="processFlowStatus" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_13t6fe2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0eqpz7t</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0bxkd77" messageRef="Message_0s9l6o3" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_13t6fe2" sourceRef="Debit1ResultGateway" targetRef="DebitLV1RejectedSignal" />
+    <bpmn:sequenceFlow id="Flow_1a5li0x" sourceRef="DebitLV1ApprovalSignal" targetRef="GatewayEnd" />
+    <bpmn:sequenceFlow id="Flow_0eqpz7t" sourceRef="DebitLV1RejectedSignal" targetRef="GatewayEnd" />
+    <bpmn:exclusiveGateway id="GatewayEnd">
+      <bpmn:incoming>Flow_1a5li0x</bpmn:incoming>
+      <bpmn:incoming>Flow_0eqpz7t</bpmn:incoming>
+      <bpmn:incoming>Flow_0wxf7id</bpmn:incoming>
+      <bpmn:incoming>Flow_0lhblyc</bpmn:incoming>
+      <bpmn:outgoing>Flow_0tlry67</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:serviceTask id="CreditLV1Task" name="Credit Lv1 approval" zeebe:modelerTemplate="createHumanTaskCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="CreateHumanTaskCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="entityId" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="=&#34;HUMAN_TASK_DEBIT_APPROVAL&#34;" target="signalName" />
+          <zeebe:input source="=&#34;CRDLV1CANC&#34;" target="humanTaskTypeCode" />
+          <zeebe:input source="=&#34;PRIORITY_10&#34;" target="humanTaskPriorityCL" />
+          <zeebe:input source="=[&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;ProcessFlow&#34;,&#10;    entityId : entityId&#10;  },&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;ProcessInstance&#34;,&#10;    entityId : processInstanceId&#10;  }&#10;]" target="relatedEntities" />
+          <zeebe:input source="=&#34;Zeebe created&#34;" target="comment" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1bp6mt7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0q0qmq0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:eventBasedGateway id="Credit1ResultGateway">
+      <bpmn:incoming>Flow_0q0qmq0</bpmn:incoming>
+      <bpmn:outgoing>Flow_0blr3r2</bpmn:outgoing>
+      <bpmn:outgoing>Flow_00hsa8a</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:intermediateCatchEvent id="CreditLV1ApprovalSignal" name="Cancel Approve Signal">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+        <zeebe:ioMapping>
+          <zeebe:output source="=&#34;APPROVED&#34;" target="processFlowStatus" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0blr3r2</bpmn:incoming>
+      <bpmn:outgoing>Flow_0wxf7id</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1c9x5vh" messageRef="Message_39256pc" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:intermediateCatchEvent id="CreditLV1RejectedSignal" name="Cancel Reject Signal">
+      <bpmn:extensionElements>
+        <zeebe:properties />
+        <zeebe:ioMapping>
+          <zeebe:output source="=&#34;REJECTED&#34;" target="processFlowStatus" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_00hsa8a</bpmn:incoming>
+      <bpmn:outgoing>Flow_0lhblyc</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1rjixet" messageRef="Message_3gjbk4j" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0q0qmq0" sourceRef="CreditLV1Task" targetRef="Credit1ResultGateway" />
+    <bpmn:sequenceFlow id="Flow_0blr3r2" sourceRef="Credit1ResultGateway" targetRef="CreditLV1ApprovalSignal" />
+    <bpmn:sequenceFlow id="Flow_00hsa8a" sourceRef="Credit1ResultGateway" targetRef="CreditLV1RejectedSignal" />
+    <bpmn:sequenceFlow id="Flow_0wxf7id" sourceRef="CreditLV1ApprovalSignal" targetRef="GatewayEnd" />
+    <bpmn:sequenceFlow id="Flow_0lhblyc" sourceRef="CreditLV1RejectedSignal" targetRef="GatewayEnd" />
+    <bpmn:sequenceFlow id="Flow_1bp6mt7" name="No" sourceRef="DebitOrCreditGateway" targetRef="CreditLV1Task">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=bsAmount &lt; 0</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:serviceTask id="PushAfterCancellationlNotification" name="Notify user cancel BS is approved/rejected" zeebe:modelerTemplate="pushNotificationCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishPushNotificationCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=billSegmentId" target="entityId" />
+          <zeebe:input source="=&#34;BillSegment&#34;" target="entityCL" />
+          <zeebe:input source="=processFlowStatus" target="entityStatusCL" />
+          <zeebe:input source="=&#34;BS_CNL_UPD&#34;" target="notificationTypeCode" />
+          <zeebe:input source="=user" target="user" />
+          <zeebe:input source="= &#34;process-flow.bill-segment.status-update.for.cancellation.title.message&#34;" target="titleKey" />
+          <zeebe:input source="=&#34;process-flow.bill-segment.status-update.for.cancellation.body.message&#34;" target="messageKey" />
+          <zeebe:input source="=[&#34;ENTITY_STATUSES&#34;]" target="messageCodelists" />
+          <zeebe:input source="=[processFlowStatus]" target="messageParams" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0jsr1nu</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ovntzq</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0tlry67" sourceRef="GatewayEnd" targetRef="UpdateProcessFlowStatus" />
+    <bpmn:endEvent id="Event_0kkis16">
+      <bpmn:incoming>Flow_1ovntzq</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1ovntzq" sourceRef="PushAfterCancellationlNotification" targetRef="Event_0kkis16" />
+    <bpmn:serviceTask id="GetProcessFlowByIdRest" name="Get Process Flow/Id" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="get" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/process-management/process-flows/&#34; + entityId" target="url" />
+          <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultExpression" value="={&#10;  processFlowBody : response.body&#10;}" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_15uphu7</bpmn:incoming>
+      <bpmn:outgoing>Flow_0k08di0</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="GetBillSegmentByIdRest" name="Get Bill Segment/Id" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="2" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="get" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/taxpayer-accounting/bill-segments/&#34; + processFlowBody.sourceEntityId" target="url" />
+          <zeebe:input source="=if contextToken != null then {&#34;solon-context-token&#34;: contextToken} else {}" target="headers" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="resultExpression" value="={&#10;  bsAmount : response.body.billSegmentAmount,&#10;  billSegmentId : response.body.id&#10;}" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0k08di0</bpmn:incoming>
+      <bpmn:outgoing>Flow_08z1j5u</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="UpdateProcessFlowStatus" name="Update Process Flow Status" zeebe:modelerTemplate="transitionProcessFlowCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishTransitionProcessFlowCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="processFlowId" />
+          <zeebe:input source="=processFlowStatus" target="entityStatusCL" />
+          <zeebe:input source="=&#34;B_SEG_CANC&#34;" target="processTypeCode" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0tlry67</bpmn:incoming>
+      <bpmn:outgoing>Flow_0jsr1nu</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0jsr1nu" sourceRef="UpdateProcessFlowStatus" targetRef="PushAfterCancellationlNotification" />
+    <bpmn:serviceTask id="ProcessInitializer" name="Process Initializer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ProcessInitializer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_17fm3rz</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ud7yoi</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0ud7yoi" sourceRef="ProcessInitializer" targetRef="Event_08imzd6" />
+    <bpmn:intermediateCatchEvent id="Event_08imzd6">
+      <bpmn:incoming>Flow_0ud7yoi</bpmn:incoming>
+      <bpmn:outgoing>Flow_15uphu7</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1r8rojy">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT6S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_15uphu7" sourceRef="Event_08imzd6" targetRef="GetProcessFlowByIdRest" />
+  </bpmn:process>
+  <bpmn:message id="Message_2645t0q" name="DBTLV1CANC_APPROVED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_0s9l6o3" name="DBTLV1CANC_REJECTED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_39256pc" name="CRDLV1CANC_APPROVED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_3gjbk4j" name="CRDLV1CANC_REJECTED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ProcessDefinitions.BILL_SEGMENT_CANCELLATION_AMPLIO">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="369" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1ilt5hi_di" bpmnElement="PushBeforeCancellationNotification">
+        <dc:Bounds x="740" y="347" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1ji3yvt" bpmnElement="DebitOrCreditGateway" isMarkerVisible="true">
+        <dc:Bounds x="895" y="362" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="961" y="377" width="85" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1mj6axp" bpmnElement="DebitLV1Task">
+        <dc:Bounds x="1030" y="170" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0r5gdrc_di" bpmnElement="Debit1ResultGateway">
+        <dc:Bounds x="1195" y="185" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1a0335w" bpmnElement="DebitLV1ApprovalSignal">
+        <dc:Bounds x="1332" y="132" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1315" y="80" width="75" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0uxme50" bpmnElement="DebitLV1RejectedSignal">
+        <dc:Bounds x="1332" y="272" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1320" y="220" width="66" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_176cb8y" bpmnElement="GatewayEnd" isMarkerVisible="true">
+        <dc:Bounds x="1455" y="362" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0we8cq6" bpmnElement="CreditLV1Task">
+        <dc:Bounds x="1030" y="500" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1a5pa2n" bpmnElement="Credit1ResultGateway">
+        <dc:Bounds x="1195" y="515" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_17tu5u1" bpmnElement="CreditLV1ApprovalSignal">
+        <dc:Bounds x="1332" y="462" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1313" y="410" width="78" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_10tqi0j" bpmnElement="CreditLV1RejectedSignal">
+        <dc:Bounds x="1332" y="602" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1318" y="550" width="70" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0fskj66" bpmnElement="PushAfterCancellationlNotification">
+        <dc:Bounds x="1750" y="347" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0kkis16_di" bpmnElement="Event_0kkis16">
+        <dc:Bounds x="1922" y="369" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0lsewin_di" bpmnElement="GetProcessFlowByIdRest">
+        <dc:Bounds x="430" y="347" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ojfldg_di" bpmnElement="GetBillSegmentByIdRest">
+        <dc:Bounds x="590" y="347" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0ru1z2o" bpmnElement="UpdateProcessFlowStatus">
+        <dc:Bounds x="1580" y="347" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kr1fyl_di" bpmnElement="ProcessInitializer">
+        <dc:Bounds x="220" y="347" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_08imzd6_di" bpmnElement="Event_08imzd6">
+        <dc:Bounds x="362" y="369" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_17fm3rz_di" bpmnElement="Flow_17fm3rz">
+        <di:waypoint x="188" y="387" />
+        <di:waypoint x="220" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0k08di0_di" bpmnElement="Flow_0k08di0">
+        <di:waypoint x="530" y="387" />
+        <di:waypoint x="590" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08z1j5u_di" bpmnElement="Flow_08z1j5u">
+        <di:waypoint x="690" y="387" />
+        <di:waypoint x="740" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0zg0i3z_di" bpmnElement="Flow_0zg0i3z">
+        <di:waypoint x="840" y="387" />
+        <di:waypoint x="895" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pydguq_di" bpmnElement="Flow_0pydguq">
+        <di:waypoint x="920" y="362" />
+        <di:waypoint x="920" y="210" />
+        <di:waypoint x="1030" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="926" y="283" width="18" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1r2d75d_di" bpmnElement="Flow_1r2d75d">
+        <di:waypoint x="1130" y="210" />
+        <di:waypoint x="1195" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08q6h4x_di" bpmnElement="Flow_08q6h4x">
+        <di:waypoint x="1220" y="185" />
+        <di:waypoint x="1220" y="150" />
+        <di:waypoint x="1332" y="150" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13t6fe2_di" bpmnElement="Flow_13t6fe2">
+        <di:waypoint x="1220" y="235" />
+        <di:waypoint x="1220" y="290" />
+        <di:waypoint x="1332" y="290" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1a5li0x_di" bpmnElement="Flow_1a5li0x">
+        <di:waypoint x="1368" y="150" />
+        <di:waypoint x="1490" y="150" />
+        <di:waypoint x="1490" y="372" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0eqpz7t_di" bpmnElement="Flow_0eqpz7t">
+        <di:waypoint x="1368" y="290" />
+        <di:waypoint x="1470" y="290" />
+        <di:waypoint x="1470" y="372" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0x83ye4" bpmnElement="Flow_0q0qmq0">
+        <di:waypoint x="1130" y="540" />
+        <di:waypoint x="1195" y="540" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_0xhvtww" bpmnElement="Flow_0blr3r2">
+        <di:waypoint x="1220" y="515" />
+        <di:waypoint x="1220" y="480" />
+        <di:waypoint x="1332" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_10p427v" bpmnElement="Flow_00hsa8a">
+        <di:waypoint x="1220" y="565" />
+        <di:waypoint x="1220" y="620" />
+        <di:waypoint x="1332" y="620" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_1glt5bd" bpmnElement="Flow_0wxf7id">
+        <di:waypoint x="1368" y="480" />
+        <di:waypoint x="1470" y="480" />
+        <di:waypoint x="1470" y="402" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_14xosbk" bpmnElement="Flow_0lhblyc">
+        <di:waypoint x="1368" y="620" />
+        <di:waypoint x="1490" y="620" />
+        <di:waypoint x="1490" y="402" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1bp6mt7_di" bpmnElement="Flow_1bp6mt7">
+        <di:waypoint x="920" y="412" />
+        <di:waypoint x="920" y="540" />
+        <di:waypoint x="1030" y="540" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="928" y="473" width="15" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tlry67_di" bpmnElement="Flow_0tlry67">
+        <di:waypoint x="1505" y="387" />
+        <di:waypoint x="1580" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ovntzq_di" bpmnElement="Flow_1ovntzq">
+        <di:waypoint x="1850" y="387" />
+        <di:waypoint x="1922" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jsr1nu_di" bpmnElement="Flow_0jsr1nu">
+        <di:waypoint x="1680" y="387" />
+        <di:waypoint x="1750" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ud7yoi_di" bpmnElement="Flow_0ud7yoi">
+        <di:waypoint x="320" y="387" />
+        <di:waypoint x="362" y="387" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_15uphu7_di" bpmnElement="Flow_15uphu7">
+        <di:waypoint x="398" y="387" />
+        <di:waypoint x="430" y="387" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0lvt87y" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.2.0">
+  <bpmn:process id="ProcessDefinitions.NOTIFY_GDPR_EXPIRATION_AMPLIO" name="NOTIFY_GDPR_EXPIRATION_AMPLIO" isExecutable="true">
+    <bpmn:startEvent id="NotifyGDPRExpirationStartEvent">
+      <bpmn:outgoing>Flow_0qyz028</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="NotifyGDPRExpirationEndEvent">
+      <bpmn:incoming>Flow_1wa6e1j</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0qyz028" sourceRef="NotifyGDPRExpirationStartEvent" targetRef="ProcessInitializer" />
+    <bpmn:sequenceFlow id="Flow_1v5j7de" sourceRef="SendLetter" targetRef="Event_1k7kfho" />
+    <bpmn:sequenceFlow id="Flow_0dfzyzp" sourceRef="ProcessInitializer" targetRef="SendLetter" />
+    <bpmn:serviceTask id="SendLetter" name="Send Letter" zeebe:modelerTemplate="createContactCommand" zeebe:modelerTemplateVersion="1">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishCreateContactCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="entityId" />
+          <zeebe:input source="=&#34;TaskExecution&#34;" target="entityCL" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="=&#34;CREATE_CONTACT_LETTER&#34;" target="signalName" />
+          <zeebe:input source="=&#34;GDPR_EXP&#34;" target="contactTypeCode" />
+          <zeebe:input source="=&#34;EMAIL_OUT&#34;" target="communicationChannelCode" />
+          <zeebe:input source="=[]" target="relatedEntities" />
+          <zeebe:input source="= [&#10;  &#10; ]" target="parameters" />
+          <zeebe:input source="=party_role_id" target="partyRoleId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0dfzyzp</bpmn:incoming>
+      <bpmn:outgoing>Flow_1v5j7de</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="ProcessInitializer" name="Process Initializer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ProcessInitializer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0qyz028</bpmn:incoming>
+      <bpmn:outgoing>Flow_0dfzyzp</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:intermediateCatchEvent id="Event_1k7kfho" name="Contact Created Sent">
+      <bpmn:incoming>Flow_1v5j7de</bpmn:incoming>
+      <bpmn:outgoing>Flow_1wa6e1j</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0q997sv" messageRef="Message_3qpi5tb" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_1wa6e1j" sourceRef="Event_1k7kfho" targetRef="NotifyGDPRExpirationEndEvent" />
+  </bpmn:process>
+  <bpmn:message id="Message_3qpi5tb" name="=CREATE_CONTACT_LETTER">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ProcessDefinitions.NOTIFY_GDPR_EXPIRATION_AMPLIO">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="NotifyGDPRExpirationStartEvent">
+        <dc:Bounds x="152" y="79" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_16o9vva" bpmnElement="SendLetter">
+        <dc:Bounds x="430" y="57" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kr1fyl_di" bpmnElement="ProcessInitializer">
+        <dc:Bounds x="230" y="57" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0k0bnfu_di" bpmnElement="NotifyGDPRExpirationEndEvent">
+        <dc:Bounds x="762" y="79" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1k7kfho_di" bpmnElement="Event_1k7kfho">
+        <dc:Bounds x="622" y="79" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="600" y="122" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0qyz028_di" bpmnElement="Flow_0qyz028">
+        <di:waypoint x="188" y="97" />
+        <di:waypoint x="230" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1v5j7de_di" bpmnElement="Flow_1v5j7de">
+        <di:waypoint x="530" y="97" />
+        <di:waypoint x="622" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0dfzyzp_di" bpmnElement="Flow_0dfzyzp">
+        <di:waypoint x="330" y="97" />
+        <di:waypoint x="430" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1wa6e1j_di" bpmnElement="Flow_1wa6e1j">
+        <di:waypoint x="658" y="97" />
+        <di:waypoint x="762" y="97" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

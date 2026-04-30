@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0c8ivqx" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.27.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.2.0">
+  <bpmn:process id="ProcessDefinitions.DEMO_PROCESS_TASK_AMPLIO" name="DEMO_PROCESS_TASK_AMPLIO" isExecutable="true">
+    <bpmn:serviceTask id="CreateHumanTask" name="Create Human Task" zeebe:modelerTemplate="createHumanTaskCommand" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIKICJodHRwOi8vd3d3LnczLm9yZy9UUi8yMDAxL1JFQy1TVkctMjAwMTA5MDQvRFREL3N2ZzEwLmR0ZCI+CjxzdmcgdmVyc2lvbj0iMS4wIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciCiB3aWR0aD0iMTEwLjAwMDAwMHB0IiBoZWlnaHQ9IjExNy4wMDAwMDBwdCIgdmlld0JveD0iMCAwIDExMC4wMDAwMDAgMTE3LjAwMDAwMCIKIHByZXNlcnZlQXNwZWN0UmF0aW89InhNaWRZTWlkIG1lZXQiPgo8bWV0YWRhdGE+CkNyZWF0ZWQgYnkgcG90cmFjZSAxLjEwLCB3cml0dGVuIGJ5IFBldGVyIFNlbGluZ2VyIDIwMDEtMjAxMQo8L21ldGFkYXRhPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLjAwMDAwMCwxMTcuMDAwMDAwKSBzY2FsZSgwLjEwMDAwMCwtMC4xMDAwMDApIgpmaWxsPSIjMDAwMDAwIiBzdHJva2U9Im5vbmUiPgo8cGF0aCBkPSJNMjc1IDEwMzIgYy02NSAtMjMgLTExMCAtNTUgLTE0NiAtMTA1IC01MSAtNzEgLTU5IC0xMTggLTU5IC0zNTcgMAotMjcwIDcgLTI5OCA4OCAtMzgwIDg2IC04NSAxMDcgLTkwIDM4OCAtOTAgMjgzIDAgMzEyIDcgMzkzIDk2IDc3IDg0IDgzIDExNAo3OSA0MDEgLTMgMjM2IC0zIDIzOCAtMzAgMjg5IC0zMSA1OSAtODQgMTA4IC0xNDcgMTM4IC00MiAxOSAtNjYgMjEgLTI4MSAyNAotMjAzIDIgLTI0MiAwIC0yODUgLTE2eiBtNTU1IC0zOSBjNTQgLTI1IDEwNCAtNzMgMTMzIC0xMjcgMjEgLTM4IDIyIC01NyAyNQotMjg0IGw0IC0yNDMgLTI3IC01MiBjLTM0IC02NSAtNTcgLTkwIC0xMTQgLTEyNSBsLTQ2IC0yNyAtMjMzIC0zIGMtMjc0IC00Ci0zMTUgNCAtMzg1IDcyIC04MCA3NyAtODIgODcgLTgyIDM3MSAwIDI4MiAyIDI5MSA4MiAzNjggNzAgNjkgMTA2IDc2IDM2OCA3MwoyMTAgLTIgMjM0IC0zIDI3NSAtMjN6Ii8+CjxwYXRoIGQ9Ik0zMTEgODY2IGMtMzUgLTE5IC03MSAtODUgLTcxIC0xMjggMCAtNjYgMjcgLTEwMSA4OSAtMTEzIDMwIC02IDMzCi05IDM2IC0zNyAxIC0xMyAzIC0yOCA0IC0zNSAwIC02IDEzIC0yNSAyNyAtNDIgMTkgLTIzIDM0IC0zMSA1OSAtMzEgMTggMCAzNQotNiAzOCAtMTIgMiAtNyAtNyAtMzcgLTIwIC02NiAtMzIgLTc0IC0zMCAtMTAzIDEyIC0xNDggMzIgLTMzIDM4IC0zNiA3NiAtMzEKNjggOSA3NiAyMSAxNzggMjU4IDIyIDUzIDQxIDExMCA0MSAxMjggMCAyMiA5IDM5IDMxIDU4IDY0IDU3IDc3IDEzNiAzMCAxODQKLTI0IDIzIC0zOCAyOSAtNzMgMjkgLTI3IC0xIC01MSAtOCAtNjYgLTIwIC0yOCAtMjMgLTUyIC03OSAtNTIgLTEyMCAwIC0zNAotMjUgLTQyIC0zNCAtMTIgLTEzIDQxIC01NSA2NyAtMTA2IDY3IC00NCAwIC01MSAyIC02MCAyNSAtMjEgNTEgLTg5IDczIC0xMzkKNDZ6IG01MDMgLTI3IGMxOCAtMTQgMjYgLTMwIDI2IC01MCAwIC0zMSAtMjUgLTg5IC00NCAtMTAxIC0yMiAtMTUgLTcwIC04Ci05MyAxNCAtMjcgMjUgLTI5IDU3IC02IDEwMSAzMSA2MCA3MSA3MiAxMTcgMzZ6IG0tNDA0IC05IGMyNiAtMjYgMjUgLTc1IC0zCi0xMjUgLTI4IC00OSAtNjcgLTY2IC0xMDUgLTQ0IC00MCAyMiAtNDkgNTkgLTI3IDExMSAxMCAyNCAyNyA1MSAzOCA2MSAyNiAyMwo3MiAyMiA5NyAtM3ogbTE1NyAtODIgYzMxIC0yOSAyOSAtNjIgLTExIC0xNTAgLTI3IC02MCAtNDAgLTc3IC02NiAtODggLTI4Ci0xMiAtMzQgLTExIC01OCA3IC00OCAzNiAtNTAgNjEgLTcgMTUyIDIxIDQ1IDQ2IDg2IDU0IDkxIDI3IDE2IDY0IDExIDg4IC0xMnoKbTE1NyAtODkgYzE3IC0xMyAyNiAtMzAgMjYgLTQ4IDAgLTMxIC0xMjIgLTMxNSAtMTQ3IC0zNDMgLTM4IC00MiAtMTIzIC03Ci0xMjMgNTEgMCAzNCAxMzUgMzMyIDE1NyAzNDkgMjUgMTggNTcgMTUgODcgLTl6Ii8+CjwvZz4KPC9zdmc+">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="CreateHumanTaskCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=entityId" target="entityId" />
+          <zeebe:input source="=processInstanceId" target="processInstanceId" />
+          <zeebe:input source="=&#34;&#34;" target="signalName" />
+          <zeebe:input source="=&#34;PROC_TASK&#34;" target="humanTaskTypeCode" />
+          <zeebe:input source="=&#34;PRIORITY_10&#34;" target="humanTaskPriorityCL" />
+          <zeebe:input source="=[&#10;  &#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;CaseActivity&#34;,&#10;    entityId : entityId&#10;  },&#10;  {&#10;    humanTaskEntityRelationshipTypeCL : &#34;BELONGING&#34;,&#10;    entityCL : &#34;ProcessInstance&#34;,&#10;    entityId : processInstanceId&#10;  }&#10;]" target="relatedEntities" />
+          <zeebe:input source="=&#34;Zeebe created for entityId:&#34; + entityId + &#34; and entityTypeId: &#34; + entityTypeId" target="comment" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16q2o5a</bpmn:incoming>
+      <bpmn:outgoing>Flow_0u25dzr</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_02fsnz1" sourceRef="DemoProcessTaskStartEvent" targetRef="ProcessInitializer" />
+    <bpmn:eventBasedGateway id="HumanTaskSignalGateway">
+      <bpmn:incoming>Flow_0u25dzr</bpmn:incoming>
+      <bpmn:outgoing>Flow_0jilp9j</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0fwcvgd</bpmn:outgoing>
+    </bpmn:eventBasedGateway>
+    <bpmn:sequenceFlow id="Flow_0u25dzr" sourceRef="CreateHumanTask" targetRef="HumanTaskSignalGateway" />
+    <bpmn:intermediateCatchEvent id="ProcTaskApprovedSignal" name="Approved Signal">
+      <bpmn:incoming>Flow_0jilp9j</bpmn:incoming>
+      <bpmn:outgoing>Flow_0x8raet</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_0httlmu" messageRef="Message_3vt0nt0" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0jilp9j" sourceRef="HumanTaskSignalGateway" targetRef="ProcTaskApprovedSignal" />
+    <bpmn:startEvent id="DemoProcessTaskStartEvent" name="Demo Process Task Start Event">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:output source="=&#34;DEMO_START&#34;" target="actionType" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_02fsnz1</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:intermediateCatchEvent id="ProcTaskRejectedSignal" name="Rejected Signal">
+      <bpmn:incoming>Flow_0fwcvgd</bpmn:incoming>
+      <bpmn:outgoing>Flow_19gy4rd</bpmn:outgoing>
+      <bpmn:messageEventDefinition id="MessageEventDefinition_1qdbcm2" messageRef="Message_0nbpt6u" />
+    </bpmn:intermediateCatchEvent>
+    <bpmn:sequenceFlow id="Flow_0fwcvgd" sourceRef="HumanTaskSignalGateway" targetRef="ProcTaskRejectedSignal" />
+    <bpmn:exclusiveGateway id="Gateway_0r9dfn8">
+      <bpmn:incoming>Flow_0x8raet</bpmn:incoming>
+      <bpmn:incoming>Flow_19gy4rd</bpmn:incoming>
+      <bpmn:outgoing>Flow_002j1xq</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0x8raet" sourceRef="ProcTaskApprovedSignal" targetRef="Gateway_0r9dfn8" />
+    <bpmn:sequenceFlow id="Flow_19gy4rd" sourceRef="ProcTaskRejectedSignal" targetRef="Gateway_0r9dfn8" />
+    <bpmn:endEvent id="DemoProcessTaskEndEvent" name="Demo Process Task EndEvent">
+      <bpmn:incoming>Flow_0lc9kh5</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_002j1xq" sourceRef="Gateway_0r9dfn8" targetRef="Activity_14uw1gr" />
+    <bpmn:serviceTask id="SuppressionQuickActivate" name="Suppression Quick Activate">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishCreateSuppressionCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;PF_Demo&#34;" target="suppressionTypeCode" />
+          <zeebe:input source="=&#34;SPECIAL_CIRCUMSTANCE&#34;" target="suppressionReasonCL" />
+          <zeebe:input source="=&#34;ProcessInstance&#34;" target="sourceEntityTypeCL" />
+          <zeebe:input source="=processInstanceId" target="sourceEntityId" />
+          <zeebe:input source="=[&#10;  {&#10;    suppressionActionTypeCL : &#34;DEMO_PROCESS_TASK&#34;&#10;  }&#10;]" target="suppressionActionTypes" />
+          <zeebe:input source="=[&#10;  {&#10;    entityCL : &#34;Case&#34;,&#10;    entityId : caseId&#10;  }&#10;]" target="suppressionScopes" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_113t142</bpmn:incoming>
+      <bpmn:outgoing>Flow_16q2o5a</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_16q2o5a" sourceRef="SuppressionQuickActivate" targetRef="CreateHumanTask" />
+    <bpmn:sequenceFlow id="Flow_16ev4ga" sourceRef="Event_0lesmqs" targetRef="SuspendProcessCheck" />
+    <bpmn:intermediateCatchEvent id="Event_0lesmqs">
+      <bpmn:incoming>Flow_03y834w</bpmn:incoming>
+      <bpmn:outgoing>Flow_16ev4ga</bpmn:outgoing>
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1wb7y90">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT1S</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
+    </bpmn:intermediateCatchEvent>
+    <bpmn:serviceTask id="SuppressionRelease" name="Suppression Release">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="PublishReleaseSuppressionCommand" />
+        <zeebe:ioMapping>
+          <zeebe:input source="=&#34;ProcessInstance&#34;" target="entityType" />
+          <zeebe:input source="=processInstanceId" target="entityId" />
+        </zeebe:ioMapping>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0nulyvs</bpmn:incoming>
+      <bpmn:outgoing>Flow_0lc9kh5</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0lc9kh5" sourceRef="SuppressionRelease" targetRef="DemoProcessTaskEndEvent" />
+    <bpmn:serviceTask id="CompleteCaseActivity" name="Complete Case Activity" zeebe:modelerTemplate="io.camunda.connectors.HttpJson.v2" zeebe:modelerTemplateVersion="1" zeebe:modelerTemplateIcon="data:image/svg+xml;utf8,%3Csvg%20width%3D%2218%22%20height%3D%2218%22%20viewBox%3D%220%200%2018%2018%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Cpath%20d%3D%22M17.0335%208.99997C17.0335%2013.4475%2013.4281%2017.0529%208.98065%2017.0529C4.53316%2017.0529%200.927765%2013.4475%200.927765%208.99997C0.927765%204.55248%204.53316%200.947083%208.98065%200.947083C13.4281%200.947083%2017.0335%204.55248%2017.0335%208.99997Z%22%20fill%3D%22%23505562%22%2F%3E%0A%3Cpath%20d%3D%22M4.93126%2014.1571L6.78106%203.71471H10.1375C11.1917%203.71471%2011.9824%203.98323%2012.5095%204.52027C13.0465%205.04736%2013.315%205.73358%2013.315%206.57892C13.315%207.44414%2013.0714%208.15522%2012.5841%208.71215C12.1067%209.25913%2011.4553%209.63705%2010.6298%209.8459L12.0619%2014.1571H10.3315L9.03364%2010.0249H7.24351L6.51254%2014.1571H4.93126ZM7.49711%208.59281H9.24248C9.99832%208.59281%2010.5901%208.42374%2011.0177%208.08561C11.4553%207.73753%2011.6741%207.26513%2011.6741%206.66842C11.6741%206.19106%2011.5249%205.81811%2011.2265%205.54959C10.9282%205.27113%2010.4558%205.1319%209.80936%205.1319H8.10874L7.49711%208.59281Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E%0A">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="io.camunda:http-json:1" />
+        <zeebe:ioMapping>
+          <zeebe:input source="oauth-client-credentials-flow" target="authentication.type" />
+          <zeebe:input source="put" target="method" />
+          <zeebe:input source="=&#34;{{secrets.API_GATEWAY_URL}}/case-management/case-activities/&#34; + entityId + &#34;/complete&#34;" target="url" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_TOKEN_URL}}&#34;" target="authentication.oauthTokenEndpoint" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_ID}}&#34;" target="authentication.clientId" />
+          <zeebe:input source="=&#34;{{secrets.OAUTH_CLIENT_SECRET}}&#34;" target="authentication.clientSecret" />
+          <zeebe:input source="basicAuthHeader" target="authentication.clientAuthentication" />
+          <zeebe:input source="20" target="connectionTimeoutInSeconds" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_078goct</bpmn:incoming>
+      <bpmn:outgoing>Flow_0nulyvs</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_0nulyvs" sourceRef="CompleteCaseActivity" targetRef="SuppressionRelease" />
+    <bpmn:serviceTask id="ProcessInitializer" name="Process Initializer">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="ProcessInitializer" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02fsnz1</bpmn:incoming>
+      <bpmn:outgoing>Flow_03y834w</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_03y834w" sourceRef="ProcessInitializer" targetRef="Event_0lesmqs" />
+    <bpmn:callActivity id="SuspendProcessCheck" name="Suspend Process Check">
+      <bpmn:extensionElements>
+        <zeebe:calledElement processId="ProcessDefinitions.SUSPEND_PROCESS_CHECK_AMPLIO" propagateAllChildVariables="false" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_16ev4ga</bpmn:incoming>
+      <bpmn:outgoing>Flow_113t142</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_113t142" sourceRef="SuspendProcessCheck" targetRef="SuppressionQuickActivate" />
+    <bpmn:callActivity id="Activity_14uw1gr" name="Suspend Process Check">
+      <bpmn:extensionElements>
+        <zeebe:calledElement processId="ProcessDefinitions.SUSPEND_PROCESS_CHECK" propagateAllChildVariables="false" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_002j1xq</bpmn:incoming>
+      <bpmn:outgoing>Flow_078goct</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_078goct" sourceRef="Activity_14uw1gr" targetRef="CompleteCaseActivity" />
+  </bpmn:process>
+  <bpmn:message id="Message_3vt0nt0" name="PROC_TASK_APPROVED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmn:message id="Message_0nbpt6u" name="PROC_TASK_REJECTED_SIGNAL">
+    <bpmn:extensionElements>
+      <zeebe:subscription correlationKey="=processInstanceId" />
+    </bpmn:extensionElements>
+  </bpmn:message>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="ProcessDefinitions.DEMO_PROCESS_TASK_AMPLIO">
+      <bpmndi:BPMNShape id="BPMNShape_0052gny" bpmnElement="CreateHumanTask">
+        <dc:Bounds x="670" y="157" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0r5gdrc_di" bpmnElement="HumanTaskSignalGateway">
+        <dc:Bounds x="805" y="172" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1knfslb_di" bpmnElement="ProcTaskApprovedSignal">
+        <dc:Bounds x="862" y="112" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="839" y="88" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="DemoProcessTaskStartEvent">
+        <dc:Bounds x="142" y="182" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="122" y="225" width="81" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_05ib4in" bpmnElement="ProcTaskRejectedSignal">
+        <dc:Bounds x="862" y="242" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="843" y="285" width="78" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0r9dfn8_di" bpmnElement="Gateway_0r9dfn8" isMarkerVisible="true">
+        <dc:Bounds x="905" y="172" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_04y4rz2_di" bpmnElement="DemoProcessTaskEndEvent">
+        <dc:Bounds x="1422" y="179" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1405" y="222" width="74" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0jxi0o5" bpmnElement="SuppressionQuickActivate">
+        <dc:Bounds x="530" y="157" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0hjq63i_di" bpmnElement="Event_0lesmqs">
+        <dc:Bounds x="332" y="179" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_01ulajg" bpmnElement="SuppressionRelease">
+        <dc:Bounds x="1280" y="157" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_128uspi_di" bpmnElement="CompleteCaseActivity">
+        <dc:Bounds x="1140" y="157" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kr1fyl_di" bpmnElement="ProcessInitializer">
+        <dc:Bounds x="210" y="160" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_07geqvg_di" bpmnElement="SuspendProcessCheck">
+        <dc:Bounds x="390" y="157" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0gxzkxw" bpmnElement="Activity_14uw1gr">
+        <dc:Bounds x="1000" y="157" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_02fsnz1_di" bpmnElement="Flow_02fsnz1">
+        <di:waypoint x="178" y="200" />
+        <di:waypoint x="210" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0u25dzr_di" bpmnElement="Flow_0u25dzr">
+        <di:waypoint x="770" y="197" />
+        <di:waypoint x="805" y="197" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0jilp9j_di" bpmnElement="Flow_0jilp9j">
+        <di:waypoint x="830" y="172" />
+        <di:waypoint x="830" y="130" />
+        <di:waypoint x="862" y="130" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fwcvgd_di" bpmnElement="Flow_0fwcvgd">
+        <di:waypoint x="830" y="222" />
+        <di:waypoint x="830" y="260" />
+        <di:waypoint x="862" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0x8raet_di" bpmnElement="Flow_0x8raet">
+        <di:waypoint x="898" y="130" />
+        <di:waypoint x="930" y="130" />
+        <di:waypoint x="930" y="172" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19gy4rd_di" bpmnElement="Flow_19gy4rd">
+        <di:waypoint x="898" y="260" />
+        <di:waypoint x="930" y="260" />
+        <di:waypoint x="930" y="222" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_002j1xq_di" bpmnElement="Flow_002j1xq">
+        <di:waypoint x="955" y="197" />
+        <di:waypoint x="1000" y="197" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16q2o5a_di" bpmnElement="Flow_16q2o5a">
+        <di:waypoint x="630" y="197" />
+        <di:waypoint x="670" y="197" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_16ev4ga_di" bpmnElement="Flow_16ev4ga">
+        <di:waypoint x="368" y="197" />
+        <di:waypoint x="390" y="197" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lc9kh5_di" bpmnElement="Flow_0lc9kh5">
+        <di:waypoint x="1380" y="197" />
+        <di:waypoint x="1422" y="197" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0nulyvs_di" bpmnElement="Flow_0nulyvs">
+        <di:waypoint x="1240" y="197" />
+        <di:waypoint x="1280" y="197" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_03y834w_di" bpmnElement="Flow_03y834w">
+        <di:waypoint x="310" y="198" />
+        <di:waypoint x="332" y="198" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_113t142_di" bpmnElement="Flow_113t142">
+        <di:waypoint x="490" y="197" />
+        <di:waypoint x="530" y="197" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_078goct_di" bpmnElement="Flow_078goct">
+        <di:waypoint x="1100" y="197" />
+        <di:waypoint x="1140" y="197" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
