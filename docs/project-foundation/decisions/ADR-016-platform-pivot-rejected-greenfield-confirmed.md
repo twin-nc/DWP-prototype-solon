@@ -1,3 +1,13 @@
+> ## ⚠ STATUS: SUPERSEDED — DO NOT USE AS A DIRECTIVE
+>
+> **This ADR is superseded by [ADR-018](ADR-018-platform-pivot-solon-tax-confirmed.md) (2026-04-30).** Its conclusion — that Option C (greenfield) is locked — no longer stands.
+>
+> **The analysis and reasoning within this document remains valuable design input** and must not be discarded. The module-by-module capability assessment, the blocker analysis, and the forced-choice appendix all inform the new design process on the Solon Tax platform. Read for knowledge; do not read for direction.
+>
+> See [ADR-018](ADR-018-platform-pivot-solon-tax-confirmed.md) for the current direction.
+
+---
+
 # ADR-016: Platform Pivot to Solon Tax / Amplio Rejected — Greenfield Stack Confirmed
 
 ## Document History

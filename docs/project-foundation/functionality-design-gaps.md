@@ -1,3 +1,13 @@
+> ## ⚠ STATUS: UNSETTLED — PLATFORM PIVOT IN EFFECT
+>
+> A confirmed programme-level decision (ADR-018, 2026-04-30) has pivoted the project to build on top of **Solon Tax** as the base platform. A new design process is underway.
+>
+> **This document contains accumulated knowledge and analysis that remains relevant to the new design process. It does NOT represent the current or preferred direction.** All decisions and conclusions herein are open for renewed debate. Do not treat this document as a directive or default position.
+>
+> See [`CLAUDE.md`](../../CLAUDE.md) and [ADR-018](decisions/ADR-018-platform-pivot-solon-tax-confirmed.md) for the current direction.
+
+---
+
 # Functionality Design Gaps
 
 **Project:** DWP Debt Collection Management System (DCMS)  

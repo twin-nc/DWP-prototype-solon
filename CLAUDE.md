@@ -1,74 +1,93 @@
 # DWP Debt Collection Management System
 
+---
+
+> ## ⚠ PLATFORM PIVOT IN EFFECT — READ THIS FIRST
+>
+> A confirmed programme-level decision (ADR-018, 2026-04-30) has changed the fundamental build strategy for this project.
+>
+> **Previous direction:** Greenfield build on a custom stack (Flowable, React, Spring Boot, Keycloak).
+> **New direction:** Built on top of **Solon Tax** as the base platform.
+>
+> **A new design process is underway.** All prior architecture decisions (ADR-001 through ADR-017) are **UNDER REVIEW** — open for renewed debate. They represent accumulated knowledge and analysis, not settled constraints. Do not treat any prior ADR as a default or preferred direction without explicit re-confirmation.
+>
+> ADR-016 (which locked the greenfield direction) is **SUPERSEDED** by ADR-018.
+>
+> See [`docs/project-foundation/decisions/ADR-018-platform-pivot-solon-tax-confirmed.md`](docs/project-foundation/decisions/ADR-018-platform-pivot-solon-tax-confirmed.md) for the full pivot record.
+
+---
+
 ## Project Overview
 
 **Client:** UK Department for Work and Pensions (DWP)
 **Project:** Debt Collection Management System (DCMS)
-**Nature:** Greenfield build — this is a new solution being designed and built from scratch.
-
-> This is NOT a configuration or integration project based on SOLON tax or any existing COTS platform. We are designing and building a new system.
+**Nature:** Built on top of Solon Tax as the base platform. Not a greenfield build. Not a pure Solon Tax configuration project. A new system that uses Solon Tax where it satisfies requirements and adds new code where it does not.
 
 ## What We're Building
 
 A debt collection management platform for the UK Department for Work and Pensions. The system will manage the end-to-end lifecycle of DWP debt — from identification and assessment through recovery, enforcement, and write-off.
 
+The system must satisfy all DWP functional and non-functional requirements. Solon Tax is used as much as possible. Where Solon Tax does not satisfy a requirement, new code is written on top of it.
+
+**The user interface is a new, custom-built React application** styled to look and feel like Solon Tax. It is not Solon Tax's own UI. It is built from scratch using the Solon Tax visual language as its design reference.
+
 ---
 
-## Tech Stack
+## Design Status
 
-All components are fully open source.
+The new design process is underway. The following documents contain accumulated knowledge that feeds this process but **do not represent the current or preferred direction**:
 
-### Backend
+- All ADRs in `docs/project-foundation/decisions/` — UNDER REVIEW
+- `docs/project-foundation/MASTER-DESIGN-DOCUMENT.md` — UNSETTLED
+- `docs/project-foundation/ARCHITECTURE-BLUEPRINT.md` — UNSETTLED
+- `docs/project-foundation/solon-tax-feasibility-analysis.md` — conclusion superseded, analysis retained as design input
+- `docs/project-foundation/proposed-three-workspace-model 1.md` — UNSETTLED
 
-| Layer | Choice |
-|---|---|
-| Language | Java 21 (OpenJDK via `eclipse-temurin:21`) |
-| Framework | Spring Boot 3.4.x |
-| Build tool | Maven 3.9.6+ |
-| Database | PostgreSQL 16 |
-| DB migrations | Flyway (Community Edition) |
-| DB access | Spring Data JPA + Hibernate |
-| Logging | Logstash Logback Encoder (JSON to stdout) |
+The following documents remain fully authoritative and unchanged:
+- All domain rulings (`docs/project-foundation/domain-rulings/`)
+- All domain packs (`docs/project-foundation/domain-packs/`)
+- Tender requirements (`Functional-Requirements-Consolidated.md`, NFRs)
+- All standards (`docs/project-foundation/standards/`)
 
-### Frontend
+---
 
-| Layer | Choice |
-|---|---|
-| Framework | React + TypeScript |
-| Design system | GOV.UK Design System |
-| Container | Nginx (Alpine) |
+## Platform
 
-### Authentication & Authorisation
+**Base platform:** Solon Tax v2.3.0
 
-| Concern | Choice |
-|---|---|
-| Identity Provider | Keycloak 24 |
-| Protocol | OAuth 2.0 + OpenID Connect |
-| Spring integration | Spring Security OAuth2 Resource Server |
-| Authorisation model | RBAC via JWT claims from Keycloak |
-| Service accounts | OAuth2 Client Credentials grant |
+Key platform references (fully authoritative as reference material):
+- [`docs/project-foundation/solon-tax-platform-reference.md`](docs/project-foundation/solon-tax-platform-reference.md)
+- [`docs/project-foundation/amplio-process-engine-reference.md`](docs/project-foundation/amplio-process-engine-reference.md)
+- [`external_sys_docs/solon/`](external_sys_docs/solon/) — Solon Tax integration guide, operations guide, API list, data dictionary
 
-Keycloak satisfies INT01, INT02, INT03 (OAuth 2.0 + OIDC SSO) and INT28 (multi-domain federation).
+---
 
-### Infrastructure
+## Known Stack Elements
 
-| Layer | Choice |
-|---|---|
-| Containers | Docker with multi-stage builds |
-| Local orchestration | Docker Compose (`docker compose up` starts full stack) |
-| Local K8s | k3d (K3s in Docker) |
-| Remote K8s | Kubernetes (any cluster — no vendor lock-in) |
-| Package manager | Helm 3 |
+The following elements are known. Others are subject to the new design process.
 
-### Base Images (pinned)
+### Confirmed
 
-| Service | Image |
-|---|---|
-| App runtime | `eclipse-temurin:21-jre-jammy` |
-| App build stage | `eclipse-temurin:21-jdk-jammy` |
-| Frontend | `node:20-alpine` (build) / `nginx:1.27-alpine` (runtime) |
-| Database | `postgres:16` |
-| Identity provider | `quay.io/keycloak/keycloak:24` |
+| Layer | Choice | Note |
+|---|---|---|
+| Base platform | Solon Tax v2.3.0 | All capabilities to be used where they satisfy requirements |
+| Frontend | React + TypeScript | New custom UI, styled to resemble Solon Tax |
+| Design reference | Solon Tax visual language | UI must look like Solon Tax; it is not Solon Tax's UI |
+| Database | PostgreSQL 16 | Solon Tax v2.3.0 supports PostgreSQL |
+| Auth protocol | OAuth 2.0 + OpenID Connect | Solon Tax v2.3.0 uses OAuth 2.0 / OIDC; INT01 mandatory |
+| Containers | Docker with multi-stage builds | |
+| Local orchestration | Docker Compose | |
+
+### Under Review (prior decisions — not confirmed)
+
+| Layer | Prior choice | Status |
+|---|---|---|
+| Process engine | Flowable (embedded) | Under review — Solon Tax uses Amplio; re-evaluation required |
+| DB migrations | Flyway Community Edition | Under review — Solon Tax uses Liquibase |
+| Identity Provider | Keycloak 24 | Under review |
+| Authorisation model | RBAC via Keycloak JWT | Under review — Solon Tax uses OPA |
+| Java version | Java 21 | Under review — Solon Tax runs on Java 17 |
+| Architecture pattern | Single Spring Boot monolith | Under review — Solon Tax is microservices |
 
 ---
 
@@ -81,11 +100,13 @@ Monorepo layout:
 ├── backend/                  ← Spring Boot application (Maven)
 ├── frontend/                 ← React + TypeScript application
 ├── infrastructure/
-│   ├── docker-compose.yml    ← Full local stack (app + frontend + postgres + keycloak)
-│   ├── keycloak/             ← Keycloak realm config and import files
+│   ├── docker-compose.yml    ← Full local stack
+│   ├── keycloak/             ← Keycloak realm config (under review)
 │   └── helm/                 ← Helm chart for remote Kubernetes deployment
 ├── docs/
 │   └── project-foundation/   ← Architecture, requirements, ADRs
+├── external_sys_docs/
+│   └── solon/                ← Solon Tax v2.3.0 reference documentation
 └── CLAUDE.md
 ```
 
@@ -93,48 +114,31 @@ Monorepo layout:
 
 ## Environments
 
-Two environments are in scope, per STD-PLAT-011:
+Two environments are in scope:
 
 | Environment | Platform | Purpose |
 |---|---|---|
-| `local` | Docker Compose + k3d | Developer laptop — full stack, no cloud credentials |
+| `local` | Docker Compose | Developer laptop — full stack |
 | `dev` | AKS on Azure | Shared remote cluster |
 
-Higher environments (test, UAT, production) are out of scope until separately specified.
-
-**Parity rule (STD-PLAT-008):** local and dev must remain functionally equivalent — same config keys, same auth flow (Keycloak runs locally, never skipped), same JSON log format. All divergences must be documented in `docs/project-foundation/remote-environment-spec.md`.
+**Parity rule:** local and dev must remain functionally equivalent. All divergences must be documented in `docs/project-foundation/remote-environment-spec.md`.
 
 ---
 
-## Architecture
+## Domain Packages
 
-**Single Spring Boot monolith** with well-defined internal packages per domain. No microservices split. Two services in total: backend + frontend.
+The following domain areas remain valid regardless of platform. Delivery mechanism is under review.
 
-Domain packages (internal to the monolith):
 - `customer` — customer/household/joint entity model, contact details, vulnerability flags, third-party authority
-- `account` — financial ledger for a debt: balances, payment history, write-off. Records regulatory facts (breathing space date, insolvency date, death, fraud marker) for audit. Does NOT own lifecycle position or behavioural effect of these events — owned by the process engine (ADR-001, ADR-002)
+- `account` — financial ledger for a debt: balances, payment history, write-off, regulatory facts
 - `strategy` — decision engine, treatment paths, segmentation, champion/challenger, automation rules
 - `repaymentplan` — payment arrangements, plan lifecycle, tolerances, breach handling, direct debit, re-aging
 - `payment` — financial transactions, payment allocation, refunds, overpayments
 - `communications` — letters, SMS, email, in-app messages, channel preference, suppression, contact history
 - `workallocation` — queues, worklists, agent assignment, exception queues, supervisor override
-- `integration` — DWP Place, DCA placement, payment gateway, bureau feeds, batch file transfer (anti-corruption layer)
+- `integration` — DWP Place, DCA placement, payment gateway, bureau feeds, batch file transfer
 - `audit` — audit trail, CRUD event log, compliance reporting
-- `user` — RBAC, user management, Keycloak integration
-
-**Infrastructure packages** (internal to the monolith, not domain modules):
-- `infrastructure/process` — Flowable engine config, BPMN/DMN resources, JavaDelegate implementations; all Flowable imports confined here
-- `shared/process/port` — ProcessEventPort, ProcessStartPort, DelegateCommandBus interfaces and command types; no Flowable imports; imported by domain modules
-
-**Note:** The RBAC role model (`AGENT`, `TEAM_LEADER`, `OPS_MANAGER`, `COMPLIANCE`, `ADMIN`) is a placeholder. A full permissions matrix — covering write-off limits, override capability, geographic/team access restrictions, and specialist role profiles — must be designed before the `user` feature is built.
-
-**Note:** The process engine (Flowable) is infrastructure, not a domain module. All Flowable imports are confined to `infrastructure/process`. Domain modules interact with the process engine only via interfaces in `shared/process/port`.
-
----
-
-## Team
-
-Six to seven full-stack developers owning everything — backend, frontend, infrastructure, and DevOps. No dedicated specialist roles. Claude agents fill the specialist roles (architect, domain expert, DevOps engineer, etc.) as needed.
+- `user` — RBAC, user management, identity provider integration
 
 ---
 
@@ -145,11 +149,7 @@ Six to seven full-stack developers owning everything — backend, frontend, infr
 | Repository | [github.com/nctct/DWP-system-prototype](https://github.com/nctct/DWP-system-prototype) |
 | Default branch | `main` (branch-protected, PR-only) |
 | CI/CD | GitHub Actions |
-| Container runtime | Docker (used from day one) |
+| Container runtime | Docker |
 | Container registry | `ufstpit-dev-docker.repo.netcompany.com` |
 | Image naming | `ufstpit-dev-docker.repo.netcompany.com/dcms_v0/dcms_v0-{service}:{sha}` |
 | Tag strategy | `{git-sha}` + `:dev` on main-branch merges (no `latest`) |
-
----
-
-*This file will be expanded as onboarding progresses.*

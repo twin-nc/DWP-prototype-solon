@@ -1,3 +1,9 @@
+> ## STATUS: PRIMARY DESIGN INPUT — PLATFORM PIVOT IN EFFECT
+>
+> Following ADR-018 (2026-04-30), Solon Tax is the confirmed base platform for DCMS. Amplio is Solon Tax's process engine and is therefore a **primary design input** for the new design process. Read this document to understand what Amplio provides and its known constraints (particularly around non-interrupting boundary events), which must be addressed in the new architecture design.
+
+---
+
 # Amplio Process Engine Reference
 
 **Source docs:** `external_sys_docs/solon/solon_tax_2.3.0_integration_guide.md` (Section 3–4, 13–16), `external_sys_docs/solon/solon_tax_2.3.0_operations_guide.md` (Section 4, 12, 13, 16)
