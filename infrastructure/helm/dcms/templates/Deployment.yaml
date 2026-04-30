@@ -1,0 +1,106 @@
+---
+# API Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dcms.fullname" . }}-api
+  labels:
+    {{- include "dcms.labels" . | nindent 4 }}
+    {{- include "dcms.api.selectorLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "dcms.api.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dcms.api.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "dcms.fullname" . }}
+      containers:
+        - name: api
+          image: "{{ .Values.image.api.repository }}:{{ .Values.image.api.tag }}"
+          imagePullPolicy: {{ .Values.image.api.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.api.port }}
+              protocol: TCP
+          env:
+            - name: PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "dcms.fullname" . }}-config
+                  key: PORT
+            - name: LOG_LEVEL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "dcms.fullname" . }}-config
+                  key: LOG_LEVEL
+            - name: SPRING_PROFILES_ACTIVE
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "dcms.fullname" . }}-config
+                  key: SPRING_PROFILES_ACTIVE
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "dcms.fullname" . }}-config
+                  key: DATABASE_URL
+            - name: KEYCLOAK_ISSUER_URI
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "dcms.fullname" . }}-config
+                  key: KEYCLOAK_ISSUER_URI
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: {{ .Values.service.api.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: {{ .Values.service.api.port }}
+            initialDelaySeconds: 30
+            periodSeconds: 10
+---
+# Frontend Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "dcms.fullname" . }}-frontend
+  labels:
+    {{- include "dcms.labels" . | nindent 4 }}
+    {{- include "dcms.frontend.selectorLabels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "dcms.frontend.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "dcms.frontend.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "dcms.fullname" . }}
+      containers:
+        - name: frontend
+          image: "{{ .Values.image.frontend.repository }}:{{ .Values.image.frontend.tag }}"
+          imagePullPolicy: {{ .Values.image.frontend.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.frontend.port }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.frontend.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.service.frontend.port }}
+            initialDelaySeconds: 10
+            periodSeconds: 10

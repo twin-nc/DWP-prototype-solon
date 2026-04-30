@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-22T00:00:00.000Z" agent="Claude/BA" version="21.0.0" type="device">
+  <diagram id="customer-journey-roles" name="Customer Journey — In-Benefit Recovery by Role">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1500" pageHeight="2000" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="sh-title" value="DWP Debt Collection — In-Benefit Recovery: Customer Journey by User Role" style="text;html=1;strokeColor=none;fillColor=none;align=center;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="15" width="1460" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- SHARED START SECTION -->
+
+        <!-- sh-start: START -->
+        <mxCell id="sh-start" value="&lt;b&gt;START&lt;/b&gt;&lt;br/&gt;Debtor selected from candidate list" style="ellipse;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="575" y="70" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- sh-eval: Evaluate debtor -->
+        <mxCell id="sh-eval" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Evaluate debtor: vulnerability level, fraud score, repayment history, debt mix [DW.1, BSF.1, DIC.1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="575" y="160" width="300" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- sh-seg: Segment decision diamond -->
+        <mxCell id="sh-seg" value="&lt;b&gt;System&lt;/b&gt;&lt;br/&gt;Segment type?" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="600" y="270" width="250" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Shared edges -->
+        <mxCell id="e-sh-start-eval" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sh-start" target="sh-eval" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-sh-eval-seg" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sh-eval" target="sh-seg" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- COLUMN HEADERS -->
+
+        <!-- hdr-vuln: VULNERABLE TRACK header -->
+        <mxCell id="hdr-vuln" value="VULNERABLE TRACK" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;align=center;fontStyle=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="50" y="390" width="290" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- hdr-std: STANDARD TRACK header -->
+        <mxCell id="hdr-std" value="STANDARD TRACK" style="rounded=1;whiteSpace=wrap;html=1;fontSize=13;align=center;fontStyle=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="390" width="290" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- VULNERABLE COLUMN STEPS -->
+
+        <!-- v1 -->
+        <mxCell id="v1" value="&lt;b&gt;Welfare Queue Agent&lt;/b&gt;&lt;br/&gt;Create case, assign to Welfare Queue. Set primary contact (appointee / debtor). [WAM.20, CAS.5, UAAF.4]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="50" y="450" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- v2 -->
+        <mxCell id="v2" value="&lt;b&gt;Welfare Queue Agent&lt;/b&gt;&lt;br/&gt;Issue initial SMS / letter to primary contact [DIC.15, CC.1, RPF.27]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="50" y="560" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- v3 -->
+        <mxCell id="v3" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Wait response window (configurable timer) [DW.3, DW.6]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="50" y="670" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- v4 -->
+        <mxCell id="v4" value="&lt;b&gt;Welfare Queue Agent&lt;/b&gt;&lt;br/&gt;Assess affordability, policy limits, vulnerability indicators [IE.1, DW.14, FG21/1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="50" y="780" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- v5 -->
+        <mxCell id="v5" value="&lt;b&gt;Welfare Queue Agent&lt;/b&gt;&lt;br/&gt;Recommend reduced-rate deduction strategy [DW.14, RPF.1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="50" y="890" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- v6 -->
+        <mxCell id="v6" value="&lt;b&gt;Team Leader — ⚠ RULING-001&lt;/b&gt;&lt;br/&gt;Approval gate: review &amp; approve deduction recommendation [UAAF.25, WAM.24]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1000" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- v7 -->
+        <mxCell id="v7" value="&lt;b&gt;Compliance Officer — ⚠ RULING-001&lt;/b&gt;&lt;br/&gt;Approve vulnerability flag before enforcement [FG21/1, DW.27]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1110" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- v8 -->
+        <mxCell id="v8" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Apply deduction per DWP Payment Allocation [DW.14, DW.87, DW.23]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1220" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- v9 -->
+        <mxCell id="v9" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Monitor: deductions / payment / vulnerability / compliance [DW.25, SOR.1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1330" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- v10 -->
+        <mxCell id="v10" value="&lt;b&gt;Operations Manager&lt;/b&gt;&lt;br/&gt;Performance dashboard + change of circumstances triage [MIR.1, WAM.28, DW.25]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1440" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- v-end -->
+        <mxCell id="v-end" value="&lt;b&gt;END — Recovery completed&lt;/b&gt;" style="ellipse;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1560" width="290" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Vulnerable column edges (auto-routed) -->
+        <mxCell id="e-v1-v2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="v1" target="v2" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-v2-v3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="v2" target="v3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-v3-v4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="v3" target="v4" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-v4-v5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="v4" target="v5" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-v5-v6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="v5" target="v6" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-v6-v7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="v6" target="v7" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-v7-v8" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="v7" target="v8" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-v8-v9" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="v8" target="v9" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-v9-v10" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="v9" target="v10" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-v10-end" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="v10" target="v-end" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- STANDARD COLUMN STEPS -->
+
+        <!-- s-v1 -->
+        <mxCell id="s-v1" value="&lt;b&gt;Collections Agent&lt;/b&gt;&lt;br/&gt;Create case, assign general collector [WAM.1, UAAF.4]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="450" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- s-v2 -->
+        <mxCell id="s-v2" value="&lt;b&gt;Collections Agent&lt;/b&gt;&lt;br/&gt;Issue SMS / digital prompts + self-service journey link [DIC.15, CC.1, CC.5]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="560" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- s-v3 -->
+        <mxCell id="s-v3" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Wait response window (configurable timer) [DW.3, DW.6]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="670" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- s-v4 -->
+        <mxCell id="s-v4" value="&lt;b&gt;Collections Agent&lt;/b&gt;&lt;br/&gt;Create agent follow-up task if no response [WAM.1, AAD.1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="780" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- s-v5 -->
+        <mxCell id="s-v5" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Auto-assess standard deduction rate per policy rules [DW.14, DW.87, RPF.1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="890" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- s-v6 -->
+        <mxCell id="s-v6" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Apply standard benefit deduction strategy [DW.87, RPF.1, DW.23]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="1000" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- s-v7 -->
+        <mxCell id="s-v7" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Monitor: deductions / payment / compliance [DW.25, SOR.1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="1110" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- s-v8 -->
+        <mxCell id="s-v8" value="&lt;b&gt;Operations Manager&lt;/b&gt;&lt;br/&gt;Performance dashboard + change of circumstances triage [MIR.1, WAM.28, DW.25]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="1220" width="290" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- s-end -->
+        <mxCell id="s-end" value="&lt;b&gt;END — Recovery completed&lt;/b&gt;" style="ellipse;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="1340" width="290" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Standard column edges (auto-routed) -->
+        <mxCell id="e-s-v1-v2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s-v1" target="s-v2" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s-v2-v3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s-v2" target="s-v3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s-v3-v4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s-v3" target="s-v4" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s-v4-v5" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s-v4" target="s-v5" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s-v5-v6" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s-v5" target="s-v6" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s-v6-v7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s-v6" target="s-v7" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s-v7-v8" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s-v7" target="s-v8" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s-v8-end" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s-v8" target="s-end" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- SEGMENT DIVERGENCE EDGES -->
+
+        <!-- sh-seg → v1 (Vulnerable) -->
+        <mxCell id="e-seg-vuln" value="Vulnerable" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sh-seg" target="v1" parent="1" exitX="0" exitY="0.5" exitDx="0" exitDy="0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- sh-seg → s-v1 (Standard) -->
+        <mxCell id="e-seg-std" value="Standard" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sh-seg" target="s-v1" parent="1" exitX="1" exitY="0.5" exitDx="0" exitDy="0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- DIFFERENCE ANNOTATIONS (right sidebar) -->
+
+        <!-- diff1 -->
+        <mxCell id="diff1" value="⚠ Vulnerable track only: Team Leader + Compliance approval gates (RULING-001) — no equivalent in standard track" style="text;html=1;strokeColor=#b85450;fillColor=#fff2cc;align=left;fontSize=9;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1470" y="990" width="160" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- diff2 -->
+        <mxCell id="diff2" value="Vulnerable: Welfare Queue Agent (specialist). Standard: Collections Agent (general). [WAM.20, UAAF.15]" style="text;html=1;strokeColor=#b85450;fillColor=#fff2cc;align=left;fontSize=9;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1470" y="450" width="160" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- ROLE LEGEND (bottom) -->
+
+        <!-- Legend item 1: System -->
+        <mxCell id="leg-sys" value="System" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=center;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="50" y="1680" width="160" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Legend item 2: Welfare Queue Agent -->
+        <mxCell id="leg-wqa" value="Welfare Queue Agent" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=center;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="230" y="1680" width="160" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Legend item 3: Collections Agent -->
+        <mxCell id="leg-ca" value="Collections Agent" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="410" y="1680" width="160" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Legend item 4: Team Leader -->
+        <mxCell id="leg-tl" value="Team Leader" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=center;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="590" y="1680" width="160" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Legend item 5: Compliance Officer -->
+        <mxCell id="leg-co" value="Compliance Officer" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=center;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="770" y="1680" width="160" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- Legend item 6: Operations Manager -->
+        <mxCell id="leg-om" value="Operations Manager" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=center;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="950" y="1680" width="160" height="28" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,65 @@
+version: 2
+updated_at: "YYYY-MM-DD"
+
+baseline_sources:
+  functional_requirements: "Tender requirements docs/Functional-Requirements-Consolidated.md"
+  non_functional_requirements: "Tender requirements docs/Non-Functional-Requirements-Consolidated.md"
+
+status_values:
+  requirement: ["complete", "partial", "gap", "awaiting-ruling", "deviation"]
+  functionality: ["planned", "in-progress", "complete", "deferred"]
+  link_confidence: ["confirmed", "proposed"]
+
+module_catalog: []
+# - module_id: "MOD-BE-EXAMPLE"
+#   module_name: "backend/example"
+#   layer: "backend"
+
+functionality_catalog: []
+# - functionality_id: "FNC-EXAMPLE-001"
+#   functionality_name: "Example functionality"
+#   primary_module: "MOD-BE-EXAMPLE"
+#   supporting_modules: []
+#   owner_role: "Backend Builder"
+#   status: "planned"
+
+requirement_functionality_links: []
+# - link_id: "LNK-0001"
+#   requirement_id: "CAS.1"
+#   functionality_id: "FNC-EXAMPLE-001"
+#   relationship: "satisfies"
+#   confidence: "confirmed"
+#   notes: "Optional mapping notes."
+
+functionality_artifact_links: []
+# - functionality_id: "FNC-EXAMPLE-001"
+#   acceptance_criteria_issue: 123
+#   domain_ruling: null
+#   contract_versions: []
+#   policy_bundle_versions: []
+#   test_suite_ids: []
+#   evidence_refs: []
+#   code_refs: []
+
+release_views: []
+# - release_id: "REL-YYYY.MM"
+#   requirement_ids: []
+#   functionality_ids: []
+#   status_summary:
+#     complete: 0
+#     partial: 0
+#     gap: 0
+
+legacy_flattened_trace_map: []
+# - requirement_id: "CAS.1"
+#   description: "Short requirement summary"
+#   class: "B"
+#   domain_ruling: null
+#   functionality_ids: ["FNC-EXAMPLE-001"]
+#   contract_versions: []
+#   test_suite_ids: []
+#   evidence_pack_id: null
+#   status: "partial"
+#   gaps: []
+#   deviation: null
+#   owner: "Solution Architect"

@@ -1,0 +1,715 @@
+SOLON TAX © 
+Release 2.3.0 
+
+Operations Guide 
+
+Version: 2.30 
+
+© Copyright 2026 NetcompanyStatus: FINAL All Rights reserved. 
+
+Critical / Restricted / In-Confidence © Netcompany SEE & EUI 
+
+All industrial and intellectual property rights contained in this document are under protection of the intellectual property law and all related copyrightsare reserved by Netcompany SEE & EUI. No part of this document may be reproduced, stored in a retrieval system, or transmitted, on any form or byany means, electronic, mechanical, photocopying, recording, or otherwise, without the prior written permission of Netcompany SEE & EUI. 
+
+
+© 2026 Netcompany - 1/146 
+
+
+
+© 2026 Netcompany - 2/146 
+
+
+© 2026 Netcompany - 3/146 
+
+
+
+© 2026 Netcompany - 4/146 
+
+
+© 2026 Netcompany - 5/146 
+
+
+
+© 2026 Netcompany - 6/146 
+
+
+© 2026 Netcompany - 7/146 
+
+
+
+Document history 
+
+Table 1. Document history 
+
+
+© 2026 Netcompany - 8/146 
+
+
+© 2026 Netcompany - 9/146 
+
+
+
+© 2026 Netcompany - 10/146 
+
+
+© 2026 Netcompany - 11/146 
+
+
+
+© 2026 Netcompany - 12/146 
+
+
+© 2026 Netcompany - 13/146 
+
+
+
+© 2026 Netcompany - 14/146 
+
+
+© 2026 Netcompany - 15/146 
+
+
+
+© 2026 Netcompany - 16/146 
+
+
+© 2026 Netcompany - 17/146 
+
+
+
+© 2026 Netcompany - 18/146 
+
+
+© 2026 Netcompany - 19/146 
+
+
+
+© 2026 Netcompany - 20/146 
+
+
+© 2026 Netcompany - 21/146 
+
+
+
+© 2026 Netcompany - 22/146 
+
+
+© 2026 Netcompany - 23/146 
+
+
+
+© 2026 Netcompany - 24/146 
+
+
+© 2026 Netcompany - 25/146 
+
+
+
+© 2026 Netcompany - 26/146 
+
+
+© 2026 Netcompany - 27/146 
+
+
+
+© 2026 Netcompany - 28/146 
+
+
+© 2026 Netcompany - 29/146 
+
+
+
+© 2026 Netcompany - 30/146 
+
+
+© 2026 Netcompany - 31/146 
+
+
+
+© 2026 Netcompany - 32/146 
+
+
+© 2026 Netcompany - 33/146 
+
+
+
+© 2026 Netcompany - 34/146 
+
+
+© 2026 Netcompany - 35/146 
+
+
+
+© 2026 Netcompany - 36/146 
+
+
+© 2026 Netcompany - 37/146 
+
+
+
+© 2026 Netcompany - 38/146 
+
+
+© 2026 Netcompany - 39/146 
+
+
+
+© 2026 Netcompany - 40/146 
+
+
+© 2026 Netcompany - 41/146 
+
+
+
+© 2026 Netcompany - 42/146 
+
+
+© 2026 Netcompany - 43/146 
+
+
+
+© 2026 Netcompany - 44/146 
+
+
+© 2026 Netcompany - 45/146 
+
+
+
+© 2026 Netcompany - 46/146 
+
+
+© 2026 Netcompany - 47/146 
+
+
+
+© 2026 Netcompany - 48/146 
+
+
+© 2026 Netcompany - 49/146 
+
+
+
+© 2026 Netcompany - 50/146 
+
+
+© 2026 Netcompany - 51/146 
+
+
+
+© 2026 Netcompany - 52/146 
+
+
+© 2026 Netcompany - 53/146 
+
+
+
+© 2026 Netcompany - 54/146 
+
+
+© 2026 Netcompany - 55/146 
+
+
+
+© 2026 Netcompany - 56/146 
+
+
+© 2026 Netcompany - 57/146 
+
+
+
+© 2026 Netcompany - 58/146 
+
+
+© 2026 Netcompany - 59/146 
+
+
+
+© 2026 Netcompany - 60/146 
+
+
+© 2026 Netcompany - 61/146 
+
+
+
+© 2026 Netcompany - 62/146 
+
+
+© 2026 Netcompany - 63/146 
+
+
+
+© 2026 Netcompany - 64/146 
+
+
+© 2026 Netcompany - 65/146 
+
+
+
+© 2026 Netcompany - 66/146 
+
+
+© 2026 Netcompany - 67/146 
+
+
+
+-
+
+
+© 2026 Netcompany - 68/146 
+
+
+© 2026 Netcompany - 69/146 
+
+
+
+© 2026 Netcompany - 70/146 
+
+
+© 2026 Netcompany - 71/146 
+
+
+
+© 2026 Netcompany - 72/146 
+
+
+© 2026 Netcompany - 73/146 
+
+
+
+© 2026 Netcompany - 74/146 
+
+
+ --
+--
+--
+--
+
+© 2026 Netcompany - 75/146 
+
+
+
+ --
+--
+--
+
+
+© 2026 Netcompany - 76/146 
+
+
+© 2026 Netcompany - 77/146 
+
+
+
+© 2026 Netcompany - 78/146 
+
+
+© 2026 Netcompany - 79/146 
+
+
+
+© 2026 Netcompany - 80/146 
+
+
+© 2026 Netcompany - 81/146 
+
+
+
+© 2026 Netcompany - 82/146 
+
+
+© 2026 Netcompany - 83/146 
+
+
+
+© 2026 Netcompany - 84/146 
+
+
+© 2026 Netcompany - 85/146 
+
+
+
+© 2026 Netcompany - 86/146 
+
+
+© 2026 Netcompany - 87/146 
+
+
+
+© 2026 Netcompany - 88/146 
+
+
+© 2026 Netcompany - 89/146 
+
+
+
+© 2026 Netcompany - 90/146 
+
+
+© 2026 Netcompany - 91/146 
+
+
+
+© 2026 Netcompany - 92/146 
+
+
+© 2026 Netcompany - 93/146 
+
+
+
+© 2026 Netcompany - 94/146 
+
+
+© 2026 Netcompany - 95/146 
+
+
+
+© 2026 Netcompany - 96/146 
+
+
+© 2026 Netcompany - 97/146 
+
+
+
+© 2026 Netcompany - 98/146 
+
+
+© 2026 Netcompany - 99/146 
+
+
+
+© 2026 Netcompany - 100/146 
+
+
+© 2026 Netcompany - 101/146 
+
+
+
+-
+
+
+© 2026 Netcompany - 102/146 
+
+
+© 2026 Netcompany - 103/146 
+
+
+
+© 2026 Netcompany - 104/146 
+
+
+© 2026 Netcompany - 105/146 
+
+
+
+© 2026 Netcompany - 106/146 
+
+
+© 2026 Netcompany - 107/146 
+
+
+
+© 2026 Netcompany - 108/146 
+
+
+© 2026 Netcompany - 109/146 
+
+
+
+© 2026 Netcompany - 110/146 
+
+
+© 2026 Netcompany - 111/146 
+
+
+
+© 2026 Netcompany - 112/146 
+
+
+© 2026 Netcompany - 113/146 
+
+
+
+© 2026 Netcompany - 114/146 
+
+
+© 2026 Netcompany - 115/146 
+
+
+
+© 2026 Netcompany - 116/146 
+
+
+© 2026 Netcompany - 117/146 
+
+
+
+14. Appendix A 
+14.1. Amplio Administration 
+This section describes the administration user-interfaces for the Amplio Applications used within SOLON TAX ©. 
+The user-interface is a shared component used for administrating both the Amplio Process Engine and Revenue 
+Management Batch. 
+
+For the Amplio Process Engine, it is responsible for administrating processes and events. The user-interfaces can be 
+used for both getting an overview of what is executed across all engines but are primarily used for handling errors, 
+deploying process definitions, configuration of the engine, or suspending, cancelling, or restarting processes. 
+
+For the Revenue Management Batch, it is responsible for administrating batch jobs, including scheduling, monitoring, 
+and error handling. 
+
+14.1.1. Amplio Administration Overview 
+The following screenshot illustrates the user interface of the Amplio Administration section. 
+
+
+Figure 59. Amplio Administration Overview 
+Table 27. Amplio Administration UI Elements 
+
+
+© 2026 Netcompany - 118/146 
+
+
+Footnote Note 
+7 Events: The Amplio Event Administration tool allows users to monitor and manage system events that 
+trigger processes. It provides search capabilities by event ID, type, status, date range, and entity details, 
+with options to restart, terminate, or release events while viewing their relationships to processes and 
+execution status. 
+For more information, see section Amplio Event Administration . 
+
+14.1.2. Amplio Process Administration 
+The system includes a process administration tool which is accessible through the administration page of the same 
+name. 
+
+When entering the process administration page, the user is presented with the user interface as seen in Process 
+Administration, but with only the search field and process table components shown. 
+
+
+Figure 60. Process Administration 
+
+© 2026 Netcompany - 119/146 
+
+
+
+© 2026 Netcompany - 120/146 
+
+
+© 2026 Netcompany - 121/146 
+
+
+
+Footnote Note 
+3 The BPM ID of the task. 
+4 Specifies if the task is handled automatically or manually 
+in Amplio. Usually is True. 
+5 Timestamp of when the task was last changed by an 
+entity in the database. The time zone is defaulted to 
+Copenhagen, Europe. 
+6 The ID of the entity that the task last time was changed 
+by in the database. It is usually set to a user’s initials, 
+such as a caseworker, but it can be set to BPM_ENGINE 
+if the process was processed without human interaction. 
+7 Menu to show different actions: 
+Menu 
+• The rerun options force the process to rerun the 
+selected step of the process. 
+• Show process Command shows the process 
+command similar to the process context. 
+• Show task view data shows the relevant view data, if 
+it is in use by the process. 
+
+In addition to the new table being displayed, a visualization of the process appears directly beneath the selected task, 
+as seen in Amplio Process Expanded. This visualization provides the user with a clean, easy to understand 
+representation of the selected process flow. 
+
+
+Figure 63. Amplio Process Expanded 
+
+
+© 2026 Netcompany - 122/146 
+
+
+Element Description 
+3 Tasks that have not yet been executed appear in white 
+color without any status tag, indicating they are waiting to 
+be processed. 
+
+14.1.2.1. Amplio Process Context 
+The process context displays the raw contents of the process instance data in its current state. The modal gets 
+
+popped up when the icon is pressed for a process on the process table. This is the data the process has acted on 
+during its execution up to the current state of the process. 
+
+
+Figure 64. Process Context Modal 
+
+© 2026 Netcompany - 123/146 
+
+
+
+© 2026 Netcompany - 124/146 
+
+
+© 2026 Netcompany - 125/146 
+
+
+
+© 2026 Netcompany - 126/146 
+
+
+© 2026 Netcompany - 127/146 
+
+
+
+© 2026 Netcompany - 128/146 
+
+
+Figure 70. Event Administration 
+
+© 2026 Netcompany - 129/146 
+
+
+
+© 2026 Netcompany - 130/146 
+
+
+© 2026 Netcompany - 131/146 
+
+
+
+There may be specific validation rules for each system parameter type. These must be described for the individual 
+type in System Parameters. Validation rules for system parameters are considered system configuration and cannot 
+be configured by the Business Administrators, unless otherwise agreed for the individual validation rule. 
+
+14.1.5.2. Active and Inactive System Parameter Instances 
+A system parameter instance can either be active or inactive based on its validity period. An instance is active, if the 
+reporting date falls within the instance’s validity period. If the reporting date is not within the instance’s validity period, 
+the instance will be inactive, and it will not be possible to report or access the instance outside a historical overview. 
+Other instances can replace the previous one after it expires, allowing reporting to continue. For example, when 
+reporting a code across different instances with different validity periods. 
+
+ 
+ 
+An inactive instance is not a deleted instance, as it will still be visible to the administrator in the 
+
+history. 
+
+An active instance will always have a current validity period, and it is possible to edit the validity period of an inactive 
+instance to make it active. Overlapping validity periods are handled based on the principles described in section 
+Overlap with new instances. 
+
+14.1.5.3. Technical History 
+All system parameters have a technical history, so it is always possible to see previous versions of the configuration 
+and which user made which changes and when. This includes amongst other things, the creation time, the 
+modification time (when an instance was edited), and the publication time (when the instance was deployed to the 
+production environment). 
+
+14.1.5.4. Amplio Administration System Parameters UI 
+The following section describes the user interface of system parameters. 
+
+
+Figure 71. System Parameter Administration 
+
+
+© 2026 Netcompany - 132/146 
+
+
+The relevant system parameters for the process engine are: 
+
+• Eventplans - Describe the connection between event types and processes. 
+If the subscription is disabled, the relevant process is not triggered for an event type. This can be used to 
+temporarily disable the creation of specific processes. 
+• Language -Allows defining languages for localization of the administration. 
+• Process Variables -Allow the user to define specific process variables to override the environment variables 
+defined in the Kubernetes cluster. 
+This can be used to change endpoints or override values of a process without the need to deploy changes. 
+• BPMN Deployments - Show the deployed BPMN models and their related event type and process type. 
+The following is an example of the Process variables system parameter: 
+
+
+Figure 72. The System parameter Process Variables 
+
+© 2026 Netcompany - 133/146 
+
+
+
+© 2026 Netcompany - 134/146 
+
+
+© 2026 Netcompany - 135/146 
+
+
+
+© 2026 Netcompany - 136/146 
+
+
+instance started with. 
+
+• Restart finished (canceled or passed) -> run on the newest active version. 
+This model ensures consistent handling of BPMN diagram versions across operational scenarios while preserving a 
+clear historical record of the definitions used by each process instance. 
+
+14.1.6. Event Stream Management 
+The administration has a user interface which allows an administrator to monitor and interact with the Java Database 
+Connectivity (JDBC) message queue. 
+
+The administrator sees the number of messages for each group, inspect each message or requeue any messages in 
+the Dead Letter Queue. The following screenshots and tables describe the different elements of the page. 
+
+
+Figure 76. Event Stream Management 
+Table 28. Event Stream Management Elements 
+
+© 2026 Netcompany - 137/146 
+
+
+
+© 2026 Netcompany - 138/146 
+
+
+© 2026 Netcompany - 139/146 
+
+
+
+© 2026 Netcompany - 140/146 
+
+
+© 2026 Netcompany - 141/146 
+
+
+
+ -
+
+-
+
+
+© 2026 Netcompany - 142/146 
+
+
+ -
+
+© 2026 Netcompany - 143/146 
+
+
+
+ -
+
+
+© 2026 Netcompany - 144/146 
+
+
+© 2026 Netcompany - 145/146 
+
+
+
+ -
+
+-
+
+-
+
+-
+
+-
+
+
+© 2026 Netcompany - 146/146 
+
+

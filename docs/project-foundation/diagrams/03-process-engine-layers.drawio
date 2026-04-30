@@ -1,0 +1,132 @@
+<mxfile host="app.diagrams.net" modified="2026-04-22T00:00:00.000Z" agent="Codex" version="24.7.17" editor="draw.io" compressed="false">
+  <diagram name="Process Engine Layers">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title -->
+        <mxCell id="title" value="DCMS — Process Engine Layering (ADR-003)" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="350" y="20" width="900" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 1: Domain modules -->
+        <mxCell id="domain_layer" value="Layer 3 — Domain modules  (no Flowable imports)" style="swimlane;startSize=35;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="1560" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="h1" value="&lt;b&gt;SendLetterCommandHandler&lt;/b&gt;&lt;br&gt;(communications)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="domain_layer">
+          <mxGeometry x="20" y="50" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="h2" value="&lt;b&gt;AssessAffordabilityCommandHandler&lt;/b&gt;&lt;br&gt;(repaymentplan)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="domain_layer">
+          <mxGeometry x="260" y="50" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="h3" value="&lt;b&gt;PostPaymentDeductionCommandHandler&lt;/b&gt;&lt;br&gt;(payment)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="domain_layer">
+          <mxGeometry x="500" y="50" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="h4" value="&lt;b&gt;TriggerSegmentationCommandHandler&lt;/b&gt;&lt;br&gt;(strategy)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="domain_layer">
+          <mxGeometry x="740" y="50" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="h5" value="&lt;b&gt;CreateWorkItemCommandHandler&lt;/b&gt;&lt;br&gt;(workallocation)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="domain_layer">
+          <mxGeometry x="980" y="50" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="h6" value="&lt;b&gt;RecordAccountNoteCommandHandler&lt;/b&gt;&lt;br&gt;(account)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="domain_layer">
+          <mxGeometry x="1220" y="50" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 2: Shared port -->
+        <mxCell id="port_layer" value="Layer 2 — shared/process/port  (interfaces only — no Flowable)" style="swimlane;startSize=35;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="310" width="1560" height="180" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bus" value="&lt;b&gt;DelegateCommandBus&lt;/b&gt;&lt;br&gt;&lt;br&gt;Routes DelegateCommand&lt;br&gt;to registered handler&lt;br&gt;&lt;br&gt;void dispatch(DelegateCommand cmd)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="port_layer">
+          <mxGeometry x="380" y="40" width="280" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pep" value="&lt;b&gt;ProcessEventPort&lt;/b&gt;&lt;br&gt;&lt;br&gt;fireMessage(debtAccountId, name, vars)&lt;br&gt;fireSignal(customerId, name, vars)&lt;br&gt;&lt;br&gt;Only way domain modules fire events into running process instances" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="port_layer">
+          <mxGeometry x="760" y="40" width="340" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="psp" value="&lt;b&gt;ProcessStartPort&lt;/b&gt;&lt;br&gt;&lt;br&gt;startTreatment(debtAccountId, segmentCode)&lt;br&gt;&lt;br&gt;Only way a treatment process is started or restarted after resegmentation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="port_layer">
+          <mxGeometry x="1110" y="40" width="340" height="120" as="geometry" />
+        </mxCell>
+
+        <!-- Layer 3: Infrastructure/process -->
+        <mxCell id="infra_layer" value="Layer 1 — infrastructure/process  (only layer that imports Flowable)" style="swimlane;startSize=35;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="560" width="1560" height="360" as="geometry" />
+        </mxCell>
+
+        <mxCell id="delegates" value="&lt;b&gt;JavaDelegate implementations&lt;/b&gt;&lt;br&gt;(infrastructure/process/delegate/)&lt;br&gt;&lt;br&gt;One delegate per BPMN service task action.&lt;br&gt;Reads DelegateExecution variables.&lt;br&gt;Constructs command → dispatch(cmd) via bus.&lt;br&gt;Zero domain module imports.&lt;br&gt;&lt;br&gt;e.g. sendLetterDelegate&lt;br&gt;     postPaymentDeductionDelegate&lt;br&gt;     triggerSegmentationDelegate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="infra_layer">
+          <mxGeometry x="20" y="45" width="380" height="290" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flowable_engine" value="&lt;b&gt;Flowable BPMN/DMN Engine&lt;/b&gt;&lt;br&gt;&lt;br&gt;RuntimeService&lt;br&gt;TaskService&lt;br&gt;RepositoryService&lt;br&gt;HistoryService&lt;br&gt;&lt;br&gt;Calls delegates via Spring bean name expression:&lt;br&gt;flowable:delegateExpression=&quot;${sendLetterDelegate}&quot;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="infra_layer">
+          <mxGeometry x="480" y="45" width="380" height="290" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bpmn_res" value="&lt;b&gt;BPMN / DMN resources&lt;/b&gt;&lt;br&gt;(backend/src/main/resources/processes/)&lt;br&gt;&lt;br&gt;treatments/&lt;br&gt;&lt;i&gt;  treatment-vulnerable-on-benefit.bpmn&lt;/i&gt;&lt;br&gt;&lt;i&gt;  treatment-standard-on-benefit.bpmn&lt;/i&gt;&lt;br&gt;&lt;i&gt;  treatment-vulnerable-off-benefit.bpmn&lt;/i&gt;&lt;br&gt;&lt;i&gt;  treatment-standard-off-benefit.bpmn&lt;/i&gt;&lt;br&gt;&lt;br&gt;fragments/&lt;br&gt;&lt;i&gt;  standard-event-subprocesses.bpmn&lt;/i&gt;&lt;br&gt;&lt;br&gt;decisions/&lt;br&gt;&lt;i&gt;  segmentation.dmn&lt;/i&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="infra_layer">
+          <mxGeometry x="940" y="45" width="380" height="290" as="geometry" />
+        </mxCell>
+
+        <mxCell id="port_impls" value="&lt;b&gt;Port implementations&lt;/b&gt;&lt;br&gt;(infrastructure/process/port/impl/)&lt;br&gt;&lt;br&gt;ProcessEventPortImpl&lt;br&gt;  → wraps RuntimeService.messageEventReceived()&lt;br&gt;  → wraps RuntimeService.signalEventReceived()&lt;br&gt;&lt;br&gt;ProcessStartPortImpl&lt;br&gt;  → wraps RuntimeService.startProcessInstanceByKey()" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="infra_layer">
+          <mxGeometry x="1330" y="45" width="200" height="290" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows between layers -->
+        <!-- Domain handlers → bus (registers) -->
+        <mxCell id="arr1" value="register handlers" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="h1" target="bus" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="h2" target="bus" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="h3" target="bus" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="h4" target="bus" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="h5" target="bus" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="h6" target="bus" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Delegates → bus (dispatch) -->
+        <mxCell id="arr7" value="dispatch(command)" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" source="delegates" target="bus" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Flowable → delegates (calls) -->
+        <mxCell id="arr8" value="calls via bean name expression" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="flowable_engine" target="delegates" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- BPMN resources → Flowable -->
+        <mxCell id="arr9" value="deployed into" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="bpmn_res" target="flowable_engine" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Port impls → Flowable -->
+        <mxCell id="arr10" value="wraps RuntimeService" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="port_impls" target="flowable_engine" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Port impls → pep / psp (implements) -->
+        <mxCell id="arr11" value="implements" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="port_impls" target="pep" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr12" value="implements" style="edgeStyle=orthogonalEdgeStyle;html=1;" edge="1" source="port_impls" target="psp" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Rule note -->
+        <mxCell id="rule_note" value="⚠  Delegate bean names (e.g. sendLetterDelegate) are a versioned contract — renaming is a breaking change and requires contract versioning per STD-GOV-004." style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="40" y="940" width="1560" height="40" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

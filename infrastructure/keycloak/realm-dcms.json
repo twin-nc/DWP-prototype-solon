@@ -1,0 +1,79 @@
+{
+  "realm": "dcms",
+  "enabled": true,
+  "displayName": "DWP Debt Collection Management System",
+  "accessTokenLifespan": 300,
+  "ssoSessionMaxLifespan": 36000,
+  "roles": {
+    "realm": [
+      { "name": "DCMS_ADMIN", "description": "System administrator" },
+      { "name": "CASE_WORKER", "description": "Debt case worker" },
+      { "name": "CASE_MANAGER", "description": "Case manager / team lead" },
+      { "name": "FINANCE_OFFICER", "description": "Finance and payment processing" },
+      { "name": "READ_ONLY", "description": "Read-only access" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "dcms-frontend",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": [
+        "http://localhost:8080/*",
+        "http://localhost:3000/*"
+      ],
+      "webOrigins": [
+        "http://localhost:8080",
+        "http://localhost:3000"
+      ]
+    },
+    {
+      "clientId": "dcms-backend",
+      "enabled": true,
+      "publicClient": false,
+      "bearerOnly": true
+    },
+    {
+      "clientId": "dcms-robot",
+      "enabled": true,
+      "publicClient": false,
+      "serviceAccountsEnabled": true,
+      "standardFlowEnabled": false,
+      "secret": "dcms-robot-secret"
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "email": "admin@dcms.local",
+      "firstName": "System",
+      "lastName": "Admin",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "admin123", "temporary": false }],
+      "realmRoles": ["DCMS_ADMIN"]
+    },
+    {
+      "username": "caseworker1",
+      "email": "caseworker1@dcms.local",
+      "firstName": "Alice",
+      "lastName": "Smith",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "test123", "temporary": false }],
+      "realmRoles": ["CASE_WORKER"]
+    },
+    {
+      "username": "manager1",
+      "email": "manager1@dcms.local",
+      "firstName": "Bob",
+      "lastName": "Jones",
+      "enabled": true,
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "test123", "temporary": false }],
+      "realmRoles": ["CASE_MANAGER", "CASE_WORKER"]
+    }
+  ]
+}

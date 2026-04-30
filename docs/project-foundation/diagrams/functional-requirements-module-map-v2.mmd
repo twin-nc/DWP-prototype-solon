@@ -1,0 +1,48 @@
+flowchart LR
+  FR["Functional Requirements Baseline (442 IDs)"]
+
+  FR --> CONF
+  FR --> PART
+  FR --> PROP
+
+  subgraph CONF["Confirmed Module Ownership"]
+    CAS["CAS (17)"] --> M_CA["Backend: customer + account"]
+    DIC["DIC (37)"] --> M_DIC["Backend: customer/account/communications/audit"]
+    DW["DW (88)"] --> M_DW["Backend: strategy + workallocation"]
+    RPF["RPF (37)"] --> M_RPF["Backend: repaymentplan + payment"]
+    UAAF["UAAF (26)"] --> M_UAAF["Backend: user + access control"]
+    UI["UI (30)"] --> M_UI["Frontend: app screens and flows"]
+    WAM["WAM (28)"] --> M_WAM["Backend: workallocation"]
+    AAD["AAD (27)"] --> M_AAD["Backend: communications + audit"]
+    IEC["IEC (11)"] --> M_IEC["Backend: repaymentplan + customer"]
+    CC["CC (35)"] --> M_CC["Backend: communications + integration"]
+    I3PS["I3PS (15)"] --> M_I3PS["Backend: integration"]
+    SOR["SoR (21)"] --> M_SOR["Backend: account/payment/audit/integration"]
+    CP["CP (11)"] --> M_CP["Docs + CI/CD + Infrastructure controls"]
+    SD["SD (7)"] --> M_SD["Docs + release planning governance"]
+  end
+
+  subgraph PART["Partial Ownership (Scaffold Exists, Dedicated Module Not Final)"]
+    PM3["3PM (18)"] --> M_INT["Backend: integration (candidate split: thirdpartymanagement)"]
+    BSF["BSF (15)"] --> M_BSF["Backend: integration + strategy (future analytics depth)"]
+    MR["MR (15)"] --> M_MR["Backend integration + migration tooling/runbooks"]
+  end
+
+  subgraph PROP["Proposed Explicit Modules"]
+    MIR["MIR (2)"] --> M_MIR["Proposed backend module: reporting"]
+    A["A (2)"] --> M_A["Proposed backend module: analytics"]
+  end
+
+  subgraph LEG["Color Legend"]
+    L_CONF["Confirmed ownership"]:::confirmed
+    L_PART["Partial ownership"]:::partial
+    L_PROP["Proposed module"]:::proposed
+  end
+
+  classDef confirmed fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20;
+  classDef partial fill:#fff8e1,stroke:#ef6c00,color:#e65100;
+  classDef proposed fill:#ffebee,stroke:#c62828,color:#b71c1c;
+
+  class CAS,DIC,DW,RPF,UAAF,UI,WAM,AAD,IEC,CC,I3PS,SOR,CP,SD confirmed;
+  class PM3,BSF,MR partial;
+  class MIR,A proposed;

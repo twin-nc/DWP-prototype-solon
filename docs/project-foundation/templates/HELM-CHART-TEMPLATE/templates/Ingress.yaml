@@ -1,0 +1,23 @@
+{{- if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "myapp.fullname" . }}
+  labels:
+    {{- include "myapp.labels" . | nindent 4 }}
+  # No annotations here — TLS termination, ingress-class, and any
+  # cloud-provider-specific annotations are configured by the DevOps team.
+spec:
+  # No TLS block — to be configured by the DevOps team.
+  rules:
+    - host: {{ .Values.ingress.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "myapp.fullname" . }}
+                port:
+                  number: {{ .Values.service.port }}
+{{- end }}

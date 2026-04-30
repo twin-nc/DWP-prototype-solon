@@ -1,0 +1,3831 @@
+# Requirements Trace Map (Many-to-Many Model)
+# Maintained by the Traceability Steward agent (.claude/agents/traceability-steward.md)
+# Standard: STD-GOV-002 (Requirements Traceability and ID Governance)
+#
+# This is the canonical traceability source of truth:
+# requirement <-> functionality (many-to-many), then functionality -> modules/artifacts.
+
+version: 2
+updated_at: "2026-04-24"
+
+# ---------------------------------------------------------------------------
+# OPEN ITEM: I11-OI-01 — development-plan.md §14 requirement ID mismatch
+# development-plan.md §14 contains a "Requirements Traceability" table mapping
+# requirement IDs to "Satisfied By" implementations. That table's IDs do NOT
+# correspond to the tender requirement descriptions in this file. Examples
+# observed (2026-04-24): dev-plan RPF.20 = "Breathing space" but trace-map
+# RPF.20 = "arrangement history"; dev-plan CC.1 = "Household joint debt" but
+# trace-map CC.1 = "outbound letter generation". Root cause unknown — possibly
+# a different requirement numbering version was used during dev-plan authoring.
+# DO NOT use dev-plan §14 as a source for requirement↔functionality links in
+# this file. All FNC links added here (I11, 2026-04-24) are derived from
+# subject-matter matching against trace-map descriptions, not from dev-plan §14.
+# Owner: tct@netcompany.com  Due: resolve at next baseline review.
+# ---------------------------------------------------------------------------
+
+baseline_sources:
+  functional_requirements: "Tender requirements docs/Functional-Requirements-Consolidated.md"
+  non_functional_requirements: "Tender requirements docs/Non-Functional-Requirements-Consolidated.md"
+
+status_values:
+  requirement: ["complete", "partial", "gap", "awaiting-ruling", "deviation"]
+  functionality: ["planned", "in-progress", "complete", "deferred"]
+  link_confidence: ["confirmed", "proposed"]
+
+# ---------------------------------------------------------------------------
+# MODULE CATALOG
+# Keyed by module_id. Add entries here before referencing them elsewhere.
+# ---------------------------------------------------------------------------
+module_catalog:
+  MOD-BE-CUSTOMER:
+    name: "backend/customer"
+    layer: "backend"
+  MOD-BE-ACCOUNT:
+    name: "backend/account"
+    layer: "backend"
+  MOD-BE-STRATEGY:
+    name: "backend/strategy"
+    layer: "backend"
+  MOD-BE-PROCESS:
+    name: "backend/process"
+    layer: "backend"
+    notes: "Greenfield COTS workflow configuration boundary (for example Flowable BPMN + DMN) plus process boundary APIs and orchestration integration points."
+  MOD-BE-ANALYTICS:
+    name: "backend/analytics"
+    layer: "backend"
+    notes: "Segmentation, scoring, DMN decision tables, bureau feed integration. Feeds MOD-BE-PROCESS treatment routing."
+  MOD-BE-WORKALLOCATION:
+    name: "backend/workallocation"
+    layer: "backend"
+  MOD-BE-REPAYMENTPLAN:
+    name: "backend/repaymentplan"
+    layer: "backend"
+  MOD-BE-PAYMENT:
+    name: "backend/payment"
+    layer: "backend"
+  MOD-BE-COMMS:
+    name: "backend/communications"
+    layer: "backend"
+  MOD-BE-INTEGRATION:
+    name: "backend/integration"
+    layer: "backend"
+  MOD-BE-THIRDPARTYMGMT:
+    name: "backend/thirdpartymanagement"
+    layer: "backend"
+  MOD-BE-USER:
+    name: "backend/user"
+    layer: "backend"
+  MOD-BE-AUDIT:
+    name: "backend/audit"
+    layer: "backend"
+  MOD-BE-REPORTING:
+    name: "backend/reporting"
+    layer: "backend"
+  MOD-FE-APP:
+    name: "frontend/src"
+    layer: "frontend"
+  MOD-PLAT-INFRA:
+    name: "infrastructure"
+    layer: "platform"
+  MOD-PLAT-CICD:
+    name: ".github/workflows"
+    layer: "platform"
+  MOD-GOV-DOCS:
+    name: "docs/project-foundation"
+    layer: "governance"
+
+# ---------------------------------------------------------------------------
+# FUNCTIONALITY CATALOG
+# Keyed by functionality_id. Each entry must have exactly one primary_module.
+# ---------------------------------------------------------------------------
+functionality_catalog:
+  # Source: development-plan.md §7.1–7.7 (I09/I11 import, 2026-04-24)
+  # All entries status: "planned" — none yet implemented.
+  # Class A = subject to ruling status gates and sign-off requirements.
+  # Class B = internal platform capability, lower governance overhead.
+
+  # --- Process / Workflow ---
+  FNC-PROC-001:
+    name: "Collection process orchestration"
+    description: "COLLECTION_PROCESS BPMN: ingest, statute-barred gateway, vulnerability routing, champion/challenger assignment, agent task creation, escalation, and terminal states. Source: development-plan.md §7.4.1."
+    primary_module: "MOD-BE-PROCESS"
+    supporting_modules: ["MOD-BE-STRATEGY", "MOD-BE-WORKALLOCATION", "MOD-FE-APP", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "A"
+  FNC-PROC-002:
+    name: "Write-off approval workflow"
+    description: "WRITE_OFF_APPROVAL_PROCESS: 4-tier approval chain (AGENT → TEAM_LEADER → OPS_MANAGER → SRO), write_off_limit_check.dmn threshold routing, CreateTaskListener self-approval prevention. Source: development-plan.md §7.4.2."
+    primary_module: "MOD-BE-PROCESS"
+    supporting_modules: ["MOD-BE-ACCOUNT", "MOD-BE-WORKALLOCATION", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "A"
+  FNC-PROC-003:
+    name: "Treatment path history and override management"
+    description: "Per-account treatment path history view, manual override with reason code capture, override audit trail. Source: development-plan.md §7.4.1, §7.5."
+    primary_module: "MOD-BE-STRATEGY"
+    supporting_modules: ["MOD-BE-PROCESS", "MOD-FE-APP", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "A"
+  FNC-PROC-004:
+    name: "Breathing space process"
+    description: "BREATHING_SPACE_PROCESS: dual path (STANDARD 60-day moratorium, MENTAL_HEALTH_CRISIS open-ended), enforcement suspension, arrangement monitoring suspension, auto-resume on expiry. Source: development-plan.md §7.4.3."
+    primary_module: "MOD-BE-PROCESS"
+    supporting_modules: ["MOD-BE-ACCOUNT", "MOD-BE-REPAYMENTPLAN", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "A"
+  FNC-PROC-005:
+    name: "Contact suppression enforcement"
+    description: "Configurable suppression rules evaluated at outbound contact steps; suppression_rules.dmn drives automated channel block; override requires explicit reason code. Source: development-plan.md §7.5.5."
+    primary_module: "MOD-BE-COMMS"
+    supporting_modules: ["MOD-BE-PROCESS", "MOD-BE-STRATEGY", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "A"
+  FNC-PROC-006:
+    name: "Champion/challenger treatment assignment"
+    description: "segment_profile.dmn → champion_challenger_assignment.dmn pipeline. Assignment must be deterministic hash-based per ADR-010. NOTE: dev-plan DMN uses random variable — flagged OI-I09-03; ADR-010 takes precedence and DMN must be refactored before implementation. Source: development-plan.md §7.5.6–7.5.7."
+    primary_module: "MOD-BE-STRATEGY"
+    supporting_modules: ["MOD-BE-PROCESS", "MOD-BE-ANALYTICS"]
+    status: "planned"
+    class: "A"
+  FNC-PROC-007:
+    name: "Arrangement monitoring and breach detection"
+    description: "ARRANGEMENT_MONITORING_PROCESS: scheduled payment checks, configurable tolerance window (grace_period_days, tolerance_percentage), skipBreachOnResume logic, breach escalation task. Source: development-plan.md §7.4.4."
+    primary_module: "MOD-BE-REPAYMENTPLAN"
+    supporting_modules: ["MOD-BE-PROCESS", "MOD-BE-PAYMENT", "MOD-BE-WORKALLOCATION", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "A"
+  FNC-PROC-008:
+    name: "Statute-barred debt identification"
+    description: "statute_barred_check.dmn: debt age assessment, clock-reset event evaluation, clearance window gateway in COLLECTION_PROCESS. DO NOT PROCEED: awaiting RULING-009 sign-off and DDE-OQ-11 resolution. Source: development-plan.md §7.5.1."
+    primary_module: "MOD-BE-STRATEGY"
+    supporting_modules: ["MOD-BE-PROCESS", "MOD-BE-ACCOUNT"]
+    status: "planned"
+    class: "A"
+
+  # --- Repayment / Assessment ---
+  FNC-RPF-001:
+    name: "Income and expenditure capture"
+    description: "Structured I&E data capture on customer record; feeds affordability_assessment.dmn to produce recommended arrangement terms. Source: development-plan.md §7.5.4, §7.4.4."
+    primary_module: "MOD-BE-REPAYMENTPLAN"
+    supporting_modules: ["MOD-BE-CUSTOMER", "MOD-FE-APP", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "A"
+  FNC-RPF-002:
+    name: "Repayment arrangement creation and management"
+    description: "Arrangement lifecycle: create, modify, renegotiate post-breach, extendArrangementEndDate (REQUIRES_NEW propagation — OI-I09-04 requires dedicated integration test). Source: development-plan.md §7.4.4."
+    primary_module: "MOD-BE-REPAYMENTPLAN"
+    supporting_modules: ["MOD-BE-PAYMENT", "MOD-BE-PROCESS", "MOD-FE-APP", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "A"
+
+  # --- Auth / Access ---
+  FNC-AUTH-001:
+    name: "User account and identity management"
+    description: "Keycloak-backed user lifecycle (create, modify, deactivate), JWT claim propagation to Spring Security, SSO via OIDC. Source: CLAUDE.md auth section, development-plan.md §7.1."
+    primary_module: "MOD-BE-USER"
+    supporting_modules: ["MOD-PLAT-INFRA", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "B"
+  FNC-AUTH-002:
+    name: "Team-based and role-based access control"
+    description: "RBAC via JWT roles (AGENT, TEAM_LEADER, OPS_MANAGER, COMPLIANCE, ADMIN — placeholder; full matrix pending I01/I02 governance terms). Team-based restriction enforcement. Source: CLAUDE.md, development-plan.md §7.1."
+    primary_module: "MOD-BE-USER"
+    supporting_modules: ["MOD-BE-WORKALLOCATION", "MOD-FE-APP"]
+    status: "planned"
+    class: "A"
+  FNC-AUTH-003:
+    name: "Vulnerability flag capture and workflow routing"
+    description: "Vulnerability status recorded on customer entity; vulnerability_routing.dmn triggers differentiated treatment path in COLLECTION_PROCESS. Source: development-plan.md §7.5.3."
+    primary_module: "MOD-BE-CUSTOMER"
+    supporting_modules: ["MOD-BE-PROCESS", "MOD-BE-STRATEGY", "MOD-FE-APP"]
+    status: "planned"
+    class: "A"
+  FNC-AUTH-004:
+    name: "Write-off authority threshold enforcement"
+    description: "write_off_limit_check.dmn routes write-off approval to appropriate tier by amount and role. All thresholds provisional pending DDE-OQ-02 (OI-I09-02). Source: development-plan.md §7.5.8."
+    primary_module: "MOD-BE-PROCESS"
+    supporting_modules: ["MOD-BE-ACCOUNT", "MOD-BE-WORKALLOCATION"]
+    status: "planned"
+    class: "A"
+
+  # --- Customer / Account ---
+  FNC-CUST-001:
+    name: "Customer profile and contact management"
+    description: "Customer entity: identity, contact details, channel preferences, third-party authority; multi-level relationship to accounts and households."
+    primary_module: "MOD-BE-CUSTOMER"
+    supporting_modules: ["MOD-FE-APP", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "B"
+  FNC-CUST-002:
+    name: "Account balance, ledger, and payment history"
+    description: "Financial ledger per debt account: running balance, payment history, regulatory event recording (breathing space date, insolvency date, fraud marker). Per ADR-001/002, ledger records facts; lifecycle effect owned by process engine."
+    primary_module: "MOD-BE-ACCOUNT"
+    supporting_modules: ["MOD-BE-PAYMENT", "MOD-FE-APP", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "A"
+  FNC-CUST-003:
+    name: "Relationship and household management"
+    description: "Joint debt split, household linking, relationship history with effective dates, third-party authority recording."
+    primary_module: "MOD-BE-CUSTOMER"
+    supporting_modules: ["MOD-BE-ACCOUNT", "MOD-FE-APP", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "B"
+  FNC-CUST-004:
+    name: "Affordability assessment"
+    description: "affordability_assessment.dmn: I&E data input → recommended arrangement terms output. Used by arrangement creation flow and treatment routing. Source: development-plan.md §7.5.4."
+    primary_module: "MOD-BE-STRATEGY"
+    supporting_modules: ["MOD-BE-REPAYMENTPLAN", "MOD-BE-CUSTOMER"]
+    status: "planned"
+    class: "A"
+
+  # --- Audit ---
+  FNC-AUD-001:
+    name: "Immutable event audit log"
+    description: "Every state change, access event, and override recorded with actor, timestamp, and reason code; append-only log."
+    primary_module: "MOD-BE-AUDIT"
+    supporting_modules: ["MOD-BE-PROCESS", "MOD-FE-APP"]
+    status: "planned"
+    class: "A"
+  FNC-AUD-002:
+    name: "Compliance and override audit reporting"
+    description: "Reporting on treatment overrides, write-off approvals, and access events for compliance review; feeds compliance team worklist."
+    primary_module: "MOD-BE-AUDIT"
+    supporting_modules: ["MOD-BE-REPORTING", "MOD-FE-APP"]
+    status: "planned"
+    class: "B"
+
+  # --- Integration ---
+  FNC-INTG-001:
+    name: "DCA placement and integration"
+    description: "Anti-corruption layer for DCA placement: case export, status synchronisation, recall on resolution. Third-party management boundary. Source: CLAUDE.md integration module."
+    primary_module: "MOD-BE-INTEGRATION"
+    supporting_modules: ["MOD-BE-THIRDPARTYMGMT", "MOD-BE-AUDIT"]
+    status: "planned"
+    class: "A"
+  FNC-INTG-002:
+    name: "DWP Place integration and debt ingest"
+    description: "Anti-corruption layer for DWP Place: debt identification event ingest, unique external reference capture, case creation trigger. Source: CLAUDE.md integration module."
+    primary_module: "MOD-BE-INTEGRATION"
+    supporting_modules: ["MOD-BE-CUSTOMER", "MOD-BE-ACCOUNT", "MOD-BE-PROCESS"]
+    status: "planned"
+    class: "A"
+
+# ---------------------------------------------------------------------------
+# REQUIREMENT LINKS
+# Keyed by requirement_id. Single section combining requirement-functionality
+# links, artifact links, and status — replaces the previous three-section model.
+# ---------------------------------------------------------------------------
+requirement_links:
+  # --- CAS: Customer & Account Structure (17) ---
+  CAS.1:
+    description: "Multi-level view of customers, accounts, groups, and securities"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.2:
+    description: "Automatically link relationships between customer, group, account"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.3:
+    description: "Create, modify and remove relationships including joint debt split"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.4:
+    description: "Retain history of Household relationship with dates and visibility"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.5:
+    description: "Ingest unique external reference for account identification"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.6:
+    description: "Display all account and customer details including balance and arrears"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.7:
+    description: "Support organisational structure with business rules and exclusions"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.8:
+    description: "Rules based decisioning at customer or account level"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.9:
+    description: "Verification process for manually linked customers via approval"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.10:
+    description: "Linked customer and account suggestion via rule-based parameterisation"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.11:
+    description: "Segment and align strategies at different levels with configurable rules"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.12:
+    description: "Classify customers, groups, and accounts based on available data"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.13:
+    description: "View across all customer accounts regardless of delinquency status"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.14:
+    description: "Archive and purge activities for non-delinquent or written-off accounts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.15:
+    description: "Group and manage accounts together"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.16:
+    description: "Add and remove accounts for customer collections"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CAS.17:
+    description: "Transfer debt liability between customers in various scenarios"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- DIC: Data & Information Capture (37) ---
+  DIC.1:
+    description: "Load and amend customer and account data automatically and manually"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.2:
+    description: "Agents and customers update contact details manually via API"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.3:
+    description: "Hold information of customer contact history with agents and system"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.4:
+    description: "Admin user ability to extend data model and tables with custom fields"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.5:
+    description: "Capture data for statuses, deduction rates, debt re-categorisation"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.6:
+    description: "Capture details of customers' circumstances with configurable list"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.7:
+    description: "Capture external data through interfaces or integration APIs"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.8:
+    description: "Data availability for UI screens, reporting, communication channels"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.9:
+    description: "Build, customise and utilise scoring rules and calculations"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.10:
+    description: "Retain key data values for correspondence and SMS regulatory notices"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.11:
+    description: "Store multiple I&Es with ability to edit and amend manually or automatically"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.12:
+    description: "Interface or integrate with external document scanning systems"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.13:
+    description: "Capture reason for arrears and time they first went into position"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.14:
+    description: "Capture time window best suited for contacting each customer"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-005", "RULING-011"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — RULING-005 cites DIC.14 as Debt Respite Scheme arrangement interaction; RULING-011 cites DIC.14 as communication queue behaviour during suppression; trace-map description is 'Capture time window best suited for contacting each customer'"]
+    deviation: null
+  DIC.15:
+    description: "Capture all communication channels, connect to mail management"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.16:
+    description: "Capture any type of customer vulnerability from configurable list"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.17:
+    description: "Feedback loop from external sources like email or SMS issued"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.18:
+    description: "Feedback loop/handshake of collections driven activity via API"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.19:
+    description: "Admin configure data sent to third party and record responses"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.20:
+    description: "Capture customer information at customer level reflecting all accounts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.21:
+    description: "Automatically record self-serve actions without manual intervention"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.22:
+    description: "Record dispute with reason, instigator, source, date, resolution"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.24:
+    description: "Enforce data formatting and validation rules for different data types"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.25:
+    description: "Record, amend, delete and view key data items governed by RBAC"
+    moscow: "must-have"
+    status: "awaiting-ruling"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-006"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — RULING-006 cites DIC.25 as deceased customer treatment; trace-map description is 'Record, amend, delete and view key data items governed by RBAC'; RULING-006 awaiting-client-sign-off; DO NOT PROCEED gate active (DDE-OQ-07: estate pursuit policy)"]
+    deviation: null
+  DIC.26:
+    description: "Automatically and manually update, add and remove identification"
+    moscow: "must-have"
+    status: "awaiting-ruling"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-006"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — RULING-006 cites DIC.26 as deceased customer data management; trace-map description is 'Automatically and manually update, add and remove identification'; RULING-006 awaiting-client-sign-off; DO NOT PROCEED gate active (DDE-OQ-07: estate pursuit policy)"]
+    deviation: null
+  DIC.27:
+    description: "Identify and store key data counters like times in collections"
+    moscow: "must-have"
+    status: "awaiting-ruling"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-009", "RULING-012", "RULING-013"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — rulings cite DIC.27 as Limitation Act 1980 enforcement rules and clock-reset tracking; trace-map description is 'Identify and store key data counters like times in collections'; all three rulings awaiting-client-sign-off; DO NOT PROCEED gate on RULING-009 (DDE-OQ-11: limitation periods)"]
+    deviation: null
+  DIC.28:
+    description: "Record third party information including Authority, DMC, DCA, Employer"
+    moscow: "must-have"
+    status: "awaiting-ruling"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-012"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — RULING-012 cites DIC.28 as acknowledgement and payment as clock-reset events; trace-map description is 'Record third party information including Authority, DMC, DCA, Employer'; RULING-012 awaiting-client-sign-off (DDE-OQ-13: PROMISE_TO_PAY as written acknowledgement)"]
+    deviation: null
+  DIC.29:
+    description: "Store multiple email addresses and send comms to all via preferences"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.30:
+    description: "See if email was successfully delivered via DWP notification service"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.31:
+    description: "Capture and record monies owed for offsetting against existing debts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.32:
+    description: "Record and recognise payments in pending state preventing action"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.33:
+    description: "Record and store relevant data for write-off including reason and date"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.34:
+    description: "Receive, account for and allocate funds from bulk payments"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.36:
+    description: "Store more than one mobile number for a customer or account"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DIC.37:
+    description: "Store and capture reference data via configurable drop-down lists"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.1:
+    description: "System must allow configurable treatment strategies based on debt type, age, and customer segment"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.2:
+    description: "System must support automated and manual decision points within treatment paths"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.3:
+    description: "System must allow treatment paths to be configured without code changes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.4:
+    description: "System must support parallel treatment paths for customers with multiple debts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.5:
+    description: "System must allow end-to-end treatment path orchestration to be configurable"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.6:
+    description: "System must support rule-based segmentation to assign customers to treatment paths"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.7:
+    description: "System must support champion/challenger testing of treatment strategies"
+    moscow: "should-have"
+    status: "designed"
+    functionalities: {strategy: ["ExperimentService", "ExperimentRouter", "ExperimentAssignmentService"]}
+    artifacts: {domain_ruling: null, contract_versions: ["ADR-010"], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Phase 1 covers Tier 2 DMN experiments only; Tier 3 BPMN and cross-tier experiments deferred to Phase 2/3"]
+    deviation: null
+  DW.8:
+    description: "System must provide configurable decision rules using DMN or equivalent"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.9:
+    description: "System must support automated account prioritisation within queues"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.10:
+    description: "System must allow prioritisation rules to be configured by operations managers"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.11:
+    description: "System must support workflow steps that require agent action before proceeding"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {FNC-PROC-001: {confidence: "proposed"}}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: FNC-PROC-001 COLLECTION_PROCESS creates agent user tasks via CreateTaskDelegate; full task-type inventory not yet defined — coverage gap remains until task catalogue is complete"]
+    deviation: null
+  DW.12:
+    description: "System must support configurable workflow with automated transitions between steps"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.13:
+    description: "System must track the current treatment step for every active account"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.14:
+    description: "System must support re-entry to a treatment path following a break or hold"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.15:
+    description: "System must support escalation rules that automatically move accounts between paths"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.16:
+    description: "System must support BPMN-based process engine for workflow orchestration"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.17:
+    description: "System must allow agents to manually override automated treatment decisions with audit trail"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.18:
+    description: "System must log all decision outcomes including the rule version applied"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.19:
+    description: "System must support time-based triggers within treatment paths (e.g. 7-day letter delay)"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.20:
+    description: "System must support event-based triggers within treatment paths (e.g. payment received)"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.21:
+    description: "System must support suppression of treatment actions during breathing space or vulnerability holds"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.22:
+    description: "System must allow treatment strategy versioning so changes do not affect in-flight accounts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.24:
+    description: "System must support debt consolidation rules within treatment strategy"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.25:
+    description: "System must support configurable write-off rules and thresholds"
+    moscow: "must-have"
+    status: "awaiting-ruling"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-009"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — RULING-009 cites DW.25 as statute-barred debt handling (Limitation Act 1980 enforcement); trace-map description is 'System must support configurable write-off rules and thresholds'; RULING-009 awaiting-client-sign-off; DO NOT PROCEED gate active (DDE-OQ-11: limitation periods confirmation required before enforcement/collection workflows)"]
+    deviation: null
+  DW.26:
+    description: "System must track and report on treatment strategy effectiveness"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.27:
+    description: "System must support graduated enforcement escalation paths"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.28:
+    description: "System must allow differentiated treatment based on customer vulnerability status"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {FNC-AUTH-003: {confidence: "proposed"}}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: FNC-AUTH-003 vulnerability_routing.dmn and COLLECTION_PROCESS vulnerability gateway planned; implementation gap — vulnerability flag capture UI and DMN rules not yet built"]
+    deviation: null
+  DW.29:
+    description: "System must support holds and deferments on treatment paths"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.30:
+    description: "System must support configurable automated outbound contact within treatment paths"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {FNC-PROC-005: {confidence: "proposed"}}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: FNC-PROC-005 suppression_rules.dmn planned for COLLECTION_PROCESS automated contact steps; communications module (MOD-BE-COMMS) integration not yet scaffolded"]
+    deviation: null
+  DW.31:
+    description: "System must support rules for when accounts exit a treatment path"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.32:
+    description: "System must support third-party placement as a treatment path step"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.33:
+    description: "System must allow different treatment paths per debt benefit type"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.34:
+    description: "System must provide a treatment path configuration UI for authorised users"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.35:
+    description: "System must allow treatment paths to be previewed before activation"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.37:
+    description: "System must support rule-based automated correspondence triggered by treatment steps"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.38:
+    description: "System must support configurable SLAs per treatment step"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.39:
+    description: "System must alert supervisors when SLA breaches are approaching or exceeded"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.40:
+    description: "System must support batch processing of accounts through treatment paths overnight"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.41:
+    description: "System must allow simulation of treatment strategy changes before go-live"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.42:
+    description: "System must support real-time monitoring of accounts in active treatment"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.43:
+    description: "System must support configurable inactivity thresholds to trigger escalation"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.44:
+    description: "System must allow treatment path assignment to be overridden by supervisors"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.45:
+    description: "System must track all manual overrides to treatment path with reason codes"
+    moscow: "must-have"
+    status: "awaiting-ruling"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-013"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — RULING-013 cites DW.45 as treatment path override tracking during statute-barred clearance window; trace-map description is 'System must track all manual overrides to treatment path with reason codes'; RULING-013 awaiting-client-sign-off (DDE-OQ-11/12/13)"]
+    deviation: null
+  DW.46:
+    description: "System must support minimum payment thresholds before certain treatment steps are triggered"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.47:
+    description: "System must allow treatment strategies to reference external bureau data"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.48:
+    description: "System must support priority overrides for deceased or insolvent accounts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.49:
+    description: "System must support separate treatment paths for joint debt vs individual debt"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.50:
+    description: "System must allow treatment strategy to be paused and resumed with state preserved"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.51:
+    description: "System must support configurable retry logic for failed automated treatment steps"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.52:
+    description: "System must support treatment path branching based on customer response to contact"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.53:
+    description: "System must support configurable hold periods before treatment path resumes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.54:
+    description: "System must allow agents to flag accounts for supervisor review within a treatment path"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.55:
+    description: "System must support rules for when a debt should be considered unrecoverable"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.56:
+    description: "System must allow treatment step outcomes to be manually recorded by agents"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.57:
+    description: "System must provide treatment path history view per account"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {FNC-PROC-003: {confidence: "proposed"}}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: FNC-PROC-003 treatment path history view planned; no UI implementation or backend query endpoint yet built"]
+    deviation: null
+  DW.58:
+    description: "System must allow treatment strategies to incorporate income and expenditure data"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.59:
+    description: "System must support configurable approval workflows for high-value treatment decisions"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.60:
+    description: "System must support automated account re-segmentation triggered by data changes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.61:
+    description: "System must prevent treatment path progression if mandatory data is missing"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.62:
+    description: "System must support multi-step approval chains for write-off decisions"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.63:
+    description: "System must allow treatment paths to be cloned and modified for new debt types"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.64:
+    description: "System must track the number of treatment cycles an account has been through"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.65:
+    description: "System must support configurable maximum number of treatment cycles before write-off"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.66:
+    description: "System must support rules-based automatic closure of resolved accounts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.67:
+    description: "System must allow treatment strategy rules to reference account age in days"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.68:
+    description: "System must allow treatment strategy rules to reference total outstanding balance"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.69:
+    description: "System must support configurable grace periods before enforcement actions"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.70:
+    description: "System must support treatment path steps that wait for external system responses"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.71:
+    description: "System must support rules that consider number of broken arrangements in treatment decisions"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.72:
+    description: "System must allow treatment path exceptions to be routed to specialist queues"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.73:
+    description: "System must support automated notifications to agents when treatment steps require action"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.74:
+    description: "System must allow treatment paths to incorporate direct debit setup as a step"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.75:
+    description: "System must support configurable contact channel preferences within treatment steps"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.76:
+    description: "System must allow treatment path steps to be skipped based on account attributes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.77:
+    description: "System must support configurable treatment cooling-off periods between contact attempts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.78:
+    description: "System must allow treatment path steps to trigger repayment plan creation"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.79:
+    description: "System must support treatment path steps conditional on repayment plan breach"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.80:
+    description: "System must support rules for when accounts with active arrangements should bypass contact steps"
+    moscow: "must-have"
+    status: "awaiting-ruling"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-006"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — RULING-006 cites DW.80 as deceased party flag and workflow; trace-map description is 'System must support rules for when accounts with active arrangements should bypass contact steps'; RULING-006 awaiting-client-sign-off; DO NOT PROCEED gate active (DDE-OQ-07: estate pursuit policy)"]
+    deviation: null
+  DW.81:
+    description: "System must allow treatment path configuration to be exported and imported"
+    moscow: "should-have"
+    status: "awaiting-ruling"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-006"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — RULING-006 cites DW.81 as deceased party estate handling and workflow configuration; trace-map description is 'System must allow treatment path configuration to be exported and imported'; RULING-006 awaiting-client-sign-off; DO NOT PROCEED gate active (DDE-OQ-07: estate pursuit policy)"]
+    deviation: null
+  DW.82:
+    description: "System must support rollback of treatment strategy changes"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.83:
+    description: "System must provide audit log of all treatment strategy configuration changes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.84:
+    description: "System must allow treatment path steps to be assigned estimated durations"
+    moscow: "could-have"
+    status: "awaiting-ruling"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-009", "RULING-012", "RULING-013"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — rulings cite DW.84 as statute-barred debt handling (Limitation Act 1980); trace-map description is 'System must allow treatment path steps to be assigned estimated durations'; all three rulings awaiting-client-sign-off; DO NOT PROCEED gate on RULING-009 (DDE-OQ-11: limitation periods)"]
+    deviation: null
+  DW.85:
+    description: "System must support treatment strategy A/B reporting for performance comparison"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.86:
+    description: "System must support exclusion lists to prevent certain accounts from automated treatment"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.87:
+    description: "System must allow treatment paths to reference legal action steps"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  DW.88:
+    description: "System must support treatment path steps that capture customer consent"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- RPF: Repayment Plan Functionality (37) ---
+  RPF.1:
+    description: "System must support creation of repayment arrangements"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.2:
+    description: "System must allow repayment plan terms to be negotiated and recorded"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.3:
+    description: "System must generate repayment schedules based on agreed terms"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.4:
+    description: "System must support affordability-linked repayment options"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.5:
+    description: "System must support multiple concurrent arrangements per customer"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {}
+    artifacts: {domain_ruling: "RULING-014-repayment-arrangement-concurrency.md", contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["RULING-014 issued; two open questions awaiting DWP sign-off (DDE-OQ-14 concurrent deduction+arrangement; DDE-OQ-15 notification timing); BA may draft ACs for single-account invariant rules but must not finalise dual-channel or breach-renegotiation ACs until sign-off received"]
+    deviation: null
+  RPF.6:
+    description: "System must support direct debit setup and management within arrangements"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.7:
+    description: "System must support arrangement breach detection and notification"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.8:
+    description: "System must support configurable tolerance rules before breach is triggered"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {FNC-PROC-007: {confidence: "proposed"}}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: FNC-PROC-007 ARRANGEMENT_MONITORING_PROCESS process variables grace_period_days and tolerance_percentage cover tolerance-before-breach logic; process not yet implemented"]
+    deviation: null
+  RPF.9:
+    description: "System must allow arrangements to be renegotiated following breach"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.10:
+    description: "System must support re-aging of accounts on sustained compliance"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.11:
+    description: "System must track all payments made against each arrangement"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.12:
+    description: "System must support partial payments and apply them to outstanding balances"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.13:
+    description: "System must support arrangement suspension during breathing space or hardship"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.14:
+    description: "System must allow agents to set up payment holidays within arrangements"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.15:
+    description: "System must recalculate repayment schedules when terms change"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-005"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — RULING-005 cites RPF.15 as breathing-space arrangement interaction (monitoring suspended, not cancelled; no breach trigger during moratorium); trace-map description is 'System must recalculate repayment schedules when terms change'"]
+    deviation: null
+  RPF.16:
+    description: "System must support income and expenditure data capture to inform arrangement terms"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.17:
+    description: "System must support standard financial statement format for I&E capture"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.18:
+    description: "System must support configurable minimum payment thresholds per debt type"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.19:
+    description: "System must provide arrangement summary view for agents and customers"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.20:
+    description: "System must support arrangement history including all versions and changes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.21:
+    description: "System must support cancellation of arrangements with reason codes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.22:
+    description: "System must support automatic arrangement cancellation on write-off"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.23:
+    description: "System must support pro-rata payment allocation across multiple debts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.24:
+    description: "System must support configurable payment allocation priority rules"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.25:
+    description: "System must support overpayment handling and refund processing"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.26:
+    description: "System must allow agents to set arrangement review dates"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.27:
+    description: "System must support flagging arrangements for supervisory review"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.28:
+    description: "System must generate automated reminders for upcoming arrangement payments"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.29:
+    description: "System must support arrangement completion confirmation with final balance clearance"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.30:
+    description: "System must support configurable arrangement expiry rules"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.31:
+    description: "System must track arrangement compliance rate per customer"
+    moscow: "should-have"
+    status: "awaiting-ruling"
+    functionalities: {}
+    artifacts: {domain_ruling: ["RULING-012", "RULING-013"], contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: verify subject-matter correspondence — RULING-012 cites RPF.31 as repayment arrangement creation as clock-reset event; RULING-013 cites RPF.31 as arrangement-triggered clock reset timing; trace-map description is 'System must track arrangement compliance rate per customer'; both rulings awaiting-client-sign-off (DDE-OQ-13)"]
+    deviation: null
+  RPF.32:
+    description: "System must support repayment plan templates for common debt scenarios"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.33:
+    description: "System must support arrangement linked to third-party payment processor"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.34:
+    description: "System must support arrangement status flags visible on account summary"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.35:
+    description: "System must support arrangement linked to income deduction orders"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.36:
+    description: "System must support self-serve arrangement setup by customers via portal"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  RPF.37:
+    description: "System must support arrangement linked to court order payment schedule"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- UAAF: User Access & Admin Functions (26) ---
+  UAAF.1:
+    description: "System must support role-based access control for all user functions"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {}
+    artifacts: {domain_ruling: "RBAC-IMPLEMENTATION-DECISIONS.md", contract_versions: ["ADR-011"], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Operational RBAC guards (hasAuthority) not yet implemented in Spring Security — ADR-011 defines access model; RBAC-IMPLEMENTATION-DECISIONS.md defines full role set; no test suite linked yet"]
+    deviation: null
+  UAAF.2:
+    description: "System must support creation, modification, and deactivation of user accounts"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {FNC-AUTH-001: {confidence: "proposed"}}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: FNC-AUTH-001 Keycloak-backed user lifecycle planned; admin UI and lifecycle API not yet built"]
+    deviation: null
+  UAAF.3:
+    description: "System must support role assignment and removal by administrators"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.4:
+    description: "System must enforce least-privilege access principles"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {}
+    artifacts: {domain_ruling: "RBAC-IMPLEMENTATION-DECISIONS.md", contract_versions: ["ADR-011"], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Least-privilege model defined in RBAC-IMPLEMENTATION-DECISIONS.md and ADR-011 (OPS_MANAGER excluded from Admin UI; FLOWABLE_ADMIN is client-scoped named individual); Spring Security enforcement and Keycloak provisioning not yet implemented"]
+    deviation: null
+  UAAF.5:
+    description: "System must support multi-factor authentication"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.6:
+    description: "System must support SSO integration with DWP identity provider"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.7:
+    description: "System must support session timeout and automatic logout"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.8:
+    description: "System must log all user authentication events"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.9:
+    description: "System must support configurable password policies"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.10:
+    description: "System must support account lockout after configurable failed login attempts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.11:
+    description: "System must support privileged access management for admin functions"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {}
+    artifacts: {domain_ruling: "RBAC-IMPLEMENTATION-DECISIONS.md", contract_versions: ["ADR-011"], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["ADR-011 defines FLOWABLE_ADMIN as named-individual client-scoped role with Keycloak + USER table provisioning requirement; HistoryEventProcessor and FlowableOperationContext not yet built; system_initiated column added in V2__add_system_initiated_to_audit_log.sql"]
+    deviation: null
+  UAAF.12:
+    description: "System must support team-based access restrictions"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {FNC-AUTH-002: {confidence: "proposed"}}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: FNC-AUTH-002 team-based access planned; full permissions matrix (geographic restrictions, specialist profiles) pending governance terms from Dev A (I01/I02)"]
+    deviation: null
+  UAAF.13:
+    description: "System must support geographic or organisational unit access restrictions"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.14:
+    description: "System must support delegation of access for absence cover"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.15:
+    description: "System must support read-only access profiles for auditors and compliance"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {}
+    artifacts: {domain_ruling: "RBAC-IMPLEMENTATION-DECISIONS.md", contract_versions: ["ADR-011"], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["COMPLIANCE role defined as read/oversight in RBAC-IMPLEMENTATION-DECISIONS.md; ADR-011 section 6 mandates compliance audit screen notice for Admin UI OVERRIDE events; read-only UI enforcement not yet implemented"]
+    deviation: null
+  UAAF.16:
+    description: "System must support configurable approval workflows for sensitive operations"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {}
+    artifacts: {domain_ruling: "RULING-003-write-off-regulatory-constraints.md", contract_versions: ["ADR-011", "ADR-004"], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Write-off approval tier thresholds in SYSTEM_CONFIG (RULING-003 DDE-OQ-03 closed); ADR-011 section 1 documents Flowable Admin UI approval workflow access split; write-off DMN and approval BPMN not yet implemented"]
+    deviation: null
+  UAAF.17:
+    description: "System must provide user activity reporting for compliance purposes"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {}
+    artifacts: {domain_ruling: "RBAC-IMPLEMENTATION-DECISIONS.md", contract_versions: ["ADR-011"], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["ADR-011 defines AUDIT_EVENT field mapping (actor_id, system_initiated, event_type=OVERRIDE) and compliance audit screen notice; HistoryEventProcessor not yet built; system_initiated column added in V2__add_system_initiated_to_audit_log.sql; no compliance reporting UI implemented"]
+    deviation: null
+  UAAF.18:
+    description: "System must support bulk user import and provisioning"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.19:
+    description: "System must support user profile management including contact details"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.20:
+    description: "System must support notification preferences per user"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.21:
+    description: "System must support access review and recertification processes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.22:
+    description: "System must support emergency access break-glass procedures with full audit"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.23:
+    description: "System must support configurable data visibility rules per role"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.24:
+    description: "System must support service account management for system integrations"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.25:
+    description: "System must support API key management for external integrations"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UAAF.26:
+    description: "System must support configurable write-off authority limits per role"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- MIR: MI & Reporting (2) ---
+  MIR.1:
+    description: "System must provide management information reporting on debt recovery performance"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MIR.2:
+    description: "System must support export of MI data in standard formats (CSV, Excel)"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- A: Analytics & Segmentation (2) ---
+  A.1:
+    description: "System must support customer segmentation based on configurable attributes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  A.2:
+    description: "System must support scoring models for debt recovery likelihood"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- UI: User Interface Screens (30) ---
+  UI.1:
+    description: "System must provide a dashboard view for agents showing their work queue"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.2:
+    description: "System must provide a customer summary screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.3:
+    description: "System must provide an account detail screen with balance and transaction history"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.4:
+    description: "System must provide a repayment plan creation and management screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.5:
+    description: "System must provide a contact history and communications timeline screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.6:
+    description: "System must provide a notes and case actions screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.7:
+    description: "System must provide a search screen for customers and accounts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.8:
+    description: "System must provide a supervisor overview screen for team workload"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.9:
+    description: "System must provide a treatment path configuration screen for authorised users"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.10:
+    description: "System must provide an income and expenditure capture screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.11:
+    description: "System must provide a vulnerability flags management screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.12:
+    description: "System must provide a payment posting screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.13:
+    description: "System must provide a write-off approval screen with multi-step workflow"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.14:
+    description: "System must provide a third-party placement management screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.15:
+    description: "System must provide a reporting and MI dashboard screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.16:
+    description: "System must provide a user and role administration screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.17:
+    description: "System must provide an audit log viewer screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.18:
+    description: "System must provide a correspondence management screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.19:
+    description: "System must provide a bureau data and scorecard view screen"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.20:
+    description: "System must provide a document upload and management screen"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.21:
+    description: "System must provide a customer contact preferences management screen"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.22:
+    description: "System must support GOV.UK Design System components throughout"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.23:
+    description: "System must meet WCAG 2.1 AA accessibility standards"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.24:
+    description: "System must support responsive layout for different screen sizes"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.25:
+    description: "System must provide inline validation and error messages on all forms"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.26:
+    description: "System must support keyboard navigation throughout the application"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.27:
+    description: "System must support screen reader compatibility"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.28:
+    description: "System must display loading states and progress indicators for async operations"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.29:
+    description: "System must support browser back/forward navigation without data loss"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  UI.30:
+    description: "System must support print-friendly views for key screens"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- WAM: Work Allocation & Monitoring (28) ---
+  WAM.1:
+    description: "System must support configurable work queues for debt accounts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.2:
+    description: "System must support automated assignment of accounts to agents based on rules"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.3:
+    description: "System must support manual reassignment of accounts between agents"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.4:
+    description: "System must support priority-based queue ordering"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.5:
+    description: "System must support specialist queues for specific debt types or vulnerabilities"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.6:
+    description: "System must support supervisor override of queue assignments"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.7:
+    description: "System must provide real-time queue monitoring dashboard for supervisors"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.8:
+    description: "System must track agent workload and capacity metrics"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.9:
+    description: "System must support configurable SLAs per queue and debt type"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.10:
+    description: "System must alert supervisors of SLA breaches and approaching thresholds"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.11:
+    description: "System must support bulk reassignment of work from one agent to another"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.12:
+    description: "System must support absence management and auto-redistribution of work"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.13:
+    description: "System must support exception queues for accounts requiring specialist handling"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.14:
+    description: "System must support configurable queue capacity limits"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.15:
+    description: "System must track time accounts spend at each queue stage"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.16:
+    description: "System must support reporting on queue throughput and agent productivity"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.17:
+    description: "System must support configurable work allocation rules per team"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.18:
+    description: "System must support skill-based routing to match accounts to appropriately skilled agents"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.19:
+    description: "System must support locking of accounts to prevent concurrent agent access"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.20:
+    description: "System must support configurable lock timeout to release stale locks"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.21:
+    description: "System must support team hierarchy in work allocation rules"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.22:
+    description: "System must support configurable next-best-action suggestions for agents"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.23:
+    description: "System must allow supervisors to monitor agent actions in real time"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.24:
+    description: "System must support configurable work allocation scheduling (e.g. time of day)"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.25:
+    description: "System must support agent performance targets and tracking"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.26:
+    description: "System must support configurable work item age thresholds to trigger escalation"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.27:
+    description: "System must support audit trail for all work allocation events"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  WAM.28:
+    description: "System must support configurable worklist views per agent role"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- AAD: Agent Actions & Dispositions (27) ---
+  AAD.1:
+    description: "System must support recording of all agent actions against an account"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.2:
+    description: "System must support configurable disposition codes for agent call outcomes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.3:
+    description: "System must support free-text notes against any account action"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.4:
+    description: "System must support promise-to-pay recording and tracking"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.5:
+    description: "System must support recording of contact attempts including no-contact outcomes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.6:
+    description: "System must support follow-up task creation from agent actions"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.7:
+    description: "System must provide a full interaction timeline view per account"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.8:
+    description: "System must support flagging accounts for callbacks with date and time"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.9:
+    description: "System must support recording disputes raised by customers"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.10:
+    description: "System must support dispute workflow with status tracking"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.11:
+    description: "System must support vulnerability flag recording by agents"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.12:
+    description: "System must support deceased notification recording and account hold"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.13:
+    description: "System must support third-party representative authority recording"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.14:
+    description: "System must support recording of insolvency notifications with effective date"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.15:
+    description: "System must support breathing space flag application and removal"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.16:
+    description: "System must support escalation requests from agents to supervisors"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.17:
+    description: "System must support recording of financial hardship declarations"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.18:
+    description: "System must support configurable follow-up reminder scheduling"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.19:
+    description: "System must support recording of legal correspondence sent and received"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.20:
+    description: "System must support recording of court hearing dates and outcomes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.21:
+    description: "System must support recording of enforcement action steps"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.22:
+    description: "System must allow agents to mark accounts as requiring specialist review"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.23:
+    description: "System must support configurable action templates for common account dispositions"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.24:
+    description: "System must support batch disposition of multiple accounts"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.25:
+    description: "System must track disposition rate and outcome metrics per agent"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.26:
+    description: "System must support supervisor annotation on agent actions"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  AAD.27:
+    description: "System must support immutable audit record for all agent dispositions"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- IEC: Income & Expenditure Capture (11) ---
+  IEC.1:
+    description: "System must support capture of customer income details"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {FNC-RPF-001: {confidence: "proposed"}}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: FNC-RPF-001 I&E capture covers income details; frontend form and backend entity not yet built"]
+    deviation: null
+  IEC.2:
+    description: "System must support capture of customer expenditure details"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  IEC.3:
+    description: "System must support standard financial statement format for I&E"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  IEC.4:
+    description: "System must calculate disposable income from I&E data"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  IEC.5:
+    description: "System must use I&E data to inform repayment plan affordability"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {FNC-RPF-001: {confidence: "proposed"}, FNC-CUST-004: {confidence: "proposed"}}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: FNC-RPF-001 captures I&E; FNC-CUST-004 affordability_assessment.dmn consumes it to produce recommended terms; both planned, neither yet implemented"]
+    deviation: null
+  IEC.6:
+    description: "System must support versioning of I&E assessments with effective dates"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  IEC.7:
+    description: "System must support I&E review scheduling and prompts"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  IEC.8:
+    description: "System must support integration with third-party I&E tools"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  IEC.9:
+    description: "System must support self-serve I&E capture by customers"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  IEC.10:
+    description: "System must retain I&E history per customer with change audit"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  IEC.11:
+    description: "System must support I&E data expiry and re-assessment triggers"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- BSF: Bureau & Scorecard Feeds (15) ---
+  BSF.1:
+    description: "System must support integration with credit reference agencies"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.2:
+    description: "System must support ingestion of bureau data feeds"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.3:
+    description: "System must support storage and versioning of bureau data per customer"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.4:
+    description: "System must support bureau data refresh on configurable schedules"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.5:
+    description: "System must support scorecard model execution against bureau data"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.6:
+    description: "System must support configurable scorecard models without code changes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.7:
+    description: "System must store scorecard results with effective dates"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.8:
+    description: "System must use scorecard scores to inform treatment strategy routing"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.9:
+    description: "System must support champion/challenger scorecard testing"
+    moscow: "should-have"
+    status: "designed"
+    functionalities: {strategy: ["ExperimentService", "ExperimentRouter"], analytics: ["ExperimentOutcomeAggregator"]}
+    artifacts: {domain_ruling: null, contract_versions: ["ADR-010"], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Scorecard DMN experiments covered by Phase 1 framework; analytics aggregation module not yet built"]
+    deviation: null
+  BSF.10:
+    description: "System must support multiple bureau provider integrations"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.11:
+    description: "System must support tracing of bureau data usage in decisioning"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.12:
+    description: "System must support bureau data consent and suppression management"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.13:
+    description: "System must support alerting when bureau data is stale or unavailable"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.14:
+    description: "System must support bureau data quality reporting"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  BSF.15:
+    description: "System must support batch bureau data refresh for large portfolios"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- CC: Contact Channels (35) ---
+  CC.1:
+    description: "System must support outbound letter generation and tracking"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.2:
+    description: "System must support outbound SMS messaging"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.3:
+    description: "System must support outbound email communications"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.4:
+    description: "System must support inbound contact recording across all channels"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.5:
+    description: "System must support configurable contact suppression rules"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {FNC-PROC-005: {confidence: "proposed"}}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: FNC-PROC-005 suppression_rules.dmn covers configurable suppression; DMN table structure defined in process-catalog-and-dmn-baseline.md §5.5 but not yet implemented"]
+    deviation: null
+  CC.6:
+    description: "System must support customer channel preference recording and enforcement"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.7:
+    description: "System must support configurable contact frequency limits"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.8:
+    description: "System must support configurable contact time-of-day restrictions"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.9:
+    description: "System must support opt-out management per channel"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.10:
+    description: "System must provide full contact history timeline per customer"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.11:
+    description: "System must support letter template management with version control"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.12:
+    description: "System must support dynamic data merge into letter and email templates"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.13:
+    description: "System must support print/post fulfilment integration for letters"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.14:
+    description: "System must track delivery status of outbound communications"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.15:
+    description: "System must support automated contact triggers from treatment path steps"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.16:
+    description: "System must support manual contact initiation by agents"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.17:
+    description: "System must support inbound telephony event recording"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.18:
+    description: "System must support integration with telephony/CTI systems"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.19:
+    description: "System must support digital self-serve communication channel"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.20:
+    description: "System must support bulk communication campaigns"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.21:
+    description: "System must support contact suppression during breathing space periods"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.22:
+    description: "System must support contact suppression for deceased accounts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.23:
+    description: "System must support third-party representative contact routing"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.24:
+    description: "System must support communication language preference management"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.25:
+    description: "System must support accessibility-format communication requests"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.26:
+    description: "System must support configurable retry logic for failed communications"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.27:
+    description: "System must support communication event webhooks or callbacks"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.28:
+    description: "System must support email bounce and undeliverable handling"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.29:
+    description: "System must support SMS delivery receipt tracking"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.30:
+    description: "System must support communication audit trail for compliance"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.31:
+    description: "System must support configurable communication approval workflows"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.32:
+    description: "System must support communication effectiveness reporting"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.33:
+    description: "System must support multi-language template management"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.34:
+    description: "System must support real-time communication status visibility for agents"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CC.35:
+    description: "System must support configurable contact cooling-off periods between attempts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- I3PS: Interfaces to 3rd Party Systems (15) ---
+  I3PS.1:
+    description: "System must support API integration with DWP Place host system"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.2:
+    description: "System must support batch file exchange with DWP legacy systems"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.3:
+    description: "System must support integration with payment gateway"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.4:
+    description: "System must support integration with print and post fulfilment provider"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.5:
+    description: "System must support integration with DCA (Debt Collection Agency) systems"
+    moscow: "must-have"
+    status: "partial"
+    functionalities: {FNC-INTG-001: {confidence: "proposed"}}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["I11: FNC-INTG-001 DCA anti-corruption layer planned in MOD-BE-INTEGRATION and MOD-BE-THIRDPARTYMGMT; not yet scaffolded"]
+    deviation: null
+  I3PS.6:
+    description: "System must support integration with credit reference bureau APIs"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.7:
+    description: "System must support integration with SMS gateway provider"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.8:
+    description: "System must support integration with email delivery service"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.9:
+    description: "System must support secure SFTP file transfer for batch integrations"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.10:
+    description: "System must support integration error handling with retry and alerting"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.11:
+    description: "System must support integration monitoring and reconciliation reporting"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.12:
+    description: "System must support configurable integration adapters for new external systems"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.13:
+    description: "System must support OAuth 2.0 authentication for external API calls"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.14:
+    description: "System must support anti-corruption layer to isolate external system changes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  I3PS.15:
+    description: "System must support integration with DWP identity and authentication services"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- SoR: System of Record (21) ---
+  SoR.1:
+    description: "System must be the system of record for all debt account data"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.2:
+    description: "System must maintain data integrity through transactional consistency"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.3:
+    description: "System must support full audit trail for all data changes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.4:
+    description: "System must support data retention policies per data category"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.5:
+    description: "System must support data archival and purge processes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.6:
+    description: "System must support GDPR right-to-erasure with audit evidence"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.7:
+    description: "System must support data subject access request (DSAR) fulfilment"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.8:
+    description: "System must support data classification and sensitivity labelling"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.9:
+    description: "System must support encryption at rest for all sensitive data"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.10:
+    description: "System must support encryption in transit for all data exchanges"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.11:
+    description: "System must support database backup and recovery procedures"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.12:
+    description: "System must support point-in-time recovery of data"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.13:
+    description: "System must support database schema versioning via Flyway migrations"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.14:
+    description: "System must support financial transaction immutability"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.15:
+    description: "System must support reconciliation between DCMS and host system balances"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.16:
+    description: "System must support reconciliation reporting with discrepancy alerting"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.17:
+    description: "System must support configurable data quality rules and validation"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.18:
+    description: "System must support data lineage tracking for key data fields"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.19:
+    description: "System must support data masking for non-production environments"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.20:
+    description: "System must support configurable data access logging for sensitive fields"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SoR.21:
+    description: "System must support data stewardship roles for data quality management"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- CP: Change Processes (11) ---
+  CP.1:
+    description: "System must support a documented change management process"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CP.2:
+    description: "System must support change impact assessment before deployment"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CP.3:
+    description: "System must support automated CI/CD pipeline for all deployments"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CP.4:
+    description: "System must support rollback capability for all deployments"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CP.5:
+    description: "System must support environment parity between local and dev"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CP.6:
+    description: "System must support release evidence pack generation per deployment"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CP.7:
+    description: "System must support automated test gate before production promotion"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CP.8:
+    description: "System must support traceability from requirement to release evidence"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CP.9:
+    description: "System must support configuration management with version control"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CP.10:
+    description: "System must support infrastructure-as-code for all environments"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  CP.11:
+    description: "System must support change freeze periods with governance controls"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- SD: System Development & Roadmap (7) ---
+  SD.1:
+    description: "System must support phased delivery roadmap with clear milestones"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SD.2:
+    description: "System must support documented architecture decision records"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SD.3:
+    description: "System must support up-to-date technical documentation"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SD.4:
+    description: "System must support sprint-based delivery cadence with release planning"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SD.5:
+    description: "System must support dependency tracking across delivery workstreams"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SD.6:
+    description: "System must support risk register and issue log governance"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  SD.7:
+    description: "System must support standards governance and compliance review cadence"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- 3PM: 3rd Party Management (18) ---
+  3PM.1:
+    description: "System must support DCA placement workflow with configurable criteria"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.2:
+    description: "System must support DCA recall workflow and account reinstatement"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.3:
+    description: "System must support DCA performance monitoring and reporting"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.4:
+    description: "System must support DCA commission and billing reconciliation"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.5:
+    description: "System must support multiple concurrent DCA partners"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.6:
+    description: "System must support DCA partner data feed and file exchange"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.7:
+    description: "System must support DCA partner SLA monitoring"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.8:
+    description: "System must support DCA partner account status synchronisation"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.9:
+    description: "System must support audit trail for all DCA placement and recall events"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.10:
+    description: "System must support DCA payment posting and reconciliation"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.11:
+    description: "System must support configurable DCA placement rules per debt type"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.12:
+    description: "System must support DCA partner management UI for authorised users"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.13:
+    description: "System must support DCA exclusion lists to prevent placement of certain accounts"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.14:
+    description: "System must support DCA contract terms storage and reference"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.15:
+    description: "System must support bulk DCA placement processing"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.16:
+    description: "System must support DCA placement approval workflow"
+    moscow: "should-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.17:
+    description: "System must support DCA partner onboarding and offboarding process"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  3PM.18:
+    description: "System must support DCA performance benchmarking and comparison"
+    moscow: "could-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  # --- MR: Migration Requirements (15) ---
+  MR1:
+    description: "System must support migration of debt account data from legacy systems"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR2:
+    description: "System must support migration of customer data from legacy systems"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR3:
+    description: "System must support migration of payment history from legacy systems"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR4:
+    description: "System must support migration of arrangement history from legacy systems"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR5:
+    description: "System must support migration of contact history from legacy systems"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR6:
+    description: "System must support data cleansing and transformation during migration"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR7:
+    description: "System must support migration data validation and reconciliation"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR8:
+    description: "System must support parallel running during cutover period"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR9:
+    description: "System must support migration rollback capability"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR10:
+    description: "System must support incremental migration for large data volumes"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR11:
+    description: "System must support migration audit trail and evidence pack"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR12:
+    description: "System must support migration runbook documentation"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR13:
+    description: "System must support user acceptance testing of migrated data"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR14:
+    description: "System must support migration sign-off and approval process"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+  MR15:
+    description: "System must support post-migration reconciliation and issue resolution"
+    moscow: "must-have"
+    status: "gap"
+    functionalities: {}
+    artifacts: {domain_ruling: null, contract_versions: [], test_suite_ids: [], evidence_pack_id: null}
+    gaps: ["Not yet traced — bootstrap seed"]
+    deviation: null
+# Example:
+# RPF.4:
+#   description: "Arrangement creation — system must generate repayment schedule on submission"
+#   class: "B"
+#   functionalities:
+#     FNC-RPF-001:
+#       relationship: "satisfies"       # satisfies | partially-satisfies | constrains | enables
+#       confidence: "proposed"          # proposed | confirmed
+#   artifacts:
+#     domain_ruling: null
+#     contract_versions: []
+#     test_suite_ids: []
+#     evidence_pack_id: null
+#   status: "partial"
+#   gaps:
+#     - "No test suite linked yet"
+#   deviation: null
+
+# ---------------------------------------------------------------------------
+# RELEASE VIEWS
+# Optional release-level coverage snapshots for governance and signoff.
+# ---------------------------------------------------------------------------
+release_views: []
+# Example:
+# - release_id: "REL-2026.05"
+#   requirement_ids: ["RPF.4", "RPF.7", "UI.12"]
+#   functionality_ids: ["FNC-RPF-001", "FNC-FE-002"]
+#   status_summary:
+#     complete: 2
+#     partial: 1
+#     gap: 0

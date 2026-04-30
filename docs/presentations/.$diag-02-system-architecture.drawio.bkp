@@ -1,0 +1,387 @@
+<mxfile host="app.diagrams.net" modified="2026-04-28" agent="Claude" version="24.0.0" type="device">
+  <diagram name="DIAG-02 System Architecture" id="diag-02">
+    <mxGraphModel dx="1600" dy="900" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="932" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- TITLE -->
+        <mxCell id="title" value="DCMS — System Architecture  (C4 Container Level)"
+          style="text;html=1;fontSize=20;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A1A1A;"
+          vertex="1" parent="1">
+          <mxGeometry x="400" y="18" width="860" height="34" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════ USERS ═══════════════════ -->
+        <mxCell id="user-staff" value="&lt;b&gt;DWP Staff&lt;/b&gt;&lt;br/&gt;Agents / Supervisors&lt;br/&gt;Business Admins"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=12;arcSize=8;"
+          vertex="1" parent="1">
+          <mxGeometry x="30" y="110" width="165" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="user-customer" value="&lt;b&gt;DWP Customer&lt;/b&gt;&lt;br/&gt;Via self-service&lt;br/&gt;portal (future)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=12;arcSize=8;"
+          vertex="1" parent="1">
+          <mxGeometry x="30" y="340" width="165" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════ DCMS BOUNDARY ═══════════════════ -->
+        <mxCell id="dcms-boundary" value="DCMS — Debt Collection Management System"
+          style="swimlane;startSize=32;fillColor=#EBF3FB;strokeColor=#1565C0;strokeWidth=3;fontColor=#0D47A1;fontSize=13;fontStyle=1;arcSize=3;align=left;spacingLeft=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="215" y="62" width="1010" height="840" as="geometry" />
+        </mxCell>
+
+        <!-- Frontend -->
+        <mxCell id="frontend" value="&lt;b&gt;Frontend&lt;/b&gt;&lt;br/&gt;React + TypeScript&lt;br/&gt;Nginx 1.27-alpine&lt;br/&gt;GOV.UK Design System"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1565C0;strokeColor=#0D47A1;fontColor=#FFFFFF;fontSize=12;arcSize=8;"
+          vertex="1" parent="dcms-boundary">
+          <mxGeometry x="18" y="52" width="185" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Database -->
+        <mxCell id="database" value="&lt;b&gt;Database&lt;/b&gt;&lt;br/&gt;PostgreSQL 16&lt;br/&gt;public schema (app)&lt;br/&gt;flowable schema (engine)"
+          style="shape=cylinder3;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=12;"
+          vertex="1" parent="dcms-boundary">
+          <mxGeometry x="18" y="310" width="185" height="110" as="geometry" />
+        </mxCell>
+
+        <!-- Identity Provider -->
+        <mxCell id="keycloak" value="&lt;b&gt;Identity Provider&lt;/b&gt;&lt;br/&gt;Keycloak 24&lt;br/&gt;OAuth 2.0 + OIDC&lt;br/&gt;RBAC via JWT claims"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=12;arcSize=8;"
+          vertex="1" parent="dcms-boundary">
+          <mxGeometry x="18" y="570" width="185" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════ MONOLITH BOX ═══════════════════ -->
+        <mxCell id="monolith" value="Backend Monolith — Spring Boot 3.4 / Java 21"
+          style="swimlane;startSize=36;fillColor=#EEF4FF;strokeColor=#1565C0;strokeWidth=2;fontColor=#0D47A1;fontSize=14;fontStyle=1;arcSize=3;"
+          vertex="1" parent="dcms-boundary">
+          <mxGeometry x="230" y="48" width="762" height="775" as="geometry" />
+        </mxCell>
+
+        <!-- ── Domain Packages header ── -->
+        <mxCell id="dom-hdr" value="Domain Packages"
+          style="text;html=1;fontSize=12;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A237E;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="10" y="12" width="742" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- Domain package boxes — 4 columns × 3 rows + 1 full-width -->
+        <!-- Row 1: customer, account, strategy, workallocation -->
+        <mxCell id="pkg-customer" value="&lt;b&gt;customer&lt;/b&gt;&lt;br/&gt;Identity · Vulnerability&lt;br/&gt;Joint liability&lt;br/&gt;3rd-party authority"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="10" y="44" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pkg-account" value="&lt;b&gt;account&lt;/b&gt;&lt;br/&gt;Ledger · Regulatory state&lt;br/&gt;Write-off&lt;br/&gt;Breathing space"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="192" y="44" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pkg-strategy" value="&lt;b&gt;strategy&lt;/b&gt;&lt;br/&gt;Decisioning · Segmentation&lt;br/&gt;Treatment routing&lt;br/&gt;Champion/challenger"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="374" y="44" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pkg-workalloc" value="&lt;b&gt;workallocation&lt;/b&gt;&lt;br/&gt;Queues · Worklists&lt;br/&gt;Agent assignment&lt;br/&gt;Supervisor override"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="556" y="44" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <!-- Row 2: repaymentplan, payment, communications, integration -->
+        <mxCell id="pkg-repayment" value="&lt;b&gt;repaymentplan&lt;/b&gt;&lt;br/&gt;Arrangements · I&amp;amp;E&lt;br/&gt;Schedule mgmt&lt;br/&gt;Breach handling"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="10" y="138" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pkg-payment" value="&lt;b&gt;payment&lt;/b&gt;&lt;br/&gt;Payment posting&lt;br/&gt;Allocation logic&lt;br/&gt;Reconciliation"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="192" y="138" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pkg-comms" value="&lt;b&gt;communications&lt;/b&gt;&lt;br/&gt;Letters · SMS · Email&lt;br/&gt;Suppression&lt;br/&gt;Contact history"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="374" y="138" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pkg-integration" value="&lt;b&gt;integration&lt;/b&gt;&lt;br/&gt;Anti-corruption layer&lt;br/&gt;Inbound/Outbound APIs&lt;br/&gt;Batch file transfer"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="556" y="138" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <!-- Row 3: audit, analytics, reporting, user -->
+        <mxCell id="pkg-audit" value="&lt;b&gt;audit&lt;/b&gt;&lt;br/&gt;Immutable event log&lt;br/&gt;Compliance evidence&lt;br/&gt;Trace records"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="10" y="232" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pkg-analytics" value="&lt;b&gt;analytics&lt;/b&gt;&lt;br/&gt;Scoring models&lt;br/&gt;Segmentation&lt;br/&gt;DMN table evaluation"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="192" y="232" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pkg-reporting" value="&lt;b&gt;reporting&lt;/b&gt;&lt;br/&gt;MI exports&lt;br/&gt;KPI read models"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="374" y="232" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pkg-user" value="&lt;b&gt;user&lt;/b&gt;&lt;br/&gt;RBAC&lt;br/&gt;User management&lt;br/&gt;Keycloak integration"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=10;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="556" y="232" width="172" height="82" as="geometry" />
+        </mxCell>
+
+        <!-- Row 4: thirdpartymanagement — full width -->
+        <mxCell id="pkg-3pm" value="&lt;b&gt;thirdpartymanagement&lt;/b&gt;&lt;br/&gt;DCA Placement · Recall · Commission / Billing · Third-party partner interfaces"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=5;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="10" y="326" width="718" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- ── Process isolation section ── -->
+        <mxCell id="proc-hdr" value="Process Engine Isolation  (ADR-003)"
+          style="text;html=1;fontSize=12;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#4A148C;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="10" y="392" width="742" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- shared/process/port -->
+        <mxCell id="pkg-port" value="&lt;b&gt;shared / process / port&lt;/b&gt;&lt;br/&gt;ProcessEventPort · ProcessStartPort · DelegateCommandBus&lt;br/&gt;ZERO Flowable imports — domain modules interact with the process engine only through these interfaces"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=10;arcSize=5;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="10" y="420" width="718" height="62" as="geometry" />
+        </mxCell>
+
+        <!-- infrastructure/process -->
+        <mxCell id="pkg-infra" value="&lt;b&gt;infrastructure / process&lt;/b&gt;&lt;br/&gt;Flowable engine config · BPMN/DMN model resources · JavaDelegate implementations&lt;br/&gt;ALL Flowable imports confined here — no other package may import Flowable types"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=10;arcSize=5;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="10" y="498" width="718" height="62" as="geometry" />
+        </mxCell>
+
+        <!-- Flowable Engine -->
+        <mxCell id="flowable" value="&lt;b&gt;Flowable BPMN/DMN Engine&lt;/b&gt;&lt;br/&gt;Embedded in monolith JVM · Manages own transaction on flowable schema"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B71C1C;strokeColor=#7F0000;fontColor=#FFFFFF;fontSize=10;arcSize=5;"
+          vertex="1" parent="monolith">
+          <mxGeometry x="155" y="578" width="432" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- ── Internal arrows (domain → port → infra → flowable) ── -->
+        <mxCell id="ia-dom-port" value="domain calls port interfaces only"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6A1B9A;strokeWidth=2;fontSize=9;fontStyle=2;fontColor=#4A148C;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;"
+          edge="1" source="pkg-3pm" target="pkg-port" parent="monolith">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ia-port-infra" value="implemented by"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#AD1457;strokeWidth=2;fontSize=9;fontStyle=2;fontColor=#880E4F;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;"
+          edge="1" source="pkg-port" target="pkg-infra" parent="monolith">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ia-infra-flow" value="RuntimeService / TaskService"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#B71C1C;strokeWidth=2;fontSize=9;fontStyle=2;fontColor=#7F0000;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;"
+          edge="1" source="pkg-infra" target="flowable" parent="monolith">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════ EXTERNAL SYSTEMS ═══════════════════ -->
+        <mxCell id="ext-boundary" value="External Systems"
+          style="swimlane;startSize=32;fillColor=#FFF8F0;strokeColor=#5D4037;strokeWidth=3;fontColor=#4E342E;fontSize=13;fontStyle=1;arcSize=3;align=left;spacingLeft=10;"
+          vertex="1" parent="1">
+          <mxGeometry x="1245" y="62" width="375" height="840" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dwpplace" value="&lt;b&gt;DWP Place / DM6&lt;/b&gt;&lt;br/&gt;Debt referral source system"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5D4037;strokeColor=#4E342E;fontColor=#FFFFFF;fontSize=12;arcSize=8;"
+          vertex="1" parent="ext-boundary">
+          <mxGeometry x="20" y="52" width="335" height="72" as="geometry" />
+        </mxCell>
+
+        <mxCell id="portal" value="&lt;b&gt;DWP Self-Service Portal&lt;/b&gt;&lt;br/&gt;Customer portal (inbound API only)"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5D4037;strokeColor=#4E342E;fontColor=#FFFFFF;fontSize=12;arcSize=8;"
+          vertex="1" parent="ext-boundary">
+          <mxGeometry x="20" y="210" width="335" height="72" as="geometry" />
+        </mxCell>
+
+        <mxCell id="gateway" value="&lt;b&gt;Payment Gateway&lt;/b&gt;&lt;br/&gt;Direct debit &amp; card payment processing"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5D4037;strokeColor=#4E342E;fontColor=#FFFFFF;fontSize=12;arcSize=8;"
+          vertex="1" parent="ext-boundary">
+          <mxGeometry x="20" y="368" width="335" height="72" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bureau" value="&lt;b&gt;Credit Reference Agency&lt;/b&gt;&lt;br/&gt;Bureau scorecard and CRA feeds"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5D4037;strokeColor=#4E342E;fontColor=#FFFFFF;fontSize=12;arcSize=8;"
+          vertex="1" parent="ext-boundary">
+          <mxGeometry x="20" y="526" width="335" height="72" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dca" value="&lt;b&gt;Debt Collection Agents (DCA)&lt;/b&gt;&lt;br/&gt;DCA placement, recall &amp; reconciliation"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5D4037;strokeColor=#4E342E;fontColor=#FFFFFF;fontSize=12;arcSize=8;"
+          vertex="1" parent="ext-boundary">
+          <mxGeometry x="20" y="684" width="335" height="72" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════ CONNECTORS ═══════════════════ -->
+
+        <!-- Staff → Frontend -->
+        <mxCell id="e-staff-fe" value="HTTPS"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#263238;strokeWidth=2;fontSize=10;fontStyle=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;endArrow=block;endFill=1;"
+          edge="1" source="user-staff" target="frontend" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Customer → Monolith (future, dashed) -->
+        <mxCell id="e-customer-be" value="future"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#78909C;strokeWidth=2;dashed=1;fontSize=10;fontStyle=2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;endArrow=block;endFill=1;"
+          edge="1" source="user-customer" target="monolith" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="210" y="380" />
+              <mxPoint x="210" y="500" />
+              <mxPoint x="445" y="500" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Frontend ↔ Monolith -->
+        <mxCell id="e-fe-be" value="HTTPS / REST JSON"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#263238;strokeWidth=2;fontSize=10;fontStyle=2;endArrow=block;startArrow=block;endFill=1;startFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.3;"
+          edge="1" source="frontend" target="monolith" parent="dcms-boundary">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Frontend → Keycloak (OIDC) -->
+        <mxCell id="e-fe-kc" value="OIDC login"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2E7D32;strokeWidth=2;fontSize=10;fontStyle=2;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;"
+          edge="1" source="frontend" target="keycloak" parent="dcms-boundary">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Monolith → Keycloak (validate JWT) -->
+        <mxCell id="e-be-kc" value="validate JWT (JWKS)"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2E7D32;strokeWidth=2;fontSize=10;fontStyle=2;exitX=0;exitY=0.85;entryX=1;entryY=0.5;endArrow=block;endFill=1;"
+          edge="1" source="monolith" target="keycloak" parent="dcms-boundary">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Monolith ↔ Database -->
+        <mxCell id="e-be-db" value="JDBC / JPA"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2E7D32;strokeWidth=2;fontSize=10;fontStyle=2;endArrow=block;startArrow=block;endFill=1;startFill=1;exitX=0;exitY=0.5;entryX=1;entryY=0.5;"
+          edge="1" source="monolith" target="database" parent="dcms-boundary">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- DWP Place → Monolith -->
+        <mxCell id="e-dwp-be" value="Debt referral ingest — HTTPS/REST"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#263238;strokeWidth=2;fontSize=10;fontStyle=2;exitX=0;exitY=0.5;entryX=1;entryY=0.2;endArrow=block;endFill=1;"
+          edge="1" source="dwpplace" target="monolith" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Portal → Monolith -->
+        <mxCell id="e-portal-be" value="I&amp;E / payments / messages — HTTPS/REST"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#263238;strokeWidth=2;fontSize=10;fontStyle=2;exitX=0;exitY=0.5;entryX=1;entryY=0.4;endArrow=block;endFill=1;"
+          edge="1" source="portal" target="monolith" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Monolith ↔ Payment Gateway -->
+        <mxCell id="e-be-gw" value="Payment instructions — HTTPS/REST"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#263238;strokeWidth=2;fontSize=10;fontStyle=2;endArrow=block;startArrow=block;endFill=1;startFill=1;exitX=1;exitY=0.55;entryX=0;entryY=0.5;"
+          edge="1" source="monolith" target="gateway" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Monolith → Bureau -->
+        <mxCell id="e-be-bureau" value="Pull scorecard data — HTTPS/REST"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#263238;strokeWidth=2;fontSize=10;fontStyle=2;exitX=1;exitY=0.7;entryX=0;entryY=0.5;endArrow=block;endFill=1;"
+          edge="1" source="monolith" target="bureau" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Monolith ↔ DCA -->
+        <mxCell id="e-be-dca" value="Placement &amp; recall — REST or batch"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#263238;strokeWidth=2;fontSize=10;fontStyle=2;endArrow=block;startArrow=block;endFill=1;startFill=1;exitX=1;exitY=0.88;entryX=0;entryY=0.5;"
+          edge="1" source="monolith" target="dca" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════ LEGEND ═══════════════════ -->
+        <mxCell id="legend-bg" value=""
+          style="rounded=1;fillColor=#F5F5F5;strokeColor=#BDBDBD;strokeWidth=1;arcSize=5;"
+          vertex="1" parent="1">
+          <mxGeometry x="30" y="490" width="165" height="198" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend-title" value="Legend"
+          style="text;html=1;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;fontColor=#1A1A1A;"
+          vertex="1" parent="1">
+          <mxGeometry x="42" y="498" width="60" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-svc" value="Runtime service"
+          style="rounded=1;fillColor=#1565C0;strokeColor=#0D47A1;fontColor=#FFFFFF;fontSize=10;arcSize=20;"
+          vertex="1" parent="1">
+          <mxGeometry x="42" y="524" width="140" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-inf" value="Infrastructure"
+          style="rounded=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=10;arcSize=20;"
+          vertex="1" parent="1">
+          <mxGeometry x="42" y="554" width="140" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-dom" value="Domain package"
+          style="rounded=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=20;"
+          vertex="1" parent="1">
+          <mxGeometry x="42" y="584" width="140" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-prt" value="Port interface"
+          style="rounded=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=10;arcSize=20;"
+          vertex="1" parent="1">
+          <mxGeometry x="42" y="614" width="140" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-prc" value="Process infra"
+          style="rounded=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=10;arcSize=20;"
+          vertex="1" parent="1">
+          <mxGeometry x="42" y="644" width="140" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-ext" value="External system"
+          style="rounded=1;fillColor=#5D4037;strokeColor=#4E342E;fontColor=#FFFFFF;fontSize=10;arcSize=20;"
+          vertex="1" parent="1">
+          <mxGeometry x="42" y="644" width="140" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-usr" value="User / actor"
+          style="rounded=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=10;arcSize=20;"
+          vertex="1" parent="1">
+          <mxGeometry x="42" y="674" width="140" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- FOOTER -->
+        <mxCell id="footer" value="Key constraints:  ① One Flowable process instance per DebtAccount  ② App DB writes always @Transactional — Flowable calls always outside transaction boundary (ADR-003)  ③ No domain module imports Flowable directly"
+          style="text;html=1;fontSize=10;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#546E7A;"
+          vertex="1" parent="1">
+          <mxGeometry x="215" y="920" width="1010" height="24" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

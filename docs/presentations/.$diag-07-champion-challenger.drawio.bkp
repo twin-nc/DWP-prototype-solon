@@ -1,0 +1,208 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram name="DIAG-07 Champion Challenger" id="diag-07">
+    <mxGraphModel dx="1868" dy="945" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="920" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title and subtitle -->
+        <mxCell id="title" parent="1" style="text;html=1;fontSize=22;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A1A1A;" value="DIAG-07 — Champion/Challenger: Parallel Strategy Testing" vertex="1">
+          <mxGeometry x="40" y="18" width="1574" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;fontSize=12;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="Two DMN versions run simultaneously; every non-vulnerable account is deterministically routed to one variant for the test duration." vertex="1">
+          <mxGeometry x="40" y="54" width="1574" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- PANEL 1 — Account Routing  (x=40, w=500)                   -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="centre-panel" parent="1" style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Account Routing" vertex="1">
+          <mxGeometry x="40" y="86" width="500" height="590" as="geometry" />
+        </mxCell>
+
+        <mxCell id="incoming" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#455A64;strokeColor=#263238;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=6;spacing=8;" value="Incoming accounts&lt;br/&gt;&lt;font style=&quot;font-size:11px;font-style:italic;&quot;&gt;eligible for strategy evaluation&lt;/font&gt;" vertex="1">
+          <mxGeometry x="100" y="58" width="300" height="48" as="geometry" />
+        </mxCell>
+
+        <mxCell id="incoming-to-decision" parent="centre-panel" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#455A64;strokeWidth=2;" edge="1" source="incoming" target="vulnerable-decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vulnerable-decision" parent="centre-panel" style="rhombus;whiteSpace=wrap;html=1;fillColor=#FFF9C4;strokeColor=#F9A825;strokeWidth=2;fontColor=#5D4037;fontSize=12;fontStyle=1;" value="Vulnerable&lt;br/&gt;customer?" vertex="1">
+          <mxGeometry x="175" y="158" width="150" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="yes-to-force" parent="centre-panel" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#AD1457;strokeWidth=2;" edge="1" source="vulnerable-decision" target="force-champion">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="90" y="198" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="yes-lbl" parent="centre-panel" style="text;html=1;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;fontColor=#AD1457;" value="YES" vertex="1">
+          <mxGeometry x="52" y="186" width="36" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="force-champion" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="Force to CHAMPION&lt;br/&gt;&lt;font style=&quot;font-size:11px;font-style:italic;&quot;&gt;vulnerability_override = true&lt;/font&gt;" vertex="1">
+          <mxGeometry x="20" y="298" width="200" height="56" as="geometry" />
+        </mxCell>
+
+        <mxCell id="no-to-routing" parent="centre-panel" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#283593;strokeWidth=2;" edge="1" source="vulnerable-decision" target="ab-routing">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="400" y="198" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="no-lbl" parent="centre-panel" style="text;html=1;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;fontColor=#283593;" value="NO" vertex="1">
+          <mxGeometry x="362" y="186" width="32" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ab-routing" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="A/B routing DMN&lt;br/&gt;&lt;font style=&quot;font-size:11px;font-style:italic;&quot;&gt;abs(accountId.hashCode()) % 100&lt;/font&gt;" vertex="1">
+          <mxGeometry x="288" y="292" width="192" height="56" as="geometry" />
+        </mxCell>
+
+        <mxCell id="deterministic-lbl" parent="centre-panel" style="text;html=1;fontSize=10;fontStyle=2;fillColor=none;strokeColor=none;fontColor=#455A64;" value="account stays on assigned version for test duration" vertex="1">
+          <mxGeometry x="278" y="256" width="212" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="routing-to-champion" parent="centre-panel" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#2E7D32;strokeWidth=2;" edge="1" source="ab-routing" target="champion-variant">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="320" y="414" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="routing-to-challenger" parent="centre-panel" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#6A1B9A;strokeWidth=2;" edge="1" source="ab-routing" target="challenger-variant">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="414" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="champion-variant" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="CHAMPION variant&lt;br/&gt;&lt;font style=&quot;font-size:11px;font-style:italic;&quot;&gt;majority of accounts&lt;/font&gt;" vertex="1">
+          <mxGeometry x="220" y="414" width="180" height="56" as="geometry" />
+        </mxCell>
+
+        <mxCell id="challenger-variant" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="CHALLENGER variant&lt;br/&gt;&lt;font style=&quot;font-size:11px;font-style:italic;&quot;&gt;challenger_percentage %&lt;/font&gt;" vertex="1">
+          <mxGeometry x="300" y="498" width="180" height="56" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vuln-warning" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=11;arcSize=6;spacing=8;" value="&lt;b&gt;Vulnerable customers always on CHAMPION.&lt;/b&gt;&lt;br/&gt;Changing this eligibility rule is a Class A&lt;br/&gt;policy change requiring DWP sign-off." vertex="1">
+          <mxGeometry x="20" y="498" width="240" height="64" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- PANEL 2 — Comparison Dashboard  (x=560, w=420)             -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="right-panel" parent="1" style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Comparison Dashboard" vertex="1">
+          <mxGeometry x="560" y="86" width="420" height="590" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dash-ab" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;align=left;spacingLeft=12;" value="&lt;b&gt;A/B Comparison&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px;&quot;&gt;Non-vulnerable accounts only&lt;br/&gt;CHAMPION vs CHALLENGER on:&lt;br/&gt;— accounts in test&lt;br/&gt;— total recovered (£)&lt;br/&gt;— arrangements made&lt;br/&gt;— avg payment per account&lt;/font&gt;" vertex="1">
+          <mxGeometry x="30" y="56" width="360" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dash-vuln" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;align=left;spacingLeft=12;" value="&lt;b&gt;Vulnerable Outcomes&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px;&quot;&gt;Vulnerable accounts (all on CHAMPION)&lt;br/&gt;Same metrics as A/B panel&lt;br/&gt;Not split by variant — single cohort view&lt;/font&gt;" vertex="1">
+          <mxGeometry x="30" y="210" width="360" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dash-overall" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;align=left;spacingLeft=12;" value="&lt;b&gt;Overall Population&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px;&quot;&gt;Full population totals&lt;br/&gt;No variant filter — combined view&lt;/font&gt;" vertex="1">
+          <mxGeometry x="30" y="334" width="360" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="guard-note" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=2;fontColor=#1B5E20;fontSize=12;arcSize=6;spacing=8;" value="&lt;b&gt;Promotion guards&lt;/b&gt;&lt;br/&gt;min_sample_size and min_duration_days&lt;br/&gt;guard premature promotion" vertex="1">
+          <mxGeometry x="30" y="434" width="360" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ops-read-note" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=11;arcSize=6;spacing=8;" value="&lt;b&gt;OPS_MANAGER&lt;/b&gt; can view all panels but cannot trigger promotion.&lt;br/&gt;Promotion is a STRATEGY_MANAGER action only." vertex="1">
+          <mxGeometry x="30" y="514" width="360" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- PANEL 3 — What can change  (x=1000, w=614)                 -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="change-panel" parent="1" style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="What can change in the Challenger DMN" vertex="1">
+          <mxGeometry x="1000" y="86" width="614" height="590" as="geometry" />
+        </mxCell>
+
+        <!-- CAN CHANGE sub-panel (green) -->
+        <mxCell id="can-change" parent="change-panel" style="swimlane;startSize=28;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=2;fontColor=#1B5E20;fontSize=12;fontStyle=1;arcSize=3;align=left;spacingLeft=10;" value="Can change" vertex="1">
+          <mxGeometry x="16" y="50" width="582" height="248" as="geometry" />
+        </mxCell>
+
+        <mxCell id="can-thresholds" parent="can-change" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=11;arcSize=6;spacing=6;align=left;spacingLeft=10;" value="&lt;b&gt;Decision thresholds&lt;/b&gt;&lt;br/&gt;e.g. Champion uses £500 to trigger enhanced monitoring. Challenger tests £350." vertex="1">
+          <mxGeometry x="10" y="36" width="270" height="72" as="geometry" />
+        </mxCell>
+
+        <mxCell id="can-routing" parent="can-change" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=11;arcSize=6;spacing=6;align=left;spacingLeft=10;" value="&lt;b&gt;Routing outputs&lt;/b&gt;&lt;br/&gt;e.g. Champion routes debt category X to queue A. Challenger tests queue B for faster cycle time." vertex="1">
+          <mxGeometry x="300" y="36" width="270" height="72" as="geometry" />
+        </mxCell>
+
+        <mxCell id="can-logic" parent="can-change" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=11;arcSize=6;spacing=6;align=left;spacingLeft=10;" value="&lt;b&gt;Treatment path assignment&lt;/b&gt;&lt;br/&gt;e.g. Champion routes &quot;low balance + employed&quot; to self-cure. Challenger tests light-touch phone outreach first." vertex="1">
+          <mxGeometry x="10" y="122" width="270" height="72" as="geometry" />
+        </mxCell>
+
+        <mxCell id="can-split" parent="can-change" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=11;arcSize=6;spacing=6;align=left;spacingLeft=10;" value="&lt;b&gt;Split percentage&lt;/b&gt;&lt;br/&gt;challenger_percentage 0–50% set on STRATEGY_TEST. Controls what fraction of non-vulnerable accounts see challenger." vertex="1">
+          <mxGeometry x="300" y="122" width="270" height="72" as="geometry" />
+        </mxCell>
+
+        <!-- CANNOT CHANGE sub-panel (red warning) -->
+        <mxCell id="cannot-change" parent="change-panel" style="swimlane;startSize=28;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=12;fontStyle=1;arcSize=3;align=left;spacingLeft=10;" value="Cannot change — hard constraints" vertex="1">
+          <mxGeometry x="16" y="318" width="582" height="214" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cannot-vuln" parent="cannot-change" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=11;arcSize=6;spacing=6;align=left;spacingLeft=10;" value="&lt;b&gt;Protected-population eligibility&lt;/b&gt;&lt;br/&gt;Vulnerable customers always go to CHAMPION. Priority rule 1 in champion_challenger_assignment.dmn fires before the split — no challenger DMN content can override it. Changing this = Class A policy change, DWP sign-off required." vertex="1">
+          <mxGeometry x="10" y="36" width="560" height="72" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cannot-hash" parent="cannot-change" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=11;arcSize=6;spacing=6;align=left;spacingLeft=10;" value="&lt;b&gt;Hash routing mechanism&lt;/b&gt;&lt;br/&gt;abs(accountId.hashCode()) % 100 — locked by ADR-010. An account stays on its assigned variant for the full test duration. Cannot be overridden per-experiment." vertex="1">
+          <mxGeometry x="10" y="120" width="270" height="72" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cannot-metrics" parent="cannot-change" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=11;arcSize=6;spacing=6;align=left;spacingLeft=10;" value="&lt;b&gt;Metric collection&lt;/b&gt;&lt;br/&gt;STRATEGY_OUTCOME_METRIC records written for all accounts. Cannot suppress measurement for any population. Exclusion is query-level only." vertex="1">
+          <mxGeometry x="300" y="120" width="270" height="72" as="geometry" />
+        </mxCell>
+
+        <!-- Governance path note (orange) -->
+        <mxCell id="class-a-note" parent="change-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#EF6C00;strokeWidth=2;fontColor=#E65100;fontSize=11;arcSize=6;spacing=8;" value="&lt;b&gt;Governance path:&lt;/b&gt; PROCESS_DESIGNER authors → COMPLIANCE approves → simulation required if materially different eligibility/outcome behaviour → STRATEGY_MANAGER activates (Class A gate)" vertex="1">
+          <mxGeometry x="16" y="548" width="582" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- BOTTOM STRIP — Promotion Path                               -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="bottom-strip" parent="1" style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Promotion Path" vertex="1">
+          <mxGeometry x="40" y="700" width="1574" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="promo-challenger" parent="bottom-strip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=6;spacing=8;" value="CHALLENGER" vertex="1">
+          <mxGeometry x="200" y="50" width="180" height="48" as="geometry" />
+        </mxCell>
+
+        <mxCell id="promo-arrow" parent="bottom-strip" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#2E7D32;strokeWidth=3;startArrow=none;endArrow=block;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="promo-challenger" target="promo-champion">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="promo-arrow-lbl" parent="bottom-strip" style="text;html=1;fontSize=11;fontStyle=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=1;fontColor=#1B5E20;arcSize=6;rounded=1;spacing=4;" value="STRATEGY_MANAGER triggers promotion&lt;br/&gt;from Operations Workspace" vertex="1">
+          <mxGeometry x="430" y="48" width="224" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="promo-champion" parent="bottom-strip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=6;spacing=8;" value="CHAMPION" vertex="1">
+          <mxGeometry x="704" y="50" width="180" height="48" as="geometry" />
+        </mxCell>
+
+        <mxCell id="audit-note" parent="bottom-strip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=11;arcSize=6;spacing=8;" value="Promotion emits &lt;b&gt;CC_PROMOTION&lt;/b&gt; audit event&lt;br/&gt;with actor ID. OPS_MANAGER can read results&lt;br/&gt;but cannot trigger promotion." vertex="1">
+          <mxGeometry x="960" y="40" width="300" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- FOOTER -->
+        <mxCell id="footer-sources" parent="1" style="text;html=1;fontSize=10;fontStyle=2;align=left;fillColor=none;strokeColor=none;fontColor=#90A4AE;" value="Sources: ADR-010, ADR-014, strategy-simulation-engine-design.md" vertex="1">
+          <mxGeometry x="40" y="832" width="600" height="16" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,29 @@
+{{- if .Values.ingress.enabled }}
+---
+# Frontend Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "dcms.fullname" . }}-frontend
+  labels:
+    {{- include "dcms.labels" . | nindent 4 }}
+spec:
+  rules:
+    - host: {{ .Values.ingress.host | quote }}
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "dcms.fullname" . }}-frontend
+                port:
+                  number: {{ .Values.service.frontend.port }}
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ include "dcms.fullname" . }}-api
+                port:
+                  number: {{ .Values.service.api.port }}
+{{- end }}

@@ -1,0 +1,49 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" version="28.2.3">
+  <diagram name="Simplified Integration Flow" id="vZ2b_U-5eZC39xn99aGy">
+    <mxGraphModel dx="2066" dy="1137" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-1" value="Previous Task" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=14;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="280" y="20" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-2" value="IntegrationIntent(s)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="280" y="120" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-3" value="AbstractIntegrationListener" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=14;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="280" y="220" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-4" value="AsyncProcessIntegrationExecutorImpl" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=14;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="280" y="320" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-5" value="ProcessIntegrationService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=14;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="280" y="420" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-6" value="ProcessIntegrationExecutionService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#c9daf8;strokeColor=#6d9eeb;fontSize=14;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="280" y="520" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-7" value="IntegrationExecutor" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=14;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="280" y="620" width="260" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="RFV21P9ky_8KEDg9LwfS-1" target="RFV21P9ky_8KEDg9LwfS-2" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="RFV21P9ky_8KEDg9LwfS-2" target="RFV21P9ky_8KEDg9LwfS-3" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="RFV21P9ky_8KEDg9LwfS-3" target="RFV21P9ky_8KEDg9LwfS-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="RFV21P9ky_8KEDg9LwfS-4" target="RFV21P9ky_8KEDg9LwfS-5" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="RFV21P9ky_8KEDg9LwfS-5" target="RFV21P9ky_8KEDg9LwfS-6" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="RFV21P9ky_8KEDg9LwfS-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2" parent="1" source="RFV21P9ky_8KEDg9LwfS-6" target="RFV21P9ky_8KEDg9LwfS-7" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

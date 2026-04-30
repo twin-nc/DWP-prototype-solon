@@ -1,0 +1,30 @@
+---
+title: "DCMS — System Context"
+---
+C4Context
+  title DCMS System Context
+
+  Person(agent, "DWP Agent", "Reviews candidate debts, manages cases, arranges repayments, and handles communications")
+  Person(supervisor, "Team Leader / Supervisor", "Monitors queues, overrides workflow steps, manages team workload")
+  Person(admin, "System Admin", "Manages users, configures segments and DMN rules, deploys BPMN definitions")
+
+  System(dcms, "DCMS", "Debt Collection Management System — manages the full lifecycle of DWP debt from referral through recovery, enforcement, and write-off")
+
+  System_Ext(dwpPlace, "DWP Place", "Source system — pushes debt referrals to DCMS via REST API")
+  System_Ext(dm6, "DM6", "Legacy debt management system — source of migration data")
+  System_Ext(dca, "Debt Collection Agencies", "Third-party agencies — receive placement packages, return reconciliation data")
+  System_Ext(payGateway, "Payment Gateway", "Processes direct debit and card payment transactions")
+  System_Ext(bureauFeeds, "Credit Bureau / Scorecard Feeds", "Provides propensity-to-pay scores and customer affordability signals")
+  System_Ext(keycloak, "Keycloak 24", "Identity Provider — OAuth 2.0 + OIDC, RBAC claims, multi-domain federation")
+
+  Rel(agent, dcms, "Uses", "HTTPS / browser")
+  Rel(supervisor, dcms, "Uses", "HTTPS / browser")
+  Rel(admin, dcms, "Configures", "HTTPS / browser")
+
+  Rel(dwpPlace, dcms, "Pushes debt referrals", "REST API POST /api/v1/integration/candidates")
+  Rel(dm6, dcms, "Migrates historical accounts", "Batch / REST (migration tooling)")
+  Rel(dcms, dca, "Sends placement packages, receives reconciliation", "REST / batch file transfer")
+  Rel(dcms, payGateway, "Submits payment instructions, receives confirmations", "REST API")
+  Rel(dcms, bureauFeeds, "Requests scores and affordability data", "REST / batch")
+  Rel(keycloak, dcms, "Issues JWT tokens, enforces RBAC", "OIDC / OAuth 2.0")
+  Rel(dcms, keycloak, "Validates tokens, fetches user claims", "OIDC introspection")

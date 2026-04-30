@@ -1,0 +1,2865 @@
+SOLON TAX © 
+Release 2.3.0 
+
+Integration Guide 
+
+Version: 2.30 
+
+© Copyright 2026 NetcompanyStatus: FINAL All Rights reserved. 
+
+Critical / Restricted / In-Confidence © Netcompany SEE & EUI 
+
+All industrial and intellectual property rights contained in this document are under protection of the intellectual property law and all related copyrightsare reserved by Netcompany SEE & EUI. No part of this document may be reproduced, stored in a retrieval system, or transmitted, on any form or byany means, electronic, mechanical, photocopying, recording, or otherwise, without the prior written permission of Netcompany SEE & EUI. 
+
+
+© 2026 Netcompany - 1/539 
+
+
+
+© 2026 Netcompany - 2/539 
+
+
+© 2026 Netcompany - 3/539 
+
+
+
+© 2026 Netcompany - 4/539 
+
+
+© 2026 Netcompany - 5/539 
+
+
+
+© 2026 Netcompany - 6/539 
+
+
+© 2026 Netcompany - 7/539 
+
+
+
+© 2026 Netcompany - 8/539 
+
+
+© 2026 Netcompany - 9/539 
+
+
+
+© 2026 Netcompany - 10/539 
+
+
+© 2026 Netcompany - 11/539 
+
+
+
+© 2026 Netcompany - 12/539 
+
+
+© 2026 Netcompany - 13/539 
+
+
+
+© 2026 Netcompany - 14/539 
+
+
+© 2026 Netcompany - 15/539 
+
+
+
+Document history 
+
+Table 1. Document history 
+
+
+© 2026 Netcompany - 16/539 
+
+
+© 2026 Netcompany - 17/539 
+
+
+
+© 2026 Netcompany - 18/539 
+
+
+© 2026 Netcompany - 19/539 
+
+
+
+© 2026 Netcompany - 20/539 
+
+
+© 2026 Netcompany - 21/539 
+
+
+
+© 2026 Netcompany - 22/539 
+
+
+© 2026 Netcompany - 23/539 
+
+
+
+© 2026 Netcompany - 24/539 
+
+
+© 2026 Netcompany - 25/539 
+
+
+
+© 2026 Netcompany - 26/539 
+
+
+© 2026 Netcompany - 27/539 
+
+
+
+© 2026 Netcompany - 28/539 
+
+
+© 2026 Netcompany - 29/539 
+
+
+
+© 2026 Netcompany - 30/539 
+
+
+© 2026 Netcompany - 31/539 
+
+
+
+© 2026 Netcompany - 32/539 
+
+
+© 2026 Netcompany - 33/539 
+
+
+
+= 
+
+
+© 2026 Netcompany - 34/539 
+
+
+= 
+
+= 
+
+== 
+= 
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 35/539 
+
+
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 36/539 
+
+
+© 2026 Netcompany - 37/539 
+
+
+
+= 
+
+= 
+
+== 
+
+= 
+
+== 
+
+= 
+
+== 
+
+= 
+
+
+© 2026 Netcompany - 38/539 
+
+
+© 2026 Netcompany - 39/539 
+
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 40/539 
+
+
+= 
+
+© 2026 Netcompany - 41/539 
+
+
+
+© 2026 Netcompany - 42/539 
+
+
+© 2026 Netcompany - 43/539 
+
+
+
+© 2026 Netcompany - 44/539 
+
+
+© 2026 Netcompany - 45/539 
+
+
+
+© 2026 Netcompany - 46/539 
+
+
+© 2026 Netcompany - 47/539 
+
+
+
+= 
+
+
+© 2026 Netcompany - 48/539 
+
+
+© 2026 Netcompany - 49/539 
+
+
+
+© 2026 Netcompany - 50/539 
+
+
+© 2026 Netcompany - 51/539 
+
+
+
+© 2026 Netcompany - 52/539 
+
+
+= 
+
+© 2026 Netcompany - 53/539 
+
+
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 54/539 
+
+
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 55/539 
+
+
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 56/539 
+
+
+= 
+
+= 
+= 
+
+= 
+== 
+
+= 
+
+= 
+
+= 
+= 
+
+© 2026 Netcompany - 57/539 
+
+
+
+= == 
+= == 
+
+== 
+= 
+== 
+= 
+
+= == 
+= == 
+
+= == 
+
+= == 
+= == 
+
+
+© 2026 Netcompany - 58/539 
+
+
+= == 
+
+== 
+
+= 
+== 
+== 
+
+== 
+
+== 
+== 
+
+= 
+== 
+== 
+
+== 
+== 
+= 
+
+= 
+== 
+== 
+
+== 
+== 
+
+= 
+
+© 2026 Netcompany - 59/539 
+
+
+
+= == 
+
+
+© 2026 Netcompany - 60/539 
+
+
+= == 
+
+© 2026 Netcompany - 61/539 
+
+
+
+-
+
+-
+-
+-
+
+
+© 2026 Netcompany - 62/539 
+
+
+= 
+
+= 
+
+© 2026 Netcompany - 63/539 
+
+
+
+© 2026 Netcompany - 64/539 
+
+
+ 
+
+
+-
+-
+
+© 2026 Netcompany - 65/539 
+
+
+
+-
+-
+
+-
+-
+
+
+© 2026 Netcompany - 66/539 
+
+
+ -
+
+© 2026 Netcompany - 67/539 
+
+
+
+© 2026 Netcompany - 68/539 
+
+
+© 2026 Netcompany - 69/539 
+
+
+
+© 2026 Netcompany - 70/539 
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 71/539 
+
+
+
+= 
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 72/539 
+
+
+= 
+== 
+== 
+
+= 
+== 
+== 
+== 
+
+= 
+== 
+== 
+
+== 
+= 
+= 
+
+= 
+== 
+
+== 
+== 
+
+== 
+
+© 2026 Netcompany - 73/539 
+
+
+
+= 
+== 
+== 
+
+= 
+== 
+
+== 
+
+= 
+== 
+
+== 
+
+= 
+== 
+
+== 
+
+= 
+== 
+== 
+
+= 
+== 
+== 
+== 
+
+
+© 2026 Netcompany - 74/539 
+
+
+= 
+== 
+== 
+
+= 
+== 
+== 
+== 
+
+= 
+== 
+== 
+
+== 
+= 
+
+= 
+== 
+== 
+
+= 
+== 
+
+== 
+== 
+== 
+
+= 
+= 
+= 
+== 
+
+== 
+
+© 2026 Netcompany - 75/539 
+
+
+
+© 2026 Netcompany - 76/539 
+
+
+© 2026 Netcompany - 77/539 
+
+
+
+© 2026 Netcompany - 78/539 
+
+
+© 2026 Netcompany - 79/539 
+
+
+
+© 2026 Netcompany - 80/539 
+
+
+© 2026 Netcompany - 81/539 
+
+
+
+© 2026 Netcompany - 82/539 
+
+
+© 2026 Netcompany - 83/539 
+
+
+
+© 2026 Netcompany - 84/539 
+
+
+© 2026 Netcompany - 85/539 
+
+
+
+© 2026 Netcompany - 86/539 
+
+
+© 2026 Netcompany - 87/539 
+
+
+
+© 2026 Netcompany - 88/539 
+
+
+© 2026 Netcompany - 89/539 
+
+
+
+© 2026 Netcompany - 90/539 
+
+
+© 2026 Netcompany - 91/539 
+
+
+
+ -
+
+
+© 2026 Netcompany - 92/539 
+
+
+© 2026 Netcompany - 93/539 
+
+
+
+© 2026 Netcompany - 94/539 
+
+
+© 2026 Netcompany - 95/539 
+
+
+
+© 2026 Netcompany - 96/539 
+
+
+© 2026 Netcompany - 97/539 
+
+
+
+© 2026 Netcompany - 98/539 
+
+
+© 2026 Netcompany - 99/539 
+
+
+
+© 2026 Netcompany - 100/539 
+
+
+© 2026 Netcompany - 101/539 
+
+
+
+© 2026 Netcompany - 102/539 
+
+
+© 2026 Netcompany - 103/539 
+
+
+
+© 2026 Netcompany - 104/539 
+
+
+" 
+
+© 2026 Netcompany - 105/539 
+
+
+
+© 2026 Netcompany - 106/539 
+
+
+Figure 13. Statement ID and Message ID 
+
+• The file size to be less than the max file size recommended and configured. By default, 10MB as the 
+recommendation for performance reasons. 
+• The file is validated according to ISO20022, and it must support the specific format of bank transaction data. 
+• The Payment Segment Type used for the distribution of the payment segments is configured to support the 
+payment upload process from bank statements. 
+• The tender source that matches the bank account reference should have a valid tender type: Currently, only the 
+SWIFT_CREDIT_TRANSFER is supported. 
+Table 22. PaymentFileValidationApplication 
+
+© 2026 Netcompany - 107/539 
+
+
+
+© 2026 Netcompany - 108/539 
+
+
+© 2026 Netcompany - 109/539 
+
+
+
+© 2026 Netcompany - 110/539 
+
+
+© 2026 Netcompany - 111/539 
+
+
+
+© 2026 Netcompany - 112/539 
+
+
+© 2026 Netcompany - 113/539 
+
+
+
+© 2026 Netcompany - 114/539 
+
+
+© 2026 Netcompany - 115/539 
+
+
+
+© 2026 Netcompany - 116/539 
+
+
+© 2026 Netcompany - 117/539 
+
+
+
+© 2026 Netcompany - 118/539 
+
+
+© 2026 Netcompany - 119/539 
+
+
+
+© 2026 Netcompany - 120/539 
+
+
+© 2026 Netcompany - 121/539 
+
+
+
+© 2026 Netcompany - 122/539 
+
+
+© 2026 Netcompany - 123/539 
+
+
+
+© 2026 Netcompany - 124/539 
+
+
+© 2026 Netcompany - 125/539 
+
+
+
+© 2026 Netcompany - 126/539 
+
+
+© 2026 Netcompany - 127/539 
+
+
+
+© 2026 Netcompany - 128/539 
+
+
+© 2026 Netcompany - 129/539 
+
+
+
+© 2026 Netcompany - 130/539 
+
+
+© 2026 Netcompany - 131/539 
+
+
+
+© 2026 Netcompany - 132/539 
+
+
+© 2026 Netcompany - 133/539 
+
+
+
+© 2026 Netcompany - 134/539 
+
+
+© 2026 Netcompany - 135/539 
+
+
+
+© 2026 Netcompany - 136/539 
+
+
+= 
+
+© 2026 Netcompany - 137/539 
+
+
+
+© 2026 Netcompany - 138/539 
+
+
+© 2026 Netcompany - 139/539 
+
+
+
+© 2026 Netcompany - 140/539 
+
+
+© 2026 Netcompany - 141/539 
+
+
+
+© 2026 Netcompany - 142/539 
+
+
+© 2026 Netcompany - 143/539 
+
+
+
+© 2026 Netcompany - 144/539 
+
+
+© 2026 Netcompany - 145/539 
+
+
+
+= 
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 146/539 
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 147/539 
+
+
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 148/539 
+
+
+= 
+
+© 2026 Netcompany - 149/539 
+
+
+
+© 2026 Netcompany - 150/539 
+
+
+= 
+
+== 
+
+© 2026 Netcompany - 151/539 
+
+
+
+© 2026 Netcompany - 152/539 
+
+
+= 
+= 
+
+= 
+= 
+= 
+
+= 
+= 
+= 
+= 
+= 
+
+= 
+= 
+= 
+
+= 
+= 
+
+© 2026 Netcompany - 153/539 
+
+
+
+= 
+
+= 
+
+© 2026 Netcompany - 154/539 
+
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 155/539 
+
+
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 156/539 
+
+
+= 
+
+= 
+
+== 
+
+© 2026 Netcompany - 157/539 
+
+
+
+= 
+
+== 
+
+© 2026 Netcompany - 158/539 
+
+
+
+= 
+
+= 
+
+© 2026 Netcompany - 159/539 
+
+
+
+© 2026 Netcompany - 160/539 
+
+
+© 2026 Netcompany - 161/539 
+
+
+
+= 
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 162/539 
+
+
+© 2026 Netcompany - 163/539 
+
+
+
+= 
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 164/539 
+
+
+© 2026 Netcompany - 165/539 
+
+
+
+© 2026 Netcompany - 166/539 
+
+
+© 2026 Netcompany - 167/539 
+
+
+
+© 2026 Netcompany - 168/539 
+
+
+© 2026 Netcompany - 169/539 
+
+
+
+© 2026 Netcompany - 170/539 
+
+
+© 2026 Netcompany - 171/539 
+
+
+
+© 2026 Netcompany - 172/539 
+
+
+© 2026 Netcompany - 173/539 
+
+
+
+© 2026 Netcompany - 174/539 
+
+
+© 2026 Netcompany - 175/539 
+
+
+
+© 2026 Netcompany - 176/539 
+
+
+© 2026 Netcompany - 177/539 
+
+
+
+© 2026 Netcompany - 178/539 
+
+
+© 2026 Netcompany - 179/539 
+
+
+
+© 2026 Netcompany - 180/539 
+
+
+" 
+
+© 2026 Netcompany - 181/539 
+
+
+
+© 2026 Netcompany - 182/539 
+
+
+© 2026 Netcompany - 183/539 
+
+
+
+© 2026 Netcompany - 184/539 
+
+
+© 2026 Netcompany - 185/539 
+
+
+
+© 2026 Netcompany - 186/539 
+
+
+© 2026 Netcompany - 187/539 
+
+
+
+© 2026 Netcompany - 188/539 
+
+
+© 2026 Netcompany - 189/539 
+
+
+
+© 2026 Netcompany - 190/539 
+
+
+© 2026 Netcompany - 191/539 
+
+
+
+© 2026 Netcompany - 192/539 
+
+
+© 2026 Netcompany - 193/539 
+
+
+
+© 2026 Netcompany - 194/539 
+
+
+© 2026 Netcompany - 195/539 
+
+
+
+© 2026 Netcompany - 196/539 
+
+
+© 2026 Netcompany - 197/539 
+
+
+
+© 2026 Netcompany - 198/539 
+
+
+© 2026 Netcompany - 199/539 
+
+
+
+== 
+
+= 
+== 
+== 
+
+= 
+== 
+== 
+
+
+© 2026 Netcompany - 200/539 
+
+
+== 
+
+= 
+== 
+
+== 
+== 
+== 
+= 
+
+= 
+== 
+
+== 
+== 
+== 
+== 
+
+© 2026 Netcompany - 201/539 
+
+
+
+© 2026 Netcompany - 202/539 
+
+
+= 
+
+© 2026 Netcompany - 203/539 
+
+
+
+= 
+== 
+= 
+
+
+© 2026 Netcompany - 204/539 
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 205/539 
+
+
+
+© 2026 Netcompany - 206/539 
+
+
+© 2026 Netcompany - 207/539 
+
+
+
+© 2026 Netcompany - 208/539 
+
+
+© 2026 Netcompany - 209/539 
+
+
+
+© 2026 Netcompany - 210/539 
+
+
+ -
+
+-
+
+© 2026 Netcompany - 211/539 
+
+
+
+© 2026 Netcompany - 212/539 
+
+
+© 2026 Netcompany - 213/539 
+
+
+
+© 2026 Netcompany - 214/539 
+
+
+© 2026 Netcompany - 215/539 
+
+
+
+© 2026 Netcompany - 216/539 
+
+
+© 2026 Netcompany - 217/539 
+
+
+
+© 2026 Netcompany - 218/539 
+
+
+© 2026 Netcompany - 219/539 
+
+
+
+© 2026 Netcompany - 220/539 
+
+
+© 2026 Netcompany - 221/539 
+
+
+
+© 2026 Netcompany - 222/539 
+
+
+© 2026 Netcompany - 223/539 
+
+
+
+© 2026 Netcompany - 224/539 
+
+
+© 2026 Netcompany - 225/539 
+
+
+
+© 2026 Netcompany - 226/539 
+
+
+© 2026 Netcompany - 227/539 
+
+
+
+© 2026 Netcompany - 228/539 
+
+
+© 2026 Netcompany - 229/539 
+
+
+
+© 2026 Netcompany - 230/539 
+
+
+© 2026 Netcompany - 231/539 
+
+
+
+© 2026 Netcompany - 232/539 
+
+
+© 2026 Netcompany - 233/539 
+
+
+
+© 2026 Netcompany - 234/539 
+
+
+© 2026 Netcompany - 235/539 
+
+
+
+© 2026 Netcompany - 236/539 
+
+
+© 2026 Netcompany - 237/539 
+
+
+
+© 2026 Netcompany - 238/539 
+
+
+© 2026 Netcompany - 239/539 
+
+
+
+© 2026 Netcompany - 240/539 
+
+
+© 2026 Netcompany - 241/539 
+
+
+
+© 2026 Netcompany - 242/539 
+
+
+© 2026 Netcompany - 243/539 
+
+
+
+© 2026 Netcompany - 244/539 
+
+
+© 2026 Netcompany - 245/539 
+
+
+
+© 2026 Netcompany - 246/539 
+
+
+© 2026 Netcompany - 247/539 
+
+
+
+© 2026 Netcompany - 248/539 
+
+
+© 2026 Netcompany - 249/539 
+
+
+
+ -
+
+
+© 2026 Netcompany - 250/539 
+
+
+ -
+
+-
+
+© 2026 Netcompany - 251/539 
+
+
+
+© 2026 Netcompany - 252/539 
+
+
+© 2026 Netcompany - 253/539 
+
+
+
+© 2026 Netcompany - 254/539 
+
+
+© 2026 Netcompany - 255/539 
+
+
+
+ -
+
+
+© 2026 Netcompany - 256/539 
+
+
+© 2026 Netcompany - 257/539 
+
+
+
+© 2026 Netcompany - 258/539 
+
+
+© 2026 Netcompany - 259/539 
+
+
+
+© 2026 Netcompany - 260/539 
+
+
+© 2026 Netcompany - 261/539 
+
+
+
+© 2026 Netcompany - 262/539 
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 263/539 
+
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 264/539 
+
+
+= 
+
+= 
+
+© 2026 Netcompany - 265/539 
+
+
+
+© 2026 Netcompany - 266/539 
+
+
+© 2026 Netcompany - 267/539 
+
+
+
+© 2026 Netcompany - 268/539 
+
+
+© 2026 Netcompany - 269/539 
+
+
+
+© 2026 Netcompany - 270/539 
+
+
+© 2026 Netcompany - 271/539 
+
+
+
+© 2026 Netcompany - 272/539 
+
+
+© 2026 Netcompany - 273/539 
+
+
+
+© 2026 Netcompany - 274/539 
+
+
+© 2026 Netcompany - 275/539 
+
+
+
+© 2026 Netcompany - 276/539 
+
+
+© 2026 Netcompany - 277/539 
+
+
+
+© 2026 Netcompany - 278/539 
+
+
+© 2026 Netcompany - 279/539 
+
+
+
+© 2026 Netcompany - 280/539 
+
+
+© 2026 Netcompany - 281/539 
+
+
+
+© 2026 Netcompany - 282/539 
+
+
+© 2026 Netcompany - 283/539 
+
+
+
+© 2026 Netcompany - 284/539 
+
+
+© 2026 Netcompany - 285/539 
+
+
+
+© 2026 Netcompany - 286/539 
+
+
+© 2026 Netcompany - 287/539 
+
+
+
+© 2026 Netcompany - 288/539 
+
+
+© 2026 Netcompany - 289/539 
+
+
+
+© 2026 Netcompany - 290/539 
+
+
+© 2026 Netcompany - 291/539 
+
+
+
+© 2026 Netcompany - 292/539 
+
+
+© 2026 Netcompany - 293/539 
+
+
+
+© 2026 Netcompany - 294/539 
+
+
+© 2026 Netcompany - 295/539 
+
+
+
+© 2026 Netcompany - 296/539 
+
+
+© 2026 Netcompany - 297/539 
+
+
+
+© 2026 Netcompany - 298/539 
+
+
+© 2026 Netcompany - 299/539 
+
+
+
+© 2026 Netcompany - 300/539 
+
+
+= 
+
+= 
+
+© 2026 Netcompany - 301/539 
+
+
+
+© 2026 Netcompany - 302/539 
+
+
+© 2026 Netcompany - 303/539 
+
+
+
+© 2026 Netcompany - 304/539 
+
+
+© 2026 Netcompany - 305/539 
+
+
+
+© 2026 Netcompany - 306/539 
+
+
+= 
+
+© 2026 Netcompany - 307/539 
+
+
+
+© 2026 Netcompany - 308/539 
+
+
+= 
+
+© 2026 Netcompany - 309/539 
+
+
+
+© 2026 Netcompany - 310/539 
+
+
+© 2026 Netcompany - 311/539 
+
+
+
+© 2026 Netcompany - 312/539 
+
+
+© 2026 Netcompany - 313/539 
+
+
+
+ -
+
+
+© 2026 Netcompany - 314/539 
+
+
+ -
+
+© 2026 Netcompany - 315/539 
+
+
+
+© 2026 Netcompany - 316/539 
+
+
+© 2026 Netcompany - 317/539 
+
+
+
+© 2026 Netcompany - 318/539 
+
+
+© 2026 Netcompany - 319/539 
+
+
+
+© 2026 Netcompany - 320/539 
+
+
+© 2026 Netcompany - 321/539 
+
+
+
+© 2026 Netcompany - 322/539 
+
+
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 323/539 
+
+
+
+= 
+
+= 
+= 
+
+
+© 2026 Netcompany - 324/539 
+
+
+= 
+
+© 2026 Netcompany - 325/539 
+
+
+
+= 
+
+= 
+
+= 
+
+== 
+
+= 
+
+= 
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 326/539 
+
+
+== 
+= 
+== 
+
+© 2026 Netcompany - 327/539 
+
+
+
+© 2026 Netcompany - 328/539 
+
+
+© 2026 Netcompany - 329/539 
+
+
+
+© 2026 Netcompany - 330/539 
+
+
+© 2026 Netcompany - 331/539 
+
+
+
+© 2026 Netcompany - 332/539 
+
+
+© 2026 Netcompany - 333/539 
+
+
+
+© 2026 Netcompany - 334/539 
+
+
+© 2026 Netcompany - 335/539 
+
+
+
+© 2026 Netcompany - 336/539 
+
+
+© 2026 Netcompany - 337/539 
+
+
+
+© 2026 Netcompany - 338/539 
+
+
+© 2026 Netcompany - 339/539 
+
+
+
+© 2026 Netcompany - 340/539 
+
+
+© 2026 Netcompany - 341/539 
+
+
+
+© 2026 Netcompany - 342/539 
+
+
+© 2026 Netcompany - 343/539 
+
+
+
+© 2026 Netcompany - 344/539 
+
+
+© 2026 Netcompany - 345/539 
+
+
+
+© 2026 Netcompany - 346/539 
+
+
+© 2026 Netcompany - 347/539 
+
+
+
+© 2026 Netcompany - 348/539 
+
+
+© 2026 Netcompany - 349/539 
+
+
+
+© 2026 Netcompany - 350/539 
+
+
+© 2026 Netcompany - 351/539 
+
+
+
+© 2026 Netcompany - 352/539 
+
+
+© 2026 Netcompany - 353/539 
+
+
+
+© 2026 Netcompany - 354/539 
+
+
+© 2026 Netcompany - 355/539 
+
+
+
+© 2026 Netcompany - 356/539 
+
+
+© 2026 Netcompany - 357/539 
+
+
+
+© 2026 Netcompany - 358/539 
+
+
+© 2026 Netcompany - 359/539 
+
+
+
+© 2026 Netcompany - 360/539 
+
+
+© 2026 Netcompany - 361/539 
+
+
+
+© 2026 Netcompany - 362/539 
+
+
+© 2026 Netcompany - 363/539 
+
+
+
+© 2026 Netcompany - 364/539 
+
+
+© 2026 Netcompany - 365/539 
+
+
+
+© 2026 Netcompany - 366/539 
+
+
+© 2026 Netcompany - 367/539 
+
+
+
+© 2026 Netcompany - 368/539 
+
+
+© 2026 Netcompany - 369/539 
+
+
+
+© 2026 Netcompany - 370/539 
+
+
+© 2026 Netcompany - 371/539 
+
+
+
+© 2026 Netcompany - 372/539 
+
+
+© 2026 Netcompany - 373/539 
+
+
+
+© 2026 Netcompany - 374/539 
+
+
+© 2026 Netcompany - 375/539 
+
+
+
+© 2026 Netcompany - 376/539 
+
+
+© 2026 Netcompany - 377/539 
+
+
+
+© 2026 Netcompany - 378/539 
+
+
+© 2026 Netcompany - 379/539 
+
+
+
+© 2026 Netcompany - 380/539 
+
+
+© 2026 Netcompany - 381/539 
+
+
+
+© 2026 Netcompany - 382/539 
+
+
+= 
+
+© 2026 Netcompany - 383/539 
+
+
+
+= 
+
+== 
+= 
+= 
+
+= 
+
+== 
+= 
+= 
+
+
+© 2026 Netcompany - 384/539 
+
+
+= 
+
+== 
+
+= 
+
+= 
+
+© 2026 Netcompany - 385/539 
+
+
+
+© 2026 Netcompany - 386/539 
+
+
+© 2026 Netcompany - 387/539 
+
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+== 
+
+= 
+
+
+© 2026 Netcompany - 388/539 
+
+
+© 2026 Netcompany - 389/539 
+
+
+
+ -
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 390/539 
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+-
+
+= 
+
+= 
+
+© 2026 Netcompany - 391/539 
+
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 392/539 
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 393/539 
+
+
+
+= 
+= 
+
+= 
+= 
+= 
+== 
+
+
+© 2026 Netcompany - 394/539 
+
+
+== 
+
+
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 395/539 
+
+
+
+© 2026 Netcompany - 396/539 
+
+
+© 2026 Netcompany - 397/539 
+
+
+
+© 2026 Netcompany - 398/539 
+
+
+© 2026 Netcompany - 399/539 
+
+
+
+© 2026 Netcompany - 400/539 
+
+
+© 2026 Netcompany - 401/539 
+
+
+
+© 2026 Netcompany - 402/539 
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 403/539 
+
+
+
+© 2026 Netcompany - 404/539 
+
+
+© 2026 Netcompany - 405/539 
+
+
+
+ -
+
+-
+
+
+© 2026 Netcompany - 406/539 
+
+
+© 2026 Netcompany - 407/539 
+
+
+
+© 2026 Netcompany - 408/539 
+
+
+© 2026 Netcompany - 409/539 
+
+
+
+© 2026 Netcompany - 410/539 
+
+
+© 2026 Netcompany - 411/539 
+
+
+
+© 2026 Netcompany - 412/539 
+
+
+= 
+== 
+== 
+== 
+== 
+== 
+== 
+
+= 
+== 
+== 
+== 
+
+= 
+== 
+== 
+== 
+
+= 
+== 
+== 
+== 
+= 
+
+= 
+== 
+
+© 2026 Netcompany - 413/539 
+
+
+
+== 
+== 
+
+= 
+== 
+
+= 
+== 
+= 
+= 
+
+= 
+== 
+== 
+== 
+
+= 
+== 
+== 
+== 
+
+= 
+== 
+== 
+== 
+== 
+
+
+© 2026 Netcompany - 414/539 
+
+
+© 2026 Netcompany - 415/539 
+
+
+
+© 2026 Netcompany - 416/539 
+
+
+© 2026 Netcompany - 417/539 
+
+
+
+© 2026 Netcompany - 418/539 
+
+
+© 2026 Netcompany - 419/539 
+
+
+
+© 2026 Netcompany - 420/539 
+
+
+© 2026 Netcompany - 421/539 
+
+
+
+© 2026 Netcompany - 422/539 
+
+
+= 
+== 
+
+= 
+= 
+= 
+
+== 
+
+= 
+== 
+
+© 2026 Netcompany - 423/539 
+
+
+
+= 
+== 
+
+= 
+== 
+
+== 
+
+= 
+== 
+
+== 
+== 
+
+= 
+== 
+
+== 
+== 
+
+== 
+
+= 
+== 
+
+== 
+
+== 
+== 
+
+= 
+
+
+© 2026 Netcompany - 424/539 
+
+
+== 
+
+== 
+== 
+
+= 
+== 
+
+== 
+== 
+
+= 
+== 
+== 
+
+== 
+== 
+
+= 
+== 
+
+== 
+== 
+
+= 
+== 
+
+== 
+== 
+
+= 
+
+© 2026 Netcompany - 425/539 
+
+
+
+== 
+== 
+
+== 
+== 
+
+= 
+== 
+
+== 
+== 
+
+= 
+== 
+
+== 
+== 
+
+= 
+== 
+== 
+
+== 
+== 
+
+= 
+== 
+
+== 
+== 
+
+= 
+== 
+
+== 
+== 
+
+
+© 2026 Netcompany - 426/539 
+
+
+== 
+
+= 
+== 
+== 
+
+== 
+
+= 
+== 
+== 
+
+== 
+
+= 
+== 
+== 
+
+== 
+
+= 
+== 
+== 
+
+== 
+
+© 2026 Netcompany - 427/539 
+
+
+
+= 
+== 
+== 
+
+== 
+
+
+© 2026 Netcompany - 428/539 
+
+
+© 2026 Netcompany - 429/539 
+
+
+
+© 2026 Netcompany - 430/539 
+
+
+© 2026 Netcompany - 431/539 
+
+
+
+© 2026 Netcompany - 432/539 
+
+
+© 2026 Netcompany - 433/539 
+
+
+
+© 2026 Netcompany - 434/539 
+
+
+© 2026 Netcompany - 435/539 
+
+
+
+= 
+== 
+== 
+= 
+== 
+
+== 
+
+
+© 2026 Netcompany - 436/539 
+
+
+© 2026 Netcompany - 437/539 
+
+
+
+© 2026 Netcompany - 438/539 
+
+
+© 2026 Netcompany - 439/539 
+
+
+
+© 2026 Netcompany - 440/539 
+
+
+© 2026 Netcompany - 441/539 
+
+
+
+ -
+
+-
+
+-
+
+
+© 2026 Netcompany - 442/539 
+
+
+ -
+
+© 2026 Netcompany - 443/539 
+
+
+
+© 2026 Netcompany - 444/539 
+
+
+ -
+
+© 2026 Netcompany - 445/539 
+
+
+
+ -
+
+-
+
+
+© 2026 Netcompany - 446/539 
+
+
+© 2026 Netcompany - 447/539 
+
+
+
+© 2026 Netcompany - 448/539 
+
+
+© 2026 Netcompany - 449/539 
+
+
+
+© 2026 Netcompany - 450/539 
+
+
+© 2026 Netcompany - 451/539 
+
+
+
+© 2026 Netcompany - 452/539 
+
+
+© 2026 Netcompany - 453/539 
+
+
+
+© 2026 Netcompany - 454/539 
+
+
+© 2026 Netcompany - 455/539 
+
+
+
+© 2026 Netcompany - 456/539 
+
+
+© 2026 Netcompany - 457/539 
+
+
+
+© 2026 Netcompany - 458/539 
+
+
+© 2026 Netcompany - 459/539 
+
+
+
+© 2026 Netcompany - 460/539 
+
+
+© 2026 Netcompany - 461/539 
+
+
+
+© 2026 Netcompany - 462/539 
+
+
+© 2026 Netcompany - 463/539 
+
+
+
+© 2026 Netcompany - 464/539 
+
+
+© 2026 Netcompany - 465/539 
+
+
+
+© 2026 Netcompany - 466/539 
+
+
+© 2026 Netcompany - 467/539 
+
+
+
+© 2026 Netcompany - 468/539 
+
+
+© 2026 Netcompany - 469/539 
+
+
+
+© 2026 Netcompany - 470/539 
+
+
+© 2026 Netcompany - 471/539 
+
+
+
+© 2026 Netcompany - 472/539 
+
+
+© 2026 Netcompany - 473/539 
+
+
+
+© 2026 Netcompany - 474/539 
+
+
+© 2026 Netcompany - 475/539 
+
+
+
+© 2026 Netcompany - 476/539 
+
+
+© 2026 Netcompany - 477/539 
+
+
+
+© 2026 Netcompany - 478/539 
+
+
+© 2026 Netcompany - 479/539 
+
+
+
+© 2026 Netcompany - 480/539 
+
+
+© 2026 Netcompany - 481/539 
+
+
+
+© 2026 Netcompany - 482/539 
+
+
+© 2026 Netcompany - 483/539 
+
+
+
+© 2026 Netcompany - 484/539 
+
+
+© 2026 Netcompany - 485/539 
+
+
+
+© 2026 Netcompany - 486/539 
+
+
+© 2026 Netcompany - 487/539 
+
+
+
+© 2026 Netcompany - 488/539 
+
+
+© 2026 Netcompany - 489/539 
+
+
+
+© 2026 Netcompany - 490/539 
+
+
+© 2026 Netcompany - 491/539 
+
+
+
+© 2026 Netcompany - 492/539 
+
+
+© 2026 Netcompany - 493/539 
+
+
+
+© 2026 Netcompany - 494/539 
+
+
+© 2026 Netcompany - 495/539 
+
+
+
+© 2026 Netcompany - 496/539 
+
+
+© 2026 Netcompany - 497/539 
+
+
+
+© 2026 Netcompany - 498/539 
+
+
+© 2026 Netcompany - 499/539 
+
+
+
+© 2026 Netcompany - 500/539 
+
+
+© 2026 Netcompany - 501/539 
+
+
+
+© 2026 Netcompany - 502/539 
+
+
+© 2026 Netcompany - 503/539 
+
+
+
+© 2026 Netcompany - 504/539 
+
+
+© 2026 Netcompany - 505/539 
+
+
+
+© 2026 Netcompany - 506/539 
+
+
+© 2026 Netcompany - 507/539 
+
+
+
+© 2026 Netcompany - 508/539 
+
+
+© 2026 Netcompany - 509/539 
+
+
+
+© 2026 Netcompany - 510/539 
+
+
+© 2026 Netcompany - 511/539 
+
+
+
+© 2026 Netcompany - 512/539 
+
+
+© 2026 Netcompany - 513/539 
+
+
+
+© 2026 Netcompany - 514/539 
+
+
+© 2026 Netcompany - 515/539 
+
+
+
+© 2026 Netcompany - 516/539 
+
+
+© 2026 Netcompany - 517/539 
+
+
+
+© 2026 Netcompany - 518/539 
+
+
+© 2026 Netcompany - 519/539 
+
+
+
+© 2026 Netcompany - 520/539 
+
+
+© 2026 Netcompany - 521/539 
+
+
+
+© 2026 Netcompany - 522/539 
+
+
+© 2026 Netcompany - 523/539 
+
+
+
+© 2026 Netcompany - 524/539 
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+© 2026 Netcompany - 525/539 
+
+
+
+= 
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 526/539 
+
+
+© 2026 Netcompany - 527/539 
+
+
+
+© 2026 Netcompany - 528/539 
+
+
+© 2026 Netcompany - 529/539 
+
+
+
+© 2026 Netcompany - 530/539 
+
+
+© 2026 Netcompany - 531/539 
+
+
+
+ 
+
+
+© 2026 Netcompany - 532/539 
+
+
+© 2026 Netcompany - 533/539 
+
+
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+= 
+
+
+© 2026 Netcompany - 534/539 
+
+
+= 
+
+= 
+
+© 2026 Netcompany - 535/539 
+
+
+
+© 2026 Netcompany - 536/539 
+
+
+© 2026 Netcompany - 537/539 
+
+
+
+© 2026 Netcompany - 538/539 
+
+
+© 2026 Netcompany - 539/539 
+
+
+

@@ -1,0 +1,182 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram name="DIAG-12 Regulatory Audit Trail" id="diag-12">
+    <mxGraphModel dx="1868" dy="945" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="932" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title and subtitle -->
+        <mxCell id="title" parent="1" style="text;html=1;fontSize=22;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A1A1A;" value="DIAG-12 — Regulatory Audit Trail: Any Question Answered in Under 10 Minutes" vertex="1">
+          <mxGeometry x="120" y="18" width="1414" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;fontSize=12;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="Every action, every DMN invocation, every suppression evaluation logged with actor, timestamp, and rule version. Single query returns complete account history." vertex="1">
+          <mxGeometry x="120" y="54" width="1414" height="24" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- LEFT PANEL — Event Sources                                  -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="left-panel" parent="1" style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Event Sources" vertex="1">
+          <mxGeometry x="40" y="86" width="440" height="620" as="geometry" />
+        </mxCell>
+
+        <!-- activateSuppression / liftSuppression (crimson) -->
+        <mxCell id="evt-suppression" parent="left-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="activateSuppression() / liftSuppression()" vertex="1">
+          <mxGeometry x="40" y="56" width="360" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- DECEASED_FLAG_SET (dark indigo) -->
+        <mxCell id="evt-deceased" parent="left-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="DECEASED_FLAG_SET" vertex="1">
+          <mxGeometry x="40" y="124" width="360" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- CC_PROMOTION (purple) -->
+        <mxCell id="evt-cc-promotion" parent="left-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="CC_PROMOTION (champion/challenger)" vertex="1">
+          <mxGeometry x="40" y="192" width="360" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- OVERRIDE (slate) -->
+        <mxCell id="evt-override" parent="left-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="OVERRIDE (write-off self-approval conflict)" vertex="1">
+          <mxGeometry x="40" y="260" width="360" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- MANUAL_REVIEW_REQUIRED (red warning) -->
+        <mxCell id="evt-manual-review" parent="left-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="MANUAL_REVIEW_REQUIRED" vertex="1">
+          <mxGeometry x="40" y="328" width="360" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- Flowable HistoryEventProcessor (crimson, different shade) -->
+        <mxCell id="evt-flowable" parent="left-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#6A0035;fontColor=#FFFFFF;fontSize=11;arcSize=6;spacing=8;align=left;spacingLeft=10;" value="&lt;b&gt;Flowable HistoryEventProcessor&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;TASK_COMPLETED, VARIABLE_UPDATED,&lt;br/&gt;PROCESS_INSTANCE_SUSPENDED / ACTIVATED /&lt;br/&gt;DELETED / MIGRATED&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="396" width="360" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Self-service actions (dark indigo) -->
+        <mxCell id="evt-selfservice" parent="left-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=11;arcSize=6;spacing=8;align=left;spacingLeft=10;" value="&lt;b&gt;Self-service actions&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:10px;&quot;&gt;append-only, with correlation ID,&lt;br/&gt;idempotency key, source channel&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="496" width="360" height="72" as="geometry" />
+        </mxCell>
+
+        <!-- Arrows from each event source to centre panel (drawn as cross-panel connectors below) -->
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- CENTRE PANEL — AUDIT_EVENT Store                            -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="centre-panel" parent="1" style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="AUDIT_EVENT Store (domain/audit)" vertex="1">
+          <mxGeometry x="510" y="86" width="440" height="620" as="geometry" />
+        </mxCell>
+
+        <!-- Main AUDIT_EVENT entity (dark indigo, large) -->
+        <mxCell id="audit-event-entity" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=6;spacing=8;align=left;spacingLeft=14;" value="&lt;b&gt;AUDIT_EVENT (immutable)&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:12px;font-style:normal;&quot;&gt;— entity_type, entity_id&lt;br/&gt;— event_type, actor_id&lt;br/&gt;— occurred_at&lt;br/&gt;— rule_version (where applicable)&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="56" width="360" height="130" as="geometry" />
+        </mxCell>
+
+        <!-- Actor limitation note -->
+        <mxCell id="actor-limit-note" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=11;arcSize=6;spacing=8;align=left;spacingLeft=10;" value="&lt;b&gt;Actor for Flowable Admin UI operations:&lt;/b&gt;&lt;br/&gt;SYSTEM UUID (00000000-0000-0000-0000-000000000001).&lt;br/&gt;Real Keycloak identity in Keycloak access log —&lt;br/&gt;cross-reference limitation documented in&lt;br/&gt;compliance audit screen." vertex="1">
+          <mxGeometry x="40" y="216" width="360" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- simulation_run box (dark indigo) -->
+        <mxCell id="simulation-run" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;align=left;spacingLeft=10;" value="&lt;b&gt;simulation_run&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px;font-style:italic;&quot;&gt;immutable evidence, not operational telemetry&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="344" width="360" height="68" as="geometry" />
+        </mxCell>
+
+        <!-- Immutable constraint note (green) -->
+        <mxCell id="immutable-note" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=2;fontColor=#1B5E20;fontSize=11;arcSize=6;spacing=8;align=left;spacingLeft=10;" value="&lt;b&gt;No update or delete path exists.&lt;/b&gt;&lt;br/&gt;Records are written once and never modified.&lt;br/&gt;Regulatory queries need no external system lookup." vertex="1">
+          <mxGeometry x="40" y="440" width="360" height="68" as="geometry" />
+        </mxCell>
+
+        <!-- Single query note -->
+        <mxCell id="single-query-note" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;fontColor=#0D47A1;fontSize=11;arcSize=6;spacing=8;align=left;spacingLeft=10;" value="Single query on entity_id returns&lt;br/&gt;complete ordered account history —&lt;br/&gt;all event types, all actors, all versions." vertex="1">
+          <mxGeometry x="40" y="528" width="360" height="68" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- RIGHT PANEL — Query Consumers                               -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="right-panel" parent="1" style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Query Consumers" vertex="1">
+          <mxGeometry x="980" y="86" width="440" height="620" as="geometry" />
+        </mxCell>
+
+        <!-- Agent — staff-visible timeline (slate) -->
+        <mxCell id="consumer-agent" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;align=left;spacingLeft=10;" value="&lt;b&gt;Agent — staff-visible timeline&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px;font-style:italic;&quot;&gt;near real-time after event&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="56" width="360" height="72" as="geometry" />
+        </mxCell>
+
+        <!-- COMPLIANCE role — Operations Workspace (green) -->
+        <mxCell id="consumer-compliance" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;align=left;spacingLeft=10;" value="&lt;b&gt;COMPLIANCE role — Operations Workspace&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px;font-style:italic;&quot;&gt;read-only view — regulatory queries&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="156" width="360" height="72" as="geometry" />
+        </mxCell>
+
+        <!-- Demo Flow 12 (green, highlighted) -->
+        <mxCell id="consumer-demo" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;strokeWidth=3;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;align=left;spacingLeft=10;" value="&lt;b&gt;Demo Flow 12&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px;&quot;&gt;question to answer in under 10 minutes&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="256" width="360" height="72" as="geometry" />
+        </mxCell>
+
+        <!-- Admin UI — ADR-006 guardrail 4 (purple) -->
+        <mxCell id="consumer-admin" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;align=left;spacingLeft=10;" value="&lt;b&gt;Admin UI — ADR-006 guardrail 4&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px;font-style:italic;&quot;&gt;Actor limitation documented for evaluators&lt;/font&gt;" vertex="1">
+          <mxGeometry x="40" y="356" width="360" height="72" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- CROSS-PANEL FLOW ARROWS (parent=1)                          -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+
+        <!-- All event sources → AUDIT_EVENT (single aggregated arrow from left panel to centre panel) -->
+        <mxCell id="arrow-left-to-centre" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#283593;strokeWidth=3;startArrow=none;endArrow=block;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="left-panel" target="centre-panel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-left-lbl" parent="1" style="text;html=1;fontSize=11;fontStyle=1;fillColor=#E8EAF6;strokeColor=#283593;strokeWidth=1;fontColor=#283593;arcSize=6;rounded=1;spacing=4;" value="writes to" vertex="1">
+          <mxGeometry x="466" y="376" width="70" height="26" as="geometry" />
+        </mxCell>
+
+        <!-- AUDIT_EVENT → Query Consumers -->
+        <mxCell id="arrow-centre-to-right" parent="1" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#2E7D32;strokeWidth=3;startArrow=none;endArrow=block;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" source="centre-panel" target="right-panel">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow-centre-lbl" parent="1" style="text;html=1;fontSize=11;fontStyle=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=1;fontColor=#2E7D32;arcSize=6;rounded=1;spacing=4;" value="queried by" vertex="1">
+          <mxGeometry x="934" y="376" width="72" height="26" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- BOTTOM CALLOUT STRIP — Self-service audit                   -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="bottom-callout" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=3;fontColor=#1B5E20;fontSize=13;fontStyle=1;arcSize=4;spacing=10;align=left;spacingLeft=20;" value="Self-service audit: domain/audit records all self-service actions automatically. Every create/update command must carry correlation ID, idempotency key, and source channel." vertex="1">
+          <mxGeometry x="40" y="728" width="1380" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- LEGEND                                                       -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="legend" parent="1" style="swimlane;startSize=28;fillColor=#FAFAFA;strokeColor=#90A4AE;strokeWidth=2;fontColor=#37474F;fontSize=12;fontStyle=1;arcSize=3;align=left;spacingLeft=10;" value="Legend" vertex="1">
+          <mxGeometry x="40" y="796" width="760" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-actor" parent="legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=10;arcSize=6;" value="Actor / User" vertex="1">
+          <mxGeometry x="10" y="30" width="90" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-entity" parent="legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=6;" value="Domain entity" vertex="1">
+          <mxGeometry x="112" y="30" width="90" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-process" parent="legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=10;arcSize=6;" value="Process / Flowable" vertex="1">
+          <mxGeometry x="214" y="30" width="100" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-green" parent="legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=10;arcSize=6;" value="Compliance / Query" vertex="1">
+          <mxGeometry x="326" y="30" width="104" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-purple" parent="legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=10;arcSize=6;" value="C/C / Admin UI" vertex="1">
+          <mxGeometry x="442" y="30" width="96" height="26" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-warning" parent="legend" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=10;arcSize=6;" value="Warning / Constraint" vertex="1">
+          <mxGeometry x="550" y="30" width="110" height="26" as="geometry" />
+        </mxCell>
+
+        <!-- Footer constraint note -->
+        <mxCell id="footer-note" parent="1" style="text;html=1;fontSize=11;fontStyle=3;align=left;fillColor=none;strokeColor=none;fontColor=#B71C1C;" value="Constraint: AUDIT_EVENT records are immutable — no update or delete path exists. Regulatory queries need no external system lookup." vertex="1">
+          <mxGeometry x="40" y="872" width="980" height="18" as="geometry" />
+        </mxCell>
+        <mxCell id="footer-sources" parent="1" style="text;html=1;fontSize=10;fontStyle=2;align=left;fillColor=none;strokeColor=none;fontColor=#90A4AE;" value="Sources: ADR-001, ADR-006, ADR-003, MASTER-DESIGN-DOCUMENT, audit domain package" vertex="1">
+          <mxGeometry x="40" y="912" width="700" height="16" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

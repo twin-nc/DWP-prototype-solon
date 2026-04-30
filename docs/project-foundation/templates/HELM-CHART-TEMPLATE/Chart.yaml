@@ -1,0 +1,8 @@
+apiVersion: v2
+# Replace myapp with your project name (lowercase, hyphens only)
+name: myapp
+description: >
+  {{PROJECT_NAME}} — replace this description before handoff
+type: application
+version: 0.1.0
+appVersion: "0.1.0"

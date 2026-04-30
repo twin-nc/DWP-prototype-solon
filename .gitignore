@@ -1,0 +1,39 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# macOS
+.DS_Store
+
+# Backend (Maven / Java)
+backend/target/
+backend/.mvn/wrapper/maven-wrapper.jar
+*.class
+*.jar
+!backend/src/test/**/*.jar
+
+# Frontend (Node)
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/coverage/
+
+# Docker
+*.log
+.codex/
+.claude/.tool-call-count
+.claude/session-*.jsonl
+.claude/costs.jsonl
+.claude/governance-log.jsonl
+
+# Helm
+infrastructure/helm/dcms/charts/
+infrastructure/helm/dcms/*.lock

@@ -1,0 +1,187 @@
+<mxfile host="app.diagrams.net" modified="2026-04-23T00:00:00.000Z" agent="Codex" version="24.7.17" editor="draw.io" compressed="false">
+  <diagram name="Hybrid Architecture Overview">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="DCMS Hybrid Architecture: Event-Driven Workflow + OO Domain Modules in One Monolith" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="120" y="20" width="1410" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="outside" value="Outside the monolith" style="swimlane;startSize=30;fillColor=#f5f5f5;strokeColor=#666666;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="80" width="360" height="940" as="geometry" />
+        </mxCell>
+
+        <mxCell id="frontend" value="Frontend (React + GOV.UK)&#xa;Agent and supervisor screens&#xa;Calls backend REST APIs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=12;" vertex="1" parent="outside">
+          <mxGeometry x="30" y="60" width="300" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="keycloak" value="Keycloak (OIDC/OAuth2)&#xa;Issues JWT with role claims&#xa;Backend validates token" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=12;" vertex="1" parent="outside">
+          <mxGeometry x="30" y="210" width="300" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dwp" value="DWP source systems (DWP Place, DM6)&#xa;Send debt referrals and event updates" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=12;" vertex="1" parent="outside">
+          <mxGeometry x="30" y="360" width="300" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="extSystems" value="External partners&#xa;Payment gateway, bureau feeds, DCA" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=12;" vertex="1" parent="outside">
+          <mxGeometry x="30" y="510" width="300" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="monolith" value="DCMS Spring Boot Monolith (single deployable app)" style="swimlane;startSize=35;fillColor=#e8f5e9;strokeColor=#2e7d32;fontSize=14;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="430" y="80" width="1180" height="940" as="geometry" />
+        </mxCell>
+
+        <mxCell id="api" value="API and app entry points&#xa;REST controllers, authz checks, orchestration services" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#2e7d32;fontSize=12;" vertex="1" parent="monolith">
+          <mxGeometry x="20" y="55" width="1130" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="workflow_lane" value="Event-driven workflow layer (Flowable in infrastructure/process)" style="swimlane;startSize=30;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=13;fontStyle=1;" vertex="1" parent="monolith">
+          <mxGeometry x="20" y="165" width="1130" height="250" as="geometry" />
+        </mxCell>
+
+        <mxCell id="flowable" value="Flowable engine&#xa;BPMN process state is authoritative for debt lifecycle&#xa;One process instance per DebtAccount" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="workflow_lane">
+          <mxGeometry x="20" y="45" width="330" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="events" value="Event subprocesses&#xa;BREATHING_SPACE_START/END&#xa;BENEFIT_CEASED, CIRCUMSTANCE_CHANGE&#xa;INSOLVENCY_REGISTERED, DEATH_REGISTERED&#xa;PAYMENT_MISSED (timer), SUPERVISOR_OVERRIDE" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="workflow_lane">
+          <mxGeometry x="370" y="45" width="360" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bpmnDmn" value="Versioned BPMN/DMN resources&#xa;treatments/, fragments/, decisions/&#xa;Operational routing via DMN + config" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="workflow_lane">
+          <mxGeometry x="750" y="45" width="350" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ports_lane" value="Interaction ports (shared/process/port)" style="swimlane;startSize=30;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=13;fontStyle=1;" vertex="1" parent="monolith">
+          <mxGeometry x="20" y="445" width="1130" height="170" as="geometry" />
+        </mxCell>
+
+        <mxCell id="pep" value="ProcessEventPort&#xa;fireMessage(debtAccountId, message, vars)&#xa;fireSignal(customerId, signal, vars)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="ports_lane">
+          <mxGeometry x="20" y="45" width="350" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="psp" value="ProcessStartPort&#xa;startTreatment(debtAccountId, segmentCode)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="ports_lane">
+          <mxGeometry x="390" y="45" width="330" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bus" value="DelegateCommandBus&#xa;Delegate -> command -> handler routing" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="ports_lane">
+          <mxGeometry x="740" y="45" width="360" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="domain_lane" value="Object-oriented domain modules (business logic + invariants + persistence)" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=13;fontStyle=1;" vertex="1" parent="monolith">
+          <mxGeometry x="20" y="645" width="1130" height="220" as="geometry" />
+        </mxCell>
+
+        <mxCell id="domainCore" value="Core domains&#xa;customer, account, repaymentplan, payment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="domain_lane">
+          <mxGeometry x="20" y="45" width="350" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="domainOps" value="Operational domains&#xa;strategy, workallocation, communications, integration, user, audit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="domain_lane">
+          <mxGeometry x="390" y="45" width="350" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="handlers" value="Command handlers (OO services)&#xa;e.g. SendLetterCommandHandler,&#xa;AssessAffordabilityCommandHandler,&#xa;PostPaymentDeductionCommandHandler" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="domain_lane">
+          <mxGeometry x="760" y="45" width="340" height="120" as="geometry" />
+        </mxCell>
+
+        <mxCell id="db" value="PostgreSQL (single DB)&#xa;Domain data + process data + audit data&#xa;Single transaction boundary where required" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;" vertex="1" parent="monolith">
+          <mxGeometry x="20" y="885" width="1130" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="seq_title" value="Example runtime path: BENEFIT_CEASED" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=13;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1040" width="500" height="24" as="geometry" />
+        </mxCell>
+
+        <mxCell id="seq" value="1) External update arrives -> integration endpoint&#xa;2) Integration/domain service calls ProcessEventPort.fireMessage(..., BENEFIT_CEASED, ...)&#xa;3) Flowable interrupting event subprocess catches BENEFIT_CEASED&#xa;4) Workflow triggers RESEGMENT and starts new treatment via ProcessStartPort&#xa;5) Service tasks call delegates -> DelegateCommandBus -> OO domain handlers&#xa;6) Domain services persist account/payment/comms/audit updates in PostgreSQL" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="40" y="1065" width="1570" height="88" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" value="REST API calls" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;strokeWidth=1.2;exitX=1;exitY=0.25;entryX=0;entryY=0.2;entryDx=0;entryDy=0;" edge="1" source="frontend" target="api" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="OIDC login and JWT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;strokeWidth=1.2;exitX=1;exitY=0.45;entryX=0;entryY=0.4;entryDx=0;entryDy=0;" edge="1" source="keycloak" target="api" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="referrals and event updates" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;strokeWidth=1.2;exitX=1;exitY=0.55;entryX=0;entryY=0.6;entryDx=0;entryDy=0;" edge="1" source="dwp" target="api" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" value="payments, bureau, DCA integration" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;strokeWidth=1.2;exitX=1;exitY=0.75;entryX=0;entryY=0.8;entryDx=0;entryDy=0;" edge="1" source="extSystems" target="api" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e5" value="trigger events/start" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;strokeWidth=1.2;exitX=0.03;exitY=1;exitDx=0;exitDy=0;entryX=0.05;entryY=0;entryDx=0;entryDy=0;" edge="1" source="api" target="pep" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="460" y="520" />
+              <mxPoint x="460" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.2;exitX=0.32;exitY=1;exitDx=0;exitDy=0;entryX=0.08;entryY=0;entryDx=0;entryDy=0;" edge="1" source="api" target="psp" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="520" />
+              <mxPoint x="810" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e7" value="implemented by infrastructure/process" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;strokeWidth=1.2;exitX=0.84;exitY=0;exitDx=0;exitDy=0;entryX=0.92;entryY=1;entryDx=0;entryDy=0;" edge="1" source="pep" target="flowable" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.2;exitX=0;exitY=0.25;exitDx=0;exitDy=0;entryX=1;entryY=0.95;entryDx=0;entryDy=0;" edge="1" source="psp" target="flowable" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="595" />
+              <mxPoint x="810" y="451" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="e9" value="service task -&gt; delegate command" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;strokeWidth=1.2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" source="flowable" target="bus" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="375" />
+              <mxPoint x="810" y="560" />
+              <mxPoint x="1180" y="560" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e10" value="dispatch(command)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;strokeWidth=1.2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="bus" target="handlers" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="domain behavior and invariants" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;strokeWidth=1.2;exitX=0;exitY=0;exitDx=0;exitDy=0;entryX=1;entryY=0;entryDx=0;entryDy=0;" edge="1" source="handlers" target="domainCore" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1200" y="760" />
+              <mxPoint x="830" y="760" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.2;exitX=0;exitY=0.2;exitDx=0;exitDy=0;entryX=1;entryY=0.2;entryDx=0;entryDy=0;" edge="1" source="handlers" target="domainOps" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e13" value="persist" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;strokeWidth=1.2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;" edge="1" source="domainCore" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" source="domainOps" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e15" value="process state and history" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;labelBackgroundColor=#ffffff;strokeWidth=1.2;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.32;entryY=0;entryDx=0;entryDy=0;" edge="1" source="flowable" target="db" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="375" />
+              <mxPoint x="810" y="965" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <mxCell id="note" value="Boundary rule: domain modules do not import Flowable directly. All process interaction goes through ProcessEventPort / ProcessStartPort." style="text;html=1;strokeColor=#d6b656;fillColor=#fff2cc;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="430" y="1028" width="1180" height="34" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

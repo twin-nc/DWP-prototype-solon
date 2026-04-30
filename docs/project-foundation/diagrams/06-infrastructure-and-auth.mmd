@@ -1,0 +1,52 @@
+---
+title: "DCMS — Infrastructure, Deployment, and Auth Flow"
+---
+flowchart TB
+  subgraph LOCAL["Local environment  (Docker Compose / k3d)"]
+    direction LR
+    FE_L["Frontend container\nnginx:1.27-alpine\n:3000"]
+    BE_L["Backend container\neclipse-temurin:21-jre-jammy\n:8080"]
+    DB_L[("PostgreSQL 16\n:5432")]
+    KC_L["Keycloak 24\nquay.io/keycloak/keycloak:24\n:8180\nRealm: dcms (from realm-dcms.json)"]
+    FE_L -->|REST| BE_L
+    BE_L --> DB_L
+    BE_L -->|OIDC token validation| KC_L
+  end
+
+  subgraph DEV["Dev environment  (AKS on Azure — Helm chart)"]
+    direction LR
+    FE_D["Frontend pod\nnginx:1.27-alpine"]
+    BE_D["Backend pod\neclipse-temurin:21-jre-jammy"]
+    DB_D[("PostgreSQL 16")]
+    KC_D["Keycloak 24"]
+    FE_D -->|REST| BE_D
+    BE_D --> DB_D
+    BE_D -->|OIDC token validation| KC_D
+  end
+
+  subgraph CICD["CI/CD  (GitHub Actions)"]
+    direction LR
+    BUILD["Build & test\n(Maven + npm)"]
+    SCAN["Container scan\nHelm lint"]
+    PUSH["Push image\nufstpit-dev-docker.repo.netcompany.com\ndcms_v0/dcms_v0-{service}:{sha}"]
+    DEPLOY_D["Deploy to dev\nHelm upgrade"]
+    BUILD --> SCAN --> PUSH --> DEPLOY_D
+  end
+
+  subgraph AUTH["Auth flow (same in both environments — STD-PLAT-008)"]
+    direction LR
+    BROWSER["Browser / DWP Agent"]
+    A1["1. Login redirect to Keycloak"]
+    A2["2. Keycloak issues JWT\n(contains RBAC roles in claims)"]
+    A3["3. Frontend sends JWT\nin Authorization header"]
+    A4["4. Spring Security OAuth2\nResource Server validates JWT\nand enforces RBAC"]
+    BROWSER --> A1 --> A2 --> A3 --> A4
+  end
+
+  PARITY["⚖ Parity rule (STD-PLAT-008)\nLocal and dev must be functionally equivalent:\nsame config keys · same auth flow (Keycloak never skipped)\nsame JSON log format\nAll divergences documented in remote-environment-spec.md"]
+
+  style PARITY fill:#e3f2fd,stroke:#1565c0,color:#0d47a1
+  style LOCAL fill:#e8f5e9,stroke:#2e7d32
+  style DEV fill:#fff8e1,stroke:#f9a825
+  style CICD fill:#f3e5f5,stroke:#6a1b9a
+  style AUTH fill:#fce4ec,stroke:#c62828

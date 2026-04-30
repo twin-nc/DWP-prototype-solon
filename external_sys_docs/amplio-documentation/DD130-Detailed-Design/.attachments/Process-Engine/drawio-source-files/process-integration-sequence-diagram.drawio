@@ -1,0 +1,161 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36" version="28.1.2">
+  <diagram name="Page-1" id="YzETDME0Qo6Gkl20hRHr">
+    <mxGraphModel dx="2066" dy="1137" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-1" value="AbstractIntegrationListener" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" parent="1" vertex="1">
+          <mxGeometry x="20" y="20" width="213" height="1286" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-2" value="AsyncProcessIntegrationExecutorImpl" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" parent="1" vertex="1">
+          <mxGeometry x="457" y="20" width="285" height="1286" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-3" value="ProcessIntegrationStatusService" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" parent="1" vertex="1">
+          <mxGeometry x="922" y="20" width="244" height="1286" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-4" value="ContextAwareAsyncExecutor" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" parent="1" vertex="1">
+          <mxGeometry x="1216" y="20" width="221" height="1286" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-5" value="ProcessIntegrationService" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" parent="1" vertex="1">
+          <mxGeometry x="1659" y="20" width="201" height="1286" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-6" value="ProcessPendingService" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;elbow&quot;:&quot;vertical&quot;,&quot;curved&quot;:0,&quot;rounded&quot;:0};size=65;" parent="1" vertex="1">
+          <mxGeometry x="1910" y="20" width="181" height="1286" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-7" value="opt" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#B3B3B3;height=20;width=30" parent="1" vertex="1">
+          <mxGeometry x="116" y="725" width="1655" height="202" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-8" value="[Within wait period (default 2s)]" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" parent="g6VGqthF6oqzLcxs2S1F-7" vertex="1">
+          <mxGeometry x="30" width="1625" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-9" value="opt" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#B3B3B3;height=20;width=30" parent="1" vertex="1">
+          <mxGeometry x="116" y="937" width="1896" height="254" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-10" value="[Timeout occurs]" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" parent="g6VGqthF6oqzLcxs2S1F-9" vertex="1">
+          <mxGeometry x="30" width="1866" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-11" value="alt" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#B3B3B3;height=20;width=30" parent="1" vertex="1">
+          <mxGeometry x="106" y="477" width="1916" height="724" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-12" value="[No intents to execute]" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" parent="g6VGqthF6oqzLcxs2S1F-11" vertex="1">
+          <mxGeometry x="30" width="1886" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-13" value="[Intents to execute]" style="shape=line;dashed=1;whiteSpace=wrap;verticalAlign=top;labelPosition=center;verticalLabelPosition=middle;align=center;strokeColor=#B3B3B3;" parent="g6VGqthF6oqzLcxs2S1F-11" vertex="1">
+          <mxGeometry y="103" width="1916" height="4" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-14" value="alt" style="shape=umlFrame;dashed=1;pointerEvents=0;dropTarget=0;strokeColor=#B3B3B3;height=20;width=30" parent="1" vertex="1">
+          <mxGeometry x="96" y="251" width="1936" height="960" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-15" value="[Running integrations exist]" style="text;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;" parent="g6VGqthF6oqzLcxs2S1F-14" vertex="1">
+          <mxGeometry x="30" width="1906" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-16" value="[No running integrations]" style="shape=line;dashed=1;whiteSpace=wrap;verticalAlign=top;labelPosition=center;verticalLabelPosition=middle;align=center;strokeColor=#B3B3B3;" parent="g6VGqthF6oqzLcxs2S1F-14" vertex="1">
+          <mxGeometry y="103" width="1936" height="4" as="geometry" />
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-17" value="executeIntegrations(processId, taskId, intents, retryFailed)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" parent="1" source="g6VGqthF6oqzLcxs2S1F-1" target="g6VGqthF6oqzLcxs2S1F-2" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="372" y="127" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-18" value="setStuckRunningIntegrationsToFailed(taskId, timeout)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" parent="1" source="g6VGqthF6oqzLcxs2S1F-2" target="g6VGqthF6oqzLcxs2S1F-3" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="830" y="179" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-20" value="return (integrationsCompleted=false , naturalTimeOut= false)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;fillColor=#d5e8d4;strokeColor=#336600;fontColor=#336600;" parent="1" source="g6VGqthF6oqzLcxs2S1F-2" target="g6VGqthF6oqzLcxs2S1F-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="375" y="329" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-21" value="filter intents (new + failed if retry)" style="curved=1;endArrow=block;rounded=0;" parent="1" source="g6VGqthF6oqzLcxs2S1F-2" target="g6VGqthF6oqzLcxs2S1F-2" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="651" y="427" />
+              <mxPoint x="651" y="457" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-22" value="return existing results" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;strokeColor=#336600;fontColor=#336600;" parent="1" source="g6VGqthF6oqzLcxs2S1F-2" target="g6VGqthF6oqzLcxs2S1F-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="375" y="555" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-23" value="executeAsyncWithinContext(...)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" parent="1" source="g6VGqthF6oqzLcxs2S1F-2" target="g6VGqthF6oqzLcxs2S1F-4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="971" y="653" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-24" value="executeIntegrationIntents(processId, taskId, intents)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" parent="1" source="g6VGqthF6oqzLcxs2S1F-4" target="g6VGqthF6oqzLcxs2S1F-5" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1551" y="705" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-25" value="Result (success/failure)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;strokeColor=#336600;fontColor=#336600;" parent="1" source="g6VGqthF6oqzLcxs2S1F-5" target="g6VGqthF6oqzLcxs2S1F-4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1554" y="803" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-26" value="ProcessIntegrationExecutionResult" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;strokeColor=#336600;fontColor=#336600;" parent="1" source="g6VGqthF6oqzLcxs2S1F-4" target="g6VGqthF6oqzLcxs2S1F-2" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="974" y="855" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-27" value="return result" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;strokeColor=#336600;fontColor=#336600;" parent="1" source="g6VGqthF6oqzLcxs2S1F-2" target="g6VGqthF6oqzLcxs2S1F-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="375" y="907" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-28" value="return (naturalTimeOut=true)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;strokeColor=#336600;fontColor=#336600;" parent="1" source="g6VGqthF6oqzLcxs2S1F-2" target="g6VGqthF6oqzLcxs2S1F-1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="375" y="1015" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-29" value="Result (completed in background)" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" parent="1" source="g6VGqthF6oqzLcxs2S1F-5" target="g6VGqthF6oqzLcxs2S1F-4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1554" y="1067" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="g6VGqthF6oqzLcxs2S1F-30" value="ProcessIntegrationExecutionResult" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;dashed=1;dashPattern=2 3;endArrow=block;" parent="1" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="974" y="1160" />
+            </Array>
+            <mxPoint x="1326" y="1160" as="sourcePoint" />
+            <mxPoint x="599" y="1160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="pfSgul-O9d-NmATwxIXB-35" value="createResumeEventIfStillInCurrentTask" style="verticalAlign=bottom;edgeStyle=elbowEdgeStyle;elbow=vertical;curved=0;rounded=0;endArrow=block;" edge="1" parent="1" target="g6VGqthF6oqzLcxs2S1F-6">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1545" y="1130" />
+            </Array>
+            <mxPoint x="1330" y="1130" as="sourcePoint" />
+            <mxPoint x="1753" y="1130" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

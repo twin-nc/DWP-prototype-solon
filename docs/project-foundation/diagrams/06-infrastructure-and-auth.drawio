@@ -1,0 +1,153 @@
+<mxfile host="app.diagrams.net" modified="2026-04-23T00:00:00.000Z" agent="Codex" version="24.7.17" editor="draw.io" compressed="false">
+  <diagram name="Infrastructure and Auth">
+    <mxGraphModel dx="1800" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="DCMS - Infrastructure, Deployment, and Auth Flow" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;fontSize=26;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="20" width="1400" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="local_box" value="Local Environment (Docker Compose / k3d)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e9;strokeColor=#2e7d32;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="90" width="1120" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="l_fe" value="Frontend container&#xa;nginx:1.27-alpine&#xa;:3000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="180" width="230" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="l_be" value="Backend container&#xa;eclipse-temurin:21-jre-jammy&#xa;:8080" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="350" y="180" width="250" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="l_db" value="PostgreSQL 16&#xa;:5432" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="640" y="180" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="l_kc" value="Keycloak 24&#xa;:8180&#xa;Realm: dcms" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="880" y="180" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="dev_box" value="Dev Environment (AKS on Azure - Helm chart)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff8e1;strokeColor=#f9a825;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="90" width="1120" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="d_fe" value="Frontend pod&#xa;nginx:1.27-alpine" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="180" width="230" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="d_be" value="Backend pod&#xa;eclipse-temurin:21-jre-jammy" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1550" y="180" width="250" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="d_db" value="PostgreSQL 16" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1840" y="180" width="200" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="d_kc" value="Keycloak 24" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="2080" y="180" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cicd_box" value="CI/CD (GitHub Actions)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#6a1b9a;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="40" y="430" width="1120" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="c_build" value="Build and test&#xa;(Maven + npm)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="80" y="540" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c_scan" value="Container scan&#xa;Helm lint" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="340" y="540" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c_push" value="Push image&#xa;dcms_v0/dcms_v0-{service}:{sha}" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="600" y="540" width="240" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="c_deploy" value="Deploy to dev&#xa;Helm upgrade" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#9673a6;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="880" y="540" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="auth_box" value="Auth Flow (same in both environments - STD-PLAT-008)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c62828;fontSize=14;fontStyle=1;align=left;verticalAlign=top;spacingTop=8;spacingLeft=10;" vertex="1" parent="1">
+          <mxGeometry x="1240" y="430" width="1120" height="300" as="geometry" />
+        </mxCell>
+        <mxCell id="a_browser" value="Browser / DWP Agent" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c62828;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1280" y="540" width="190" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a_1" value="1. Login redirect to Keycloak" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c62828;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1510" y="540" width="210" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a_2" value="2. Keycloak issues JWT&#xa;(RBAC roles in claims)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c62828;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="1760" y="540" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a_3" value="3. Frontend sends JWT&#xa;in Authorization header" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c62828;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="2020" y="540" width="220" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="a_4" value="4. Spring Security OAuth2&#xa;Resource Server validates JWT&#xa;and enforces RBAC" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fce4ec;strokeColor=#c62828;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="2260" y="530" width="100" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="parity" value="Parity rule (STD-PLAT-008): local and dev must be functionally equivalent.&#xa;Same config keys, same auth flow (Keycloak never skipped), same JSON log format.&#xa;All divergences documented in remote-environment-spec.md." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e3f2fd;strokeColor=#1565c0;fontColor=#0d47a1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="40" y="770" width="2320" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" value="REST" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="l_fe" target="l_be">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="l_be" target="l_db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="OIDC token validation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="l_be" target="l_kc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e4" value="REST" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="d_fe" target="d_be">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="d_be" target="d_db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" value="OIDC token validation" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="d_be" target="d_kc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="c_build" target="c_scan">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="c_scan" target="c_push">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="c_push" target="c_deploy">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="a_browser" target="a_1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="a_1" target="a_2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="a_2" target="a_3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;" edge="1" parent="1" source="a_3" target="a_4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e14" value="deploys Helm release" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="c_deploy" target="d_be">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1160" y="585" />
+              <mxPoint x="1160" y="225" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e15" value="same JWT validation path" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#c62828;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="a_4" target="l_be">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1160" y="585" />
+              <mxPoint x="1160" y="225" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e16" value="same JWT validation path" style="edgeStyle=orthogonalEdgeStyle;rounded=1;html=1;dashed=1;strokeColor=#c62828;endArrow=block;endFill=1;fontSize=12;" edge="1" parent="1" source="a_4" target="d_be">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2200" y="650" />
+              <mxPoint x="2200" y="225" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

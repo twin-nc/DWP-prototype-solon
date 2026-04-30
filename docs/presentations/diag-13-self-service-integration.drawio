@@ -1,0 +1,233 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram name="DIAG-13 Self-Service Customer Integration" id="diag-13">
+    <mxGraphModel dx="1868" dy="945" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="932" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title and subtitle -->
+        <mxCell id="title" parent="1" style="text;html=1;fontSize=20;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A1A1A;" value="DIAG-13 — Self-Service Customer Integration: DCMS as Backend Contract" vertex="1">
+          <mxGeometry x="40" y="12" width="1574" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;fontSize=11;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="DCMS owns the backend intake, validation, and workflow triggers. The customer portal is external — DCMS exposes the API contract a portal would consume." vertex="1">
+          <mxGeometry x="40" y="44" width="1574" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- LEFT SWIMLANE — External: DWP Customer Portal / App        -->
+        <!-- x=40, y=70, width=340, height=620                          -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="sl-left" parent="1" style="swimlane;startSize=44;fillColor=#F7FAFC;strokeColor=#5D4037;strokeWidth=3;fontColor=#5D4037;fontSize=13;fontStyle=1;arcSize=3;align=center;spacingLeft=6;" value="External: DWP Customer Portal / App" vertex="1">
+          <mxGeometry x="40" y="70" width="340" height="618" as="geometry" />
+        </mxCell>
+
+        <!-- Portal box 1 -->
+        <mxCell id="p1" parent="sl-left" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5D4037;strokeColor=#3E2723;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=8;align=center;spacing=6;" value="Customer authentication&lt;br/&gt;and identity proofing" vertex="1">
+          <mxGeometry x="30" y="60" width="280" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Portal box 2 -->
+        <mxCell id="p2" parent="sl-left" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5D4037;strokeColor=#3E2723;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=8;align=center;spacing=6;" value="Device enrolment,&lt;br/&gt;app-store packaging" vertex="1">
+          <mxGeometry x="30" y="150" width="280" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Portal box 3 -->
+        <mxCell id="p3" parent="sl-left" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5D4037;strokeColor=#3E2723;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=8;align=center;spacing=6;" value="Customer-facing UX&lt;br/&gt;and error journeys" vertex="1">
+          <mxGeometry x="30" y="240" width="280" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Portal box 4 -->
+        <mxCell id="p4" parent="sl-left" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5D4037;strokeColor=#3E2723;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=8;align=center;spacing=6;" value="Public-facing entrypoint" vertex="1">
+          <mxGeometry x="30" y="330" width="280" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Panel boundary label -->
+        <mxCell id="p-label" parent="sl-left" style="text;html=1;fontSize=10;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#5D4037;whiteSpace=wrap;" value="Outside DCMS — DWP strategic channel.&lt;br/&gt;DCMS does not own this." vertex="1">
+          <mxGeometry x="20" y="520" width="300" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- CENTRE SWIMLANE — DCMS Integration Boundary                -->
+        <!-- x=400, y=70, width=520, height=618                         -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="sl-centre" parent="1" style="swimlane;startSize=60;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#283593;fontSize=13;fontStyle=1;arcSize=3;align=center;" value="DCMS Integration Boundary (domain/integration)&lt;br/&gt;&lt;font style=&apos;font-size:10px;font-style:italic;font-weight:normal;color:#AD1457;&apos;&gt;Service-to-service, OAuth2 client credentials&lt;/font&gt;" vertex="1">
+          <mxGeometry x="400" y="70" width="520" height="618" as="geometry" />
+        </mxCell>
+
+        <!-- API endpoint 1 -->
+        <mxCell id="api1" parent="sl-centre" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;POST /api/v1/self-service/contact-details-updated&lt;/b&gt;&lt;br/&gt;Validates + hands to domain/customer + audit" vertex="1">
+          <mxGeometry x="20" y="70" width="480" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- API endpoint 2 -->
+        <mxCell id="api2" parent="sl-centre" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;POST /api/v1/self-service/ie-submissions&lt;/b&gt;&lt;br/&gt;Creates ie_record (channel=SELF_SERVICE), runs affordability" vertex="1">
+          <mxGeometry x="20" y="136" width="480" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- API endpoint 3 -->
+        <mxCell id="api3" parent="sl-centre" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;POST /api/v1/self-service/arrangement-offers&lt;/b&gt;&lt;br/&gt;Triggers same policy checks as agent-led flow" vertex="1">
+          <mxGeometry x="20" y="202" width="480" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- API endpoint 4 -->
+        <mxCell id="api4" parent="sl-centre" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;POST /api/v1/self-service/payment-events&lt;/b&gt;&lt;br/&gt;Triggers payment posting, reconciliation, monitoring" vertex="1">
+          <mxGeometry x="20" y="268" width="480" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- API endpoint 5 -->
+        <mxCell id="api5" parent="sl-centre" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;POST /api/v1/self-service/engagement-events&lt;/b&gt;&lt;br/&gt;Updates customer_channel_engagement for contact strategy" vertex="1">
+          <mxGeometry x="20" y="334" width="480" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- API endpoint 6 -->
+        <mxCell id="api6" parent="sl-centre" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;GET /api/v1/self-service/customer-summary/{externalRef}&lt;/b&gt;&lt;br/&gt;Data-minimisation rules enforced" vertex="1">
+          <mxGeometry x="20" y="400" width="480" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- Idempotency note (crimson) -->
+        <mxCell id="idem-note" parent="sl-centre" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;Every command:&lt;/b&gt; idempotency key + external action ref + correlation ID + source channel.&lt;br/&gt;Duplicate delivery returns deterministic no-op." vertex="1">
+          <mxGeometry x="20" y="470" width="480" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- RIGHT SWIMLANE — Internal Domains (workflow triggers)       -->
+        <!-- x=940, y=70, width=440, height=618                         -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="sl-right" parent="1" style="swimlane;startSize=44;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=13;fontStyle=1;arcSize=3;align=center;" value="Internal Domains (workflow triggers)" vertex="1">
+          <mxGeometry x="940" y="70" width="440" height="618" as="geometry" />
+        </mxCell>
+
+        <!-- Domain box 1 — customer -->
+        <mxCell id="d1" parent="sl-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;domain/customer&lt;/b&gt;&lt;br/&gt;Contact detail update, contact strategy recalculation" vertex="1">
+          <mxGeometry x="20" y="60" width="400" height="58" as="geometry" />
+        </mxCell>
+
+        <!-- Domain box 2 — repaymentplan -->
+        <mxCell id="d2" parent="sl-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;domain/repaymentplan&lt;/b&gt;&lt;br/&gt;Arrangement review / agent approval / policy checks&lt;br/&gt;(incl. vulnerability, breathing space)" vertex="1">
+          <mxGeometry x="20" y="142" width="400" height="66" as="geometry" />
+        </mxCell>
+
+        <!-- Domain box 3 — payment -->
+        <mxCell id="d3" parent="sl-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;domain/payment&lt;/b&gt;&lt;br/&gt;Payment posting, reconciliation, arrangement monitoring,&lt;br/&gt;breach prevention" vertex="1">
+          <mxGeometry x="20" y="232" width="400" height="66" as="geometry" />
+        </mxCell>
+
+        <!-- Domain box 4 — communications -->
+        <mxCell id="d4" parent="sl-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;domain/communications&lt;/b&gt;&lt;br/&gt;Engagement event → app/portal-first contact decision (DW.81)" vertex="1">
+          <mxGeometry x="20" y="322" width="400" height="58" as="geometry" />
+        </mxCell>
+
+        <!-- Domain box 5 — audit -->
+        <mxCell id="d5" parent="sl-right" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;fontStyle=0;arcSize=6;align=left;spacingLeft=10;spacing=4;" value="&lt;b&gt;domain/audit&lt;/b&gt;&lt;br/&gt;All self-service actions (append-only self_service_action table)" vertex="1">
+          <mxGeometry x="20" y="404" width="400" height="58" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- ARROWS — Portal to Integration Boundary                     -->
+        <!-- Each arrow: from right edge of left swimlane to left edge   -->
+        <!-- of centre swimlane at matched y position                    -->
+        <!-- Left swimlane right edge = 40+340 = 380                    -->
+        <!-- Centre swimlane left edge = 400                             -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+
+        <!-- Arrow p1 → api1: y midpoints portal=70+44+60+30=204 → api=70+70+52/2=166 -->
+        <!-- Simpler: use absolute coords for source and target points -->
+        <mxCell id="arr-p-api1" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5D4037;strokeWidth=2;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" value="" source="p1" target="api1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-p-api3" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5D4037;strokeWidth=2;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" value="" source="p2" target="api3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-p-api4" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5D4037;strokeWidth=2;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" value="" source="p3" target="api5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-p-api6" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#5D4037;strokeWidth=2;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" value="" source="p4" target="api6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- ARROWS — Integration Boundary to Internal Domains          -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="arr-api1-d1" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#283593;strokeWidth=2;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" value="" source="api1" target="d1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-api2-d2" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#283593;strokeWidth=2;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" value="" source="api2" target="d2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-api3-d2" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#283593;strokeWidth=2;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" value="" source="api3" target="d2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-api4-d3" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#283593;strokeWidth=2;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" value="" source="api4" target="d3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-api5-d4" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#283593;strokeWidth=2;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" value="" source="api5" target="d4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-api6-d5" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#283593;strokeWidth=2;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" value="" source="api6" target="d5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <!-- audit receives from all API calls — single representative arrow -->
+        <mxCell id="arr-api1-d5" parent="1" edge="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#283593;strokeWidth=1;dashed=1;endArrow=open;endFill=0;exitX=1;exitY=1;entryX=0;entryY=0.5;" value="all cmds → audit" source="api1" target="d5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- BOTTOM STRIP — Open Questions (DDE-OQ-SS)                   -->
+        <!-- y=700, height=66                                             -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="oq-panel" parent="1" style="swimlane;startSize=28;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=3;fontColor=#B71C1C;fontSize=12;fontStyle=1;arcSize=3;align=left;spacingLeft=10;" value="Open Questions (DDE-OQ-SS)" vertex="1">
+          <mxGeometry x="40" y="706" width="1340" height="72" as="geometry" />
+        </mxCell>
+
+        <mxCell id="oq1" parent="oq-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=10;arcSize=6;align=left;spacingLeft=8;spacing=4;" value="&lt;b&gt;SS-01&lt;/b&gt;&lt;br/&gt;Portal/app API ownership&lt;br/&gt;and onboarding model" vertex="1">
+          <mxGeometry x="14" y="34" width="290" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="oq3" parent="oq-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=10;arcSize=6;align=left;spacingLeft=8;spacing=4;" value="&lt;b&gt;SS-03&lt;/b&gt;&lt;br/&gt;Sync vs async I&amp;amp;E validation" vertex="1">
+          <mxGeometry x="322" y="34" width="290" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="oq5" parent="oq-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=10;arcSize=6;align=left;spacingLeft=8;spacing=4;" value="&lt;b&gt;SS-05&lt;/b&gt;&lt;br/&gt;Payment source-of-truth" vertex="1">
+          <mxGeometry x="630" y="34" width="290" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="oq6" parent="oq-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=10;arcSize=6;align=left;spacingLeft=8;spacing=4;" value="&lt;b&gt;SS-06&lt;/b&gt;&lt;br/&gt;Customer-facing error codes" vertex="1">
+          <mxGeometry x="938" y="34" width="290" height="28" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- LEGEND — bottom-left                                        -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="legend-panel" parent="1" style="swimlane;startSize=28;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=2;fontColor=#263238;fontSize=12;fontStyle=1;arcSize=3;align=left;spacingLeft=10;" value="Legend" vertex="1">
+          <mxGeometry x="40" y="796" width="900" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-ext" parent="legend-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#5D4037;strokeColor=#3E2723;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="External / Portal" vertex="1">
+          <mxGeometry x="14" y="26" width="120" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-actor" parent="legend-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="Actor" vertex="1">
+          <mxGeometry x="148" y="26" width="90" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-domain" parent="legend-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="Domain entity / API" vertex="1">
+          <mxGeometry x="252" y="26" width="130" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-integ" parent="legend-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="Integration note" vertex="1">
+          <mxGeometry x="396" y="26" width="120" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-safe" parent="legend-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="Safe / confirmed path" vertex="1">
+          <mxGeometry x="530" y="26" width="140" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-warn" parent="legend-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=10;arcSize=8;" value="Warning / open question" vertex="1">
+          <mxGeometry x="684" y="26" width="140" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- FOOTER                                                       -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="footer" parent="1" style="text;html=1;fontSize=11;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="Constraint: DCMS is the integration boundary, not the customer portal. It exposes the contract a portal would consume — not the customer UI." vertex="1">
+          <mxGeometry x="40" y="862" width="1574" height="22" as="geometry" />
+        </mxCell>
+        <mxCell id="sources" parent="1" style="text;html=1;fontSize=10;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#607D8B;" value="Sources: self-service-integration-design.md, MASTER-DESIGN-DOCUMENT, integration domain package" vertex="1">
+          <mxGeometry x="40" y="886" width="1574" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,120 @@
+name: Deploy to dev
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Image tag to deploy (default: short SHA of HEAD)"
+        required: false
+
+env:
+  REGISTRY: ufstpit-dev-docker.repo.netcompany.com
+  IMAGE_API: ufstpit-dev-docker.repo.netcompany.com/dcms_v0/dcms_v0-api
+  IMAGE_FRONTEND: ufstpit-dev-docker.repo.netcompany.com/dcms_v0/dcms_v0-frontend
+  HELM_TIMEOUT: "10m"
+
+jobs:
+  build-and-push:
+    name: Build, scan and push images
+    runs-on: ubuntu-latest
+    outputs:
+      sha: ${{ steps.sha.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compute SHA tag
+        id: sha
+        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+
+      - name: Log in to registry
+        run: echo "${{ secrets.REGISTRY_PASSWORD }}" | docker login ${{ env.REGISTRY }} -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin
+
+      - name: Build API image
+        run: docker build -t ${{ env.IMAGE_API }}:${{ steps.sha.outputs.sha }} ./backend
+
+      - name: Build frontend image
+        run: docker build -t ${{ env.IMAGE_FRONTEND }}:${{ steps.sha.outputs.sha }} ./frontend
+
+      - name: Trivy scan — API
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.IMAGE_API }}:${{ steps.sha.outputs.sha }}
+          format: table
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+
+      - name: Trivy scan — frontend
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.IMAGE_FRONTEND }}:${{ steps.sha.outputs.sha }}
+          format: table
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+
+      - name: Push images
+        run: |
+          SHA=${{ steps.sha.outputs.sha }}
+          docker push ${{ env.IMAGE_API }}:${SHA}
+          docker push ${{ env.IMAGE_FRONTEND }}:${SHA}
+          docker tag ${{ env.IMAGE_API }}:${SHA} ${{ env.IMAGE_API }}:dev
+          docker tag ${{ env.IMAGE_FRONTEND }}:${SHA} ${{ env.IMAGE_FRONTEND }}:dev
+          docker push ${{ env.IMAGE_API }}:dev
+          docker push ${{ env.IMAGE_FRONTEND }}:dev
+
+  deploy:
+    name: Helm deploy to dev (AKS)
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    environment: dev
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: "3.15.2"
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v4
+
+      - name: Configure kubeconfig
+        run: echo "${{ secrets.DEV_KUBECONFIG }}" | base64 -d > $HOME/.kube/config
+
+      - name: Show deploy target
+        run: |
+          echo "=== Deploy target ==="
+          kubectl config current-context
+          echo "Namespace: dcms-dev"
+          echo "Image tag: ${{ needs.build-and-push.outputs.sha }}"
+          echo "====================="
+
+      - name: Helm upgrade --install (atomic)
+        run: |
+          SHA=${{ needs.build-and-push.outputs.sha }}
+          helm upgrade --install dcms ./infrastructure/helm/dcms \
+            --namespace dcms-dev \
+            --create-namespace \
+            --values ./infrastructure/helm/dcms/values-dev.yaml \
+            --set image.api.tag=${SHA} \
+            --set image.frontend.tag=${SHA} \
+            --atomic \
+            --timeout ${{ env.HELM_TIMEOUT }} \
+            --wait
+
+      - name: Verify deployment
+        run: |
+          kubectl get pods -n dcms-dev
+          kubectl rollout status deployment/dcms-api -n dcms-dev
+          kubectl rollout status deployment/dcms-frontend -n dcms-dev
+
+      - name: Diagnostics on failure
+        if: failure()
+        run: |
+          echo "=== Pod status ==="
+          kubectl get pods -n dcms-dev
+          echo "=== Events ==="
+          kubectl get events -n dcms-dev --sort-by=.lastTimestamp | tail -30
+          echo "=== API logs ==="
+          kubectl logs -l app.kubernetes.io/name=dcms-api -n dcms-dev --tail=50 || true

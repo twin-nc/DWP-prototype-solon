@@ -1,0 +1,214 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram name="DIAG-08 Strategy Simulation Engine" id="diag-08">
+    <mxGraphModel dx="1868" dy="945" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="932" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- Title and subtitle -->
+        <mxCell id="title" parent="1" style="text;html=1;fontSize=22;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A1A1A;" value="DIAG-08 — Strategy Simulation Engine: Evidence Before Activation" vertex="1">
+          <mxGeometry height="36" width="1560" x="47" y="18" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;fontSize=12;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="Offline, read-only, deterministic. Answers: what would have changed if this rule had applied to a known cohort?" vertex="1">
+          <mxGeometry height="24" width="1400" x="127" y="52" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- LEFT PANEL — Simulation Inputs                                  -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <mxCell id="left-panel" parent="1" style="swimlane;startSize=36;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Simulation Inputs" vertex="1">
+          <mxGeometry height="560" width="390" x="40" y="90" as="geometry" />
+        </mxCell>
+
+        <!-- Rule set / policy bundle -->
+        <mxCell id="in-ruleset" parent="left-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=5;spacing=10;" value="Rule set / policy bundle" vertex="1">
+          <mxGeometry height="70" width="330" x="30" y="54" as="geometry" />
+        </mxCell>
+
+        <!-- Baseline + Proposed DMN version -->
+        <mxCell id="in-dmn" parent="left-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=5;spacing=10;" value="Baseline DMN version&lt;br/&gt;+ Proposed DMN version" vertex="1">
+          <mxGeometry height="70" width="330" x="30" y="144" as="geometry" />
+        </mxCell>
+
+        <!-- Cohort definition + data cut-off -->
+        <mxCell id="in-cohort" parent="left-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=5;spacing=10;" value="Cohort definition&lt;br/&gt;+ data cut-off timestamp" vertex="1">
+          <mxGeometry height="70" width="330" x="30" y="234" as="geometry" />
+        </mxCell>
+
+        <!-- Policy version snapshot -->
+        <mxCell id="in-policy" parent="left-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=5;spacing=10;" value="Policy version snapshot&lt;br/&gt;&lt;font style=&quot;font-size: 11px;&quot;&gt;(protected-population handling)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="330" x="30" y="324" as="geometry" />
+        </mxCell>
+
+        <!-- API label below inputs, inside panel -->
+        <mxCell id="in-api-label" parent="left-panel" style="text;html=1;fontSize=11;fontStyle=3;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="POST /api/v1/simulations/rule" vertex="1">
+          <mxGeometry height="24" width="330" x="30" y="414" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- CENTRE PANEL — Simulation Run                                   -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <mxCell id="centre-panel" parent="1" style="swimlane;startSize=36;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Simulation Run" vertex="1">
+          <mxGeometry height="560" width="500" x="490" y="90" as="geometry" />
+        </mxCell>
+
+        <!-- simulation_run entity -->
+        <mxCell id="sim-run" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=5;align=left;spacingLeft=14;spacing=8;" value="&lt;b&gt;simulation_run&lt;/b&gt; (immutable)&lt;br/&gt;&lt;font style=&quot;font-size: 11px; font-weight: normal;&quot;&gt;UUID&lt;br/&gt;type&lt;br/&gt;status&lt;br/&gt;requested_by&lt;br/&gt;cohort_definition&lt;br/&gt;data_cutoff_at&lt;br/&gt;result_hash&lt;/font&gt;" vertex="1">
+          <mxGeometry height="180" width="420" x="40" y="52" as="geometry" />
+        </mxCell>
+
+        <!-- simulation_result_detail entity -->
+        <mxCell id="sim-detail" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=5;align=left;spacingLeft=14;spacing=7;" value="&lt;b&gt;simulation_result_detail&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px; font-weight: normal;&quot;&gt;per-account:  baseline_result · proposed_result · delta · exception_code&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="420" x="40" y="252" as="geometry" />
+        </mxCell>
+
+        <!-- Lifecycle states strip -->
+        <mxCell id="lc-running" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=8;" value="RUNNING" vertex="1">
+          <mxGeometry height="34" width="90" x="40" y="344" as="geometry" />
+        </mxCell>
+        <mxCell id="lc-arrow1" parent="centre-panel" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#455A64;strokeWidth=2;endArrow=block;endFill=1;" edge="1" source="lc-running" target="lc-completed">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lc-completed" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=8;" value="COMPLETED" vertex="1">
+          <mxGeometry height="34" width="100" x="160" y="344" as="geometry" />
+        </mxCell>
+        <mxCell id="lc-pipe1" parent="centre-panel" style="text;html=1;fontSize=14;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="|" vertex="1">
+          <mxGeometry height="34" width="16" x="272" y="344" as="geometry" />
+        </mxCell>
+        <mxCell id="lc-failed" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=8;" value="FAILED" vertex="1">
+          <mxGeometry height="34" width="90" x="290" y="344" as="geometry" />
+        </mxCell>
+        <mxCell id="lc-pipe2" parent="centre-panel" style="text;html=1;fontSize=14;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="|" vertex="1">
+          <mxGeometry height="34" width="16" x="392" y="344" as="geometry" />
+        </mxCell>
+        <mxCell id="lc-cancelled" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=11;fontStyle=1;arcSize=8;" value="CANCELLED" vertex="1">
+          <mxGeometry height="34" width="100" x="310" y="344" as="geometry" />
+        </mxCell>
+
+        <!-- Red warning box -->
+        <mxCell id="warning" parent="centre-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=12;fontStyle=1;arcSize=5;align=left;spacingLeft=12;spacing=8;" value="Simulation does NOT:&lt;br/&gt;&lt;font style=&quot;font-size: 11px; font-weight: normal;&quot;&gt;&#x2022; start process instances&lt;br/&gt;&#x2022; send communications&lt;br/&gt;&#x2022; write account facts&lt;br/&gt;&#x2022; post payments&lt;/font&gt;" vertex="1">
+          <mxGeometry height="110" width="420" x="40" y="400" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- RIGHT PANEL — Simulation Outputs                                -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <mxCell id="right-panel" parent="1" style="swimlane;startSize=36;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Simulation Outputs" vertex="1">
+          <mxGeometry height="560" width="390" x="1050" y="90" as="geometry" />
+        </mxCell>
+
+        <!-- Cohort summary -->
+        <mxCell id="out-summary" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=5;spacing=10;" value="Cohort summary" vertex="1">
+          <mxGeometry height="60" width="330" x="30" y="54" as="geometry" />
+        </mxCell>
+
+        <!-- Decision distribution -->
+        <mxCell id="out-distribution" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=5;spacing=10;" value="Decision distribution: baseline vs proposed" vertex="1">
+          <mxGeometry height="60" width="330" x="30" y="134" as="geometry" />
+        </mxCell>
+
+        <!-- Decision deltas -->
+        <mxCell id="out-deltas" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=5;spacing=10;" value="Decision deltas" vertex="1">
+          <mxGeometry height="60" width="330" x="30" y="214" as="geometry" />
+        </mxCell>
+
+        <!-- Protected-population impact -->
+        <mxCell id="out-protected" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=5;align=left;spacingLeft=12;spacing=8;" value="&lt;b&gt;Protected-population impact&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px; font-weight: normal;&quot;&gt;vulnerability / breathing space / deceased / insolvency counts&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="330" x="30" y="294" as="geometry" />
+        </mxCell>
+
+        <!-- Evidence hash -->
+        <mxCell id="out-hash" parent="right-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=5;spacing=10;" value="Evidence hash + attach to approval" vertex="1">
+          <mxGeometry height="60" width="330" x="30" y="384" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- ARROWS between panels                                           -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+
+        <!-- Left panel → Centre panel arrow -->
+        <mxCell id="arrow-in-to-run" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#283593;strokeWidth=3;endArrow=block;endFill=1;fontSize=11;fontStyle=3;fontColor=#283593;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="left-panel" target="centre-panel">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <!-- Edge label as separate cell for cleaner rendering -->
+        <mxCell id="arrow-in-label" parent="1" style="text;html=1;fontSize=10;fontStyle=3;align=center;fillColor=#FFFFFF;strokeColor=none;fontColor=#283593;" value="POST /api/v1/simulations/rule" vertex="1">
+          <mxGeometry height="20" width="180" x="453" y="360" as="geometry" />
+        </mxCell>
+
+        <!-- Centre panel → Right panel arrow -->
+        <mxCell id="arrow-run-to-out" parent="1" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#2E7D32;strokeWidth=3;endArrow=block;endFill=1;fontSize=11;fontStyle=3;fontColor=#2E7D32;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" source="centre-panel" target="right-panel">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow-run-label" parent="1" style="text;html=1;fontSize=10;fontStyle=3;align=center;fillColor=#FFFFFF;strokeColor=none;fontColor=#2E7D32;" value="results" vertex="1">
+          <mxGeometry height="20" width="60" x="1010" y="360" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- BOTTOM STRIP — Governance Gate                                  -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <mxCell id="gov-panel" parent="1" style="swimlane;startSize=36;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Governance Gate — Simulation REQUIRED (not optional) when:" vertex="1">
+          <mxGeometry height="170" width="1400" x="40" y="680" as="geometry" />
+        </mxCell>
+
+        <!-- Gate box 1 -->
+        <mxCell id="gate-1" parent="gov-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=5;align=center;spacing=8;" value="Champion/challenger setup&lt;br/&gt;&lt;font style=&quot;font-size: 11px; font-weight: normal;&quot;&gt;(materially different challenger)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="74" width="310" x="30" y="54" as="geometry" />
+        </mxCell>
+
+        <!-- Gate box 2 -->
+        <mxCell id="gate-2" parent="gov-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=5;align=center;spacing=8;" value="Policy bundles affecting&lt;br/&gt;&lt;font style=&quot;font-size: 11px; font-weight: normal;&quot;&gt;protected populations&lt;/font&gt;" vertex="1">
+          <mxGeometry height="74" width="310" x="360" y="54" as="geometry" />
+        </mxCell>
+
+        <!-- Gate box 3 -->
+        <mxCell id="gate-3" parent="gov-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=5;align=center;spacing=8;" value="DCA placement eligibility changes" vertex="1">
+          <mxGeometry height="74" width="310" x="690" y="54" as="geometry" />
+        </mxCell>
+
+        <!-- Gate box 4 -->
+        <mxCell id="gate-4" parent="gov-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=5;align=center;spacing=8;" value="Vulnerability protocol changes" vertex="1">
+          <mxGeometry height="74" width="310" x="1020" y="54" as="geometry" />
+        </mxCell>
+
+        <!-- Note below gate boxes -->
+        <mxCell id="gate-note" parent="gov-panel" style="text;html=1;fontSize=11;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#B71C1C;" value="Simulation is evidence — it cannot approve a change on its own." vertex="1">
+          <mxGeometry height="22" width="900" x="250" y="138" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- LEGEND                                                          -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <mxCell id="legend-panel" parent="1" style="swimlane;startSize=28;fillColor=#FAFAFA;strokeColor=#90A4AE;strokeWidth=2;fontColor=#37474F;fontSize=12;fontStyle=1;arcSize=3;" value="Legend" vertex="1">
+          <mxGeometry height="168" width="240" x="1460" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-1" parent="legend-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="Domain entity" vertex="1">
+          <mxGeometry height="24" width="200" x="20" y="36" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-2" parent="legend-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="Port / interface" vertex="1">
+          <mxGeometry height="24" width="200" x="20" y="68" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-3" parent="legend-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="Process infrastructure / protected" vertex="1">
+          <mxGeometry height="24" width="200" x="20" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-4" parent="legend-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="Output / result" vertex="1">
+          <mxGeometry height="24" width="200" x="20" y="132" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <!-- FOOTER                                                          -->
+        <!-- ═══════════════════════════════════════════════════════════════ -->
+        <mxCell id="footer-constraint" parent="1" style="text;html=1;fontSize=11;fontStyle=2;align=left;fillColor=none;strokeColor=none;fontColor=#455A64;" value="Constraint: simulation is read-only and deterministic — same inputs always produce the same result." vertex="1">
+          <mxGeometry height="22" width="800" x="40" y="862" as="geometry" />
+        </mxCell>
+        <mxCell id="footer-sources" parent="1" style="text;html=1;fontSize=10;fontStyle=0;align=right;fillColor=none;strokeColor=none;fontColor=#90A4AE;" value="Sources: strategy-simulation-engine-design.md, ADR-010" vertex="1">
+          <mxGeometry height="22" width="500" x="1150" y="862" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C c:/Users/tct/DWP-system-prototype status)",
+      "Bash(git -C c:/Users/tct/DWP-system-prototype log --oneline -5)"
+    ]
+  }
+}

@@ -1,0 +1,32 @@
+# Dependabot configuration example
+# Adjust package-ecosystem and directory values to match your project's tech stack.
+# Full docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  # Example: Maven (Java)
+  # - package-ecosystem: "maven"
+  #   directory: "/backend"
+  #   schedule:
+  #     interval: "weekly"
+  #   labels:
+  #     - "dependencies"
+  #   open-pull-requests-limit: 10
+
+  # Example: npm (Node.js / frontend)
+  # - package-ecosystem: "npm"
+  #   directory: "/frontend"
+  #   schedule:
+  #     interval: "weekly"
+  #   labels:
+  #     - "dependencies"
+  #   open-pull-requests-limit: 10
+
+  # GitHub Actions — recommended for all projects
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+    open-pull-requests-limit: 5

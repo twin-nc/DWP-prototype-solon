@@ -1,0 +1,19 @@
+# Dev (AKS) overrides
+# Sensitive values (DATABASE_URL, KEYCLOAK_ISSUER_URI) are injected by DevOps via Kubernetes Secrets
+image:
+  api:
+    pullPolicy: Always
+  frontend:
+    pullPolicy: Always
+
+env:
+  SPRING_PROFILES_ACTIVE: "dev"
+  LOG_LEVEL: "info"
+  # DATABASE_URL: injected by DevOps via secret
+  # KEYCLOAK_ISSUER_URI: injected by DevOps via secret
+
+replicaCount: 2
+
+ingress:
+  host: ""
+  # host: to be set by DevOps team

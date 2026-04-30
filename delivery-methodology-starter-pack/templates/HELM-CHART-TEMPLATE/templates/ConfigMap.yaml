@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "myapp.fullname" . }}
+  labels:
+    {{- include "myapp.labels" . | nindent 4 }}
+data:
+  # Every key in values.yaml .env is wired here.
+  # Add one line per env var. Do not hardcode values — always use .Values.env.<KEY>.
+  # Sensitive values (credentials, tokens) must NOT appear here — they belong in a Secret,
+  # which the DevOps team will configure. Leave them empty in values.yaml under 'secrets'.
+  {{- range $key, $value := .Values.env }}
+  {{ $key }}: {{ $value | quote }}
+  {{- end }}

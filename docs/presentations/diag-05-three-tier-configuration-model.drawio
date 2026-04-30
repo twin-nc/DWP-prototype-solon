@@ -1,0 +1,58 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram name="DIAG-05 Three-Tier Configuration" id="diag-05">
+    <mxGraphModel dx="1868" dy="945" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="932" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;fontSize=22;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A1A1A;" value="DIAG-05 - Three-Tier Configuration Model with Author Roles" vertex="1">
+          <mxGeometry height="36" width="1140" x="257" y="22" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;fontSize=12;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="Business change is split by risk: definitions, rules and process structure have separate governance; contact wording is governed separately and can activate with the same policy bundle." vertex="1">
+          <mxGeometry height="24" width="1220" x="217" y="58" as="geometry" />
+        </mxCell>
+        <mxCell id="workspace-boundary" parent="1" style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Configuration Workspace /admin and Policy Workspace /admin/policies" vertex="1">
+          <mxGeometry height="690" width="1490" x="82" y="108" as="geometry" />
+        </mxCell>
+        <mxCell id="policy-bundle" parent="workspace-boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#EF6C00;strokeWidth=3;fontColor=#E65100;fontSize=13;fontStyle=1;arcSize=6;spacing=12;dashed=1;" value="&lt;b&gt;Policy Bundle&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Optional wrapper for coordinated business change across one or more tiers and governed contact wording&lt;br/&gt;Single effective date | atomic activation | one audit timeline | single rollback unit&lt;br/&gt;Single-tier operational edits stay lightweight outside a bundle&lt;/font&gt;" vertex="1">
+          <mxGeometry height="600" width="1175" x="274" y="66" as="geometry" />
+        </mxCell>
+        <mxCell id="tier3" parent="workspace-boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B71C1C;strokeColor=#7F0000;fontColor=#FFFFFF;fontSize=14;arcSize=6;spacing=14;" value="&lt;b&gt;Tier 3 - BPMN Process Definitions&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Treatment paths, escalation flows, exception event subprocesses, integration handoffs&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Authored by Business Admin / PROCESS_DESIGNER via Flowable Modeler&lt;br/&gt;COMPLIANCE approval and Class A gate for structural process change&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Quarterly cadence; new process versions affect new instances only.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="148" width="820" x="334" y="130" as="geometry" />
+        </mxCell>
+        <mxCell id="tier2" parent="workspace-boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=14;arcSize=6;spacing=14;" value="&lt;b&gt;Tier 2 - DMN Decision Tables&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Segmentation, routing, vulnerability action matrix, thresholds, champion/challenger rules&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Authored by Business Admin / PROCESS_DESIGNER, approved by COMPLIANCE&lt;br/&gt;Versioned, testable and effective-dated rule deployments&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Monthly cadence; each decision records the rule version used.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="148" width="820" x="334" y="322" as="geometry" />
+        </mxCell>
+        <mxCell id="tier1" parent="workspace-boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=14;arcSize=6;spacing=14;" value="&lt;b&gt;Tier 1 - Reference Data and Definitions&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Vulnerability types, suppression reasons, action codes, debt categories, communication channels&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Authored by Operations / OPS_MANAGER&lt;br/&gt;Stable IDs, audited changes and controlled activation for behaviour-changing definitions&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Rare / as-needed cadence; defines vocabulary that Tier 2 rules reference.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="148" width="820" x="334" y="514" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-tier3-tier2" edge="1" parent="workspace-boundary" source="tier3" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#B71C1C;strokeWidth=3;fontSize=11;fontStyle=2;fontColor=#7F0000;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;" target="tier2" value="process tasks evaluate decisions">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-tier2-tier1" edge="1" parent="workspace-boundary" source="tier2" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6A1B9A;strokeWidth=3;fontSize=11;fontStyle=2;fontColor=#4A148C;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;" target="tier1" value="rules reference stable IDs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="role-panel" parent="workspace-boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#BDBDBD;strokeWidth=1;fontColor=#1A1A1A;fontSize=12;arcSize=5;spacing=12;" value="&lt;b&gt;Author and approval roles&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;&lt;b&gt;OPS_MANAGER&lt;/b&gt;&lt;br/&gt;Maintains Tier 1 reference data&lt;br/&gt;&lt;br/&gt;&lt;b&gt;PROCESS_DESIGNER&lt;/b&gt;&lt;br/&gt;Authors Tier 2 DMN, Tier 3 BPMN and template drafts&lt;br/&gt;&lt;br/&gt;&lt;b&gt;COMPLIANCE&lt;/b&gt;&lt;br/&gt;Approves rules, process changes and contact wording&lt;br/&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Regulatory hard stops are not made configurable.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="320" width="220" x="36" y="167" as="geometry" />
+        </mxCell>
+        <mxCell id="snapshot-panel" parent="workspace-boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;fontColor=#0D47A1;fontSize=12;arcSize=6;spacing=12;" value="&lt;b&gt;Runtime snapshot&lt;/b&gt;&lt;br/&gt;&lt;br/&gt;At process start the account captures:&lt;br/&gt;- Tier 1 IDs and labels&lt;br/&gt;- Tier 2 DMN version&lt;br/&gt;- Tier 3 BPMN version&lt;br/&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;In-flight behaviour stays deterministic.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="150" width="220" x="36" y="512" as="geometry" />
+        </mxCell>
+        <mxCell id="freq-title" parent="workspace-boundary" style="text;html=1;fontSize=12;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A1A1A;" value="Adjacent governed surface" vertex="1">
+          <mxGeometry height="22" width="204" x="1244" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="freq-tier3" parent="workspace-boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F9A825;strokeWidth=2;fontColor=#5D4037;fontSize=12;fontStyle=1;arcSize=6;spacing=10;" value="&lt;b&gt;Templates&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Customer contact wording for letters, SMS, email and in-app messages&lt;br/&gt;&lt;br/&gt;Governed like configuration: versioned, approved and effective-dated&lt;br/&gt;&lt;br/&gt;Not Tier 2: wording is content; DMN decides whether / when contact is allowed.&lt;/font&gt;" vertex="1">
+          <mxGeometry height="274" width="204" x="1244" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="freq-tier2" parent="workspace-boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#EF6C00;strokeWidth=2;fontColor=#E65100;fontSize=12;fontStyle=1;arcSize=6;spacing=10;" value="Policy bundles can include template versions when the customer wording must activate with the same business change." vertex="1">
+          <mxGeometry height="94" width="204" x="1244" y="466" as="geometry" />
+        </mxCell>
+        <mxCell id="freq-tier1" parent="workspace-boundary" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#757575;strokeWidth=2;fontColor=#212121;fontSize=12;fontStyle=1;arcSize=6;spacing=10;" value="Single-template copy edits can still use the template workflow without a policy bundle." vertex="1">
+          <mxGeometry height="70" width="204" x="1244" y="586" as="geometry" />
+        </mxCell>
+        <mxCell id="footer" parent="1" style="text;html=1;fontSize=11;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#546E7A;" value="Key constraint: configuration can change business strategy without code deployment, but legal protections, approval evidence and in-flight determinism remain non-negotiable." vertex="1">
+          <mxGeometry height="26" width="1250" x="202" y="838" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

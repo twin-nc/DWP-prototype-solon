@@ -1,0 +1,27 @@
+= SUM-01: ADR Digest
+:doctype: article
+:toc: macro
+
+== Monolith Decision
+
+DCMS is built as a single Spring Boot backend rather than a network of microservices. The decision keeps one deployable service, one database boundary, and one operational model for a team of 6-7 people. It also makes regulated debt events easier to prove because account state, audit records, suppression records, and workflow coordination can be kept together instead of split across services. This prevents the delivery team from spending its limited capacity on distributed-system plumbing before the core debt lifecycle is working. It also avoids the audit risk of reconstructing one regulated customer journey from several partial service logs.
+
+== One Process Per Account
+
+Each debt account has its own Flowable process instance, while the customer or person view is assembled as a read model across accounts. This matches how real debt work behaves: one person can have several debts at different stages, and each account needs its own lifecycle position. Person-level events such as breathing space, insolvency, and death still apply across all linked active accounts, including joint-account cases. The design prevents one large customer-level process from becoming a confusing container for many unrelated account journeys. It also prevents the system from duplicating lifecycle truth between a separate case object and the process engine.
+
+== Java 21 Exhaustive Switch
+
+Java 21 is used not just as a runtime choice, but as a safety mechanism for decision code where missing cases matter. Communication suppression categories are a good example: debt collection, non-collection, dual-use, and estate-administration messages must be handled explicitly. The design expects exhaustive switch handling so that adding a new category forces a code change rather than silently falling through to the wrong outcome. This prevents accidental contact during statutory or policy suppressions, while still allowing protected communications such as estate administration where the rules permit them. In leadership terms, the language choice helps turn compliance intent into a build-time guardrail.
+
+== Transaction Boundary Rule
+
+Application database changes must be committed before Flowable engine calls are made, and Flowable calls must not run inside the same Spring transaction. This matters because Flowable has its own transaction handling, and combining it with application writes would create failure modes the platform cannot safely roll back. The intended pattern is simple: commit the regulated application state first, then call Flowable, and if the Flowable step fails, record a manual-review audit event rather than undoing the customer-protective state. This prevents scenarios where a breathing-space flag, deceased flag, suppression log, or write-off record disappears because a later process-engine call failed. The result is a system that favours durable protection and visible recovery over hidden partial failure.
+
+== Write-Off Self-Approval Prevention
+
+Write-off approval uses three independent controls to prevent a person from approving their own request. Flowable removes the requester from the approval task candidate group, the service layer checks that requester and approver differ, and the database rejects records where both fields match. This layered design exists because no single layer is enough: a service check alone would still allow an invalid task assignment, while a workflow check alone would not protect direct service calls or data writes. It prevents conflicts of interest, accidental self-approval, and audit gaps in delegated-authority decisions. Provisional threshold values remain governed through configuration and require DWP confirmation before production use.
+
+== Keycloak RBAC
+
+Keycloak is the identity provider and the RBAC role model is now defined in the design baseline. Operational users, governance users, strategy users, technical Flowable administrators, and system clients are separated into distinct roles with different workspaces and permissions. React role hiding is treated as user experience only; backend APIs remain the authoritative enforcement point through Spring Security and JWT claims. The model prevents frontline agents from reaching configuration screens, prevents strategy monitoring from becoming rule authoring, and keeps Flowable Admin access limited to named technical administrators. It also ensures privileged actions produce audit evidence tied to a named user wherever a human actor is involved.

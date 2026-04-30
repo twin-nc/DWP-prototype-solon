@@ -1,0 +1,74 @@
+---
+title: "DCMS — Domain Module Map"
+---
+flowchart TB
+  subgraph FE["Frontend  (React + TypeScript / GOV.UK Design System)"]
+    UI["frontend/src\nAgent & supervisor screens\nRepayment journeys · Work queues · Case views"]
+  end
+
+  subgraph BE["Backend  (Spring Boot 3.4 monolith)"]
+    direction TB
+
+    subgraph DOMAIN["Domain packages"]
+      direction LR
+
+      subgraph CORE["Core Case"]
+        CUST["customer\nIdentity · Profile\nVulnerability · Circumstances"]
+        ACC["account\nFinancial ledger\nRegulatory facts (audit only)"]
+      end
+
+      subgraph WORKFLOW["Workflow & Decisioning"]
+        STRAT["strategy\nSegmentation · DMN rules\nChampion/challenger"]
+        WORK["workallocation\nQueues · Assignment\nSupervisor override"]
+      end
+
+      subgraph FINANCIAL["Financial"]
+        REPAY["repaymentplan\nArrangements · Affordability\nSchedule lifecycle"]
+        PAY["payment\nPosting · Allocation\nReconciliation"]
+      end
+
+      subgraph COMMS["Engagement"]
+        COMM["communications\nLetters · SMS · Email\nSuppression · History"]
+        INT["integration\nCandidate ingest\nExternal interfaces · ACL"]
+        TPM["thirdpartymanagement\nDCA placement · Recall\nCommission · Billing"]
+      end
+
+      subgraph SUPPORT["Support"]
+        USR["user\nRBAC · Admin\nKeycloak integration"]
+        AUD["audit\nImmutable event log\nCompliance evidence"]
+        ANA["analytics\nScoring · Scorecards\nBureau feeds"]
+        REP["reporting\nMI exports · KPI views\nRead models"]
+      end
+    end
+
+    subgraph INFRA["Infrastructure packages"]
+      PROC["infrastructure/process\nFlowable engine config\nJavaDelegates · BPMN/DMN resources\n⚠ All Flowable imports confined here"]
+      PORT["shared/process/port\nProcessEventPort\nProcessStartPort\nDelegateCommandBus · Command types"]
+    end
+
+    DB[("PostgreSQL 16\nFlyway migrations")]
+  end
+
+  subgraph EXTERNAL["External Systems"]
+    direction LR
+    KC["Keycloak 24\nOAuth 2.0 · OIDC"]
+    EXT["DWP Place · DCA · Payment Gateway\nBureau Feeds · DM6"]
+  end
+
+  UI -->|REST API calls| BE
+  DOMAIN --> PORT
+  PROC --> PORT
+  PROC -.->|"No other module\nmay import Flowable"| PROC
+  BE --- DB
+  USR --- KC
+  INT --- EXT
+
+  classDef scaffolded fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20
+  classDef partial fill:#fff8e1,stroke:#f9a825,color:#e65100
+  classDef pending fill:#fce4ec,stroke:#c62828,color:#b71c1c
+  classDef infra fill:#e3f2fd,stroke:#1565c0,color:#0d47a1
+
+  class CUST,ACC,STRAT,WORK,REPAY,PAY,COMM,INT,USR scaffolded
+  class AUD partial
+  class ANA,TPM,REP,PROC,PORT pending
+  class DB,KC,EXT infra

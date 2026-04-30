@@ -1,0 +1,52 @@
+---
+title: "DCMS — Segmentation and Two-Tier Configurability (ADR-004)"
+---
+flowchart LR
+  subgraph INPUT["Account inputs to segmentation"]
+    VULN["Vulnerability flag\n(customer-level)"]
+    BEN["Benefit status\n(customer-level)"]
+    CIRC["Other circumstances\n(income, arrears age, etc.)"]
+  end
+
+  subgraph TIER1["Tier 1 — No-code  (operational config, no redeployment)"]
+    direction TB
+    DMN["DMN decision table\n(versioned, human-readable)\nEvaluates inputs → segment code\n\nEvery decision recorded\nwith DMN version that produced it"]
+    SEGDB["Segment definitions table\n(database)\nsegment_code · label · active\neffective_from · process_definition_key"]
+    ADMINUI["Admin UI\nBusiness users can read and edit\nDMN tables and segment config\nwithout any deployment"]
+    DMN --- SEGDB
+    SEGDB --- ADMINUI
+  end
+
+  subgraph SEGMENTS["Initial segment taxonomy"]
+    direction TB
+    S1["VULNERABLE_ON_BENEFIT"]
+    S2["STANDARD_ON_BENEFIT"]
+    S3["VULNERABLE_OFF_BENEFIT"]
+    S4["STANDARD_OFF_BENEFIT"]
+  end
+
+  subgraph TIER2["Tier 2 — Low-code  (restricted admin, no Spring Boot redeployment)"]
+    direction TB
+    BPMN["New BPMN process definition\nauthored and uploaded\nby privileged admin"]
+    DEPLOY["Deployed to Flowable\nvia RepositoryService at runtime\n(no Java code change)"]
+    MAP["Segment → definition key mapping\nupdated via Tier 1 admin UI"]
+    CLASS["⚠ Class A change\nRequires Domain Expert +\nSolution Architect sign-off"]
+    BPMN --> DEPLOY --> MAP
+    CLASS -.- DEPLOY
+  end
+
+  subgraph EXCEPTION["Exception states  (not segments)"]
+    direction TB
+    EX["Breathing space · Insolvency\nDeceased · Fraud · Hardship\n\nModelled as BPMN event subprocesses\nwithin every treatment process\nCoexist with any primary segment"]
+  end
+
+  INPUT --> DMN
+  DMN -->|"returns segment code"| SEGMENTS
+  SEGMENTS -->|"ProcessStartPort\n.startTreatment()"| TIER2
+  SEGMENTS -.->|"new segment reusing\nexisting process key"| TIER1
+
+  NOTE["A new segment that reuses an existing\nprocess definition key is pure Tier 1 —\nno BPMN work required"]
+  style NOTE fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20
+  style EXCEPTION fill:#fce4ec,stroke:#c62828,color:#b71c1c
+  style TIER1 fill:#e8f5e9,stroke:#2e7d32
+  style TIER2 fill:#fff8e1,stroke:#f9a825

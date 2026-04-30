@@ -1,0 +1,135 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram name="DIAG-06 Policy Bundle Lifecycle" id="diag-06">
+    <mxGraphModel dx="1868" dy="945" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="932" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;fontSize=22;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A1A1A;" value="DIAG-06 - How a Policy Bundle Coordinates Configuration Surfaces" vertex="1">
+          <mxGeometry height="36" width="1180" x="237" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;fontSize=12;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="A policy bundle is a named business change that links approved configuration items across tiers and activates them together on one effective date." vertex="1">
+          <mxGeometry height="24" width="1280" x="187" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="examples-panel" parent="1" style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Business intent - examples that need a bundle" vertex="1">
+          <mxGeometry height="444" width="338" x="64" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="example-fraud" parent="examples-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#EF6C00;strokeWidth=2;fontColor=#E65100;fontSize=12;arcSize=6;spacing=11;" value="&lt;b&gt;Fraud recovery approach&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;A stakeholder-recognisable policy, not just a rule edit.&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;- new debt category&lt;br/&gt;- stricter DMN breach rules&lt;br/&gt;- fraud treatment path&lt;br/&gt;- revised customer letters" vertex="1">
+          <mxGeometry height="162" width="278" x="30" y="58" as="geometry" />
+        </mxCell>
+        <mxCell id="example-hardship" parent="examples-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=2;fontColor=#0D47A1;fontSize=12;arcSize=6;spacing=11;" value="&lt;b&gt;Hardship relief policy&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Coordinated protection change across contact, rules and process.&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;- hardship definition&lt;br/&gt;- I&amp;E threshold rules&lt;br/&gt;- forbearance process path&lt;br/&gt;- adapted contact wording" vertex="1">
+          <mxGeometry height="162" width="278" x="30" y="244" as="geometry" />
+        </mxCell>
+        <mxCell id="config-panel" parent="1" style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Configuration surfaces touched by one policy bundle" vertex="1">
+          <mxGeometry height="444" width="770" x="442" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="tier3-lane" parent="config-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#B71C1C;strokeWidth=2;fontColor=#7F0000;fontSize=13;fontStyle=1;arcSize=4;align=left;spacingLeft=14;spacing=10;" value="Tier 3 - Processes / BPMN" vertex="1">
+          <mxGeometry height="74" width="706" x="32" y="62" as="geometry" />
+        </mxCell>
+        <mxCell id="tier2-lane" parent="config-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#6A1B9A;strokeWidth=2;fontColor=#4A148C;fontSize=13;fontStyle=1;arcSize=4;align=left;spacingLeft=14;spacing=10;" value="Tier 2 - Rules / DMN" vertex="1">
+          <mxGeometry height="74" width="706" x="32" y="152" as="geometry" />
+        </mxCell>
+        <mxCell id="tier1-lane" parent="config-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=2;fontColor=#1B5E20;fontSize=13;fontStyle=1;arcSize=4;align=left;spacingLeft=14;spacing=10;" value="Tier 1 - Foundations / reference data" vertex="1">
+          <mxGeometry height="74" width="706" x="32" y="242" as="geometry" />
+        </mxCell>
+        <mxCell id="template-lane" parent="config-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F9A825;strokeWidth=2;fontColor=#5D4037;fontSize=13;fontStyle=1;arcSize=4;align=left;spacingLeft=14;spacing=10;" value="Templates - governed content surface, not a tier" vertex="1">
+          <mxGeometry height="74" width="706" x="32" y="332" as="geometry" />
+        </mxCell>
+        <mxCell id="bundle-wrap" parent="config-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#EF6C00;strokeWidth=4;fontColor=#E65100;fontSize=13;fontStyle=1;arcSize=6;spacing=12;dashed=1;" value="" vertex="1">
+          <mxGeometry height="340" width="310" x="370" y="54" as="geometry" />
+        </mxCell>
+        <mxCell id="c-process" parent="config-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B71C1C;strokeColor=#7F0000;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;" value="New fraud treatment BPMN path&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;approved process version&lt;/font&gt;" vertex="1">
+          <mxGeometry height="54" width="238" x="406" y="75" as="geometry" />
+        </mxCell>
+        <mxCell id="c-rule" parent="config-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;" value="Fraud breach and routing DMN&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;approved decision version&lt;/font&gt;" vertex="1">
+          <mxGeometry height="54" width="238" x="406" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="c-foundation" parent="config-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;" value="Fraud debt category and action codes&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;stable IDs used by rules&lt;/font&gt;" vertex="1">
+          <mxGeometry height="54" width="238" x="406" y="255" as="geometry" />
+        </mxCell>
+        <mxCell id="c-template" parent="config-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F9A825;strokeColor=#F57F17;fontColor=#3E2723;fontSize=12;arcSize=6;spacing=8;" value="Fraud contact template wording&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;approved communication version&lt;/font&gt;" vertex="1">
+          <mxGeometry height="54" width="238" x="406" y="345" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-process-rule" edge="1" parent="config-panel" source="c-process" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#EF6C00;strokeWidth=3;fontSize=11;fontStyle=2;fontColor=#E65100;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;" target="c-rule" value="same bundle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-rule-foundation" edge="1" parent="config-panel" source="c-rule" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#EF6C00;strokeWidth=3;fontSize=11;fontStyle=2;fontColor=#E65100;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;" target="c-foundation" value="same bundle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-foundation-template" edge="1" parent="config-panel" source="c-foundation" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#EF6C00;strokeWidth=3;fontSize=11;fontStyle=2;fontColor=#E65100;exitX=0.5;exitY=1;entryX=0.5;entryY=0;endArrow=block;endFill=1;" target="c-template" value="same bundle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="bundle-label" parent="config-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#EF6C00;strokeWidth=2;fontColor=#E65100;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="&lt;b&gt;Example bundle: Fraud Recovery 2026&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 10px&quot;&gt;one effective date | one audit trail | one rollback unit&lt;/font&gt;" vertex="1">
+          <mxGeometry height="44" width="320" x="441" y="-21" as="geometry" />
+        </mxCell>
+        <mxCell id="outcomes-panel" parent="1" style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="What the bundle adds" vertex="1">
+          <mxGeometry height="444" width="338" x="1252" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="out-effective" parent="outcomes-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=10;" value="&lt;b&gt;Coordinated activation&lt;/b&gt;&lt;br/&gt;All linked items go live together on the same effective date." vertex="1">
+          <mxGeometry height="78" width="278" x="30" y="58" as="geometry" />
+        </mxCell>
+        <mxCell id="out-audit" parent="outcomes-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=10;" value="&lt;b&gt;Unified audit trail&lt;/b&gt;&lt;br/&gt;One policy identity answers what changed, why, who approved it and when." vertex="1">
+          <mxGeometry height="82" width="278" x="30" y="156" as="geometry" />
+        </mxCell>
+        <mxCell id="out-rollback" parent="outcomes-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=10;" value="&lt;b&gt;Rollback unit&lt;/b&gt;&lt;br/&gt;Retiring the policy deactivates or reverts its linked components without rewriting history." vertex="1">
+          <mxGeometry height="88" width="278" x="30" y="258" as="geometry" />
+        </mxCell>
+        <mxCell id="out-not" parent="outcomes-panel" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#757575;fontColor=#212121;fontSize=12;arcSize=6;spacing=10;" value="&lt;b&gt;Not every edit needs this&lt;/b&gt;&lt;br/&gt;Single-tier operational changes still follow their normal lightweight workflow." vertex="1">
+          <mxGeometry height="70" width="278" x="30" y="366" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-examples-config" edge="1" parent="1" source="examples-panel" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#455A64;strokeWidth=3;fontSize=11;fontStyle=2;fontColor=#263238;exitX=1;exitY=0.5;entryX=0;entryY=0.5;endArrow=block;endFill=1;" target="config-panel" value="translated into linked config components">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="edge-config-outcomes" edge="1" parent="1" source="config-panel" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#455A64;strokeWidth=3;fontSize=11;fontStyle=2;fontColor=#263238;exitX=1;exitY=0.5;entryX=0;entryY=0.5;endArrow=block;endFill=1;" target="outcomes-panel" value="governed as one change">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="lifecycle-strip" parent="1" style="swimlane;startSize=32;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=3;align=left;spacingLeft=12;" value="Lifecycle and failure rule" vertex="1">
+          <mxGeometry height="156" width="1122" x="266" y="604" as="geometry" />
+        </mxCell>
+        <mxCell id="s-draft" parent="lifecycle-strip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="DRAFT&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;assemble&lt;/font&gt;" vertex="1">
+          <mxGeometry height="54" width="116" x="32" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="s-ready" parent="lifecycle-strip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="READY&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;components approved&lt;/font&gt;" vertex="1">
+          <mxGeometry height="54" width="140" x="206" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="s-approved" parent="lifecycle-strip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="APPROVED&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;sign-off held&lt;/font&gt;" vertex="1">
+          <mxGeometry height="54" width="140" x="404" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="s-active" parent="lifecycle-strip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="ACTIVE&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;system activates&lt;/font&gt;" vertex="1">
+          <mxGeometry height="54" width="132" x="602" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="s-retired" parent="lifecycle-strip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=8;" value="RETIRED&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;superseded&lt;/font&gt;" vertex="1">
+          <mxGeometry height="54" width="132" x="792" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="failure-note" parent="lifecycle-strip" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=11;arcSize=6;spacing=8;" value="Activation failure rolls the attempted activation back to APPROVED, not DRAFT." vertex="1">
+          <mxGeometry height="54" width="132" x="960" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s1" edge="1" parent="lifecycle-strip" source="s-draft" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#455A64;strokeWidth=2;fontSize=10;fontColor=#263238;exitX=1;exitY=0.5;entryX=0;entryY=0.5;endArrow=block;endFill=1;" target="s-ready" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s2" edge="1" parent="lifecycle-strip" source="s-ready" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#455A64;strokeWidth=2;fontSize=10;fontColor=#263238;exitX=1;exitY=0.5;entryX=0;entryY=0.5;endArrow=block;endFill=1;" target="s-approved" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s3" edge="1" parent="lifecycle-strip" source="s-approved" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#455A64;strokeWidth=2;fontSize=10;fontColor=#263238;exitX=1;exitY=0.5;entryX=0;entryY=0.5;endArrow=block;endFill=1;" target="s-active" value="effective date">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-s4" edge="1" parent="lifecycle-strip" source="s-active" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#455A64;strokeWidth=2;fontSize=10;fontColor=#263238;exitX=1;exitY=0.5;entryX=0;entryY=0.5;endArrow=block;endFill=1;" target="s-retired" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-failure" edge="1" parent="lifecycle-strip" source="failure-note" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#C62828;strokeWidth=2;fontSize=10;fontColor=#B71C1C;exitX=0.5;exitY=1;entryX=0.5;entryY=1;endArrow=block;endFill=1;dashed=1;rounded=1;" target="s-approved" value="failed activation">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1026" y="130" />
+              <mxPoint x="474" y="130" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="footer" parent="1" style="text;html=1;fontSize=12;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="Key constraint: the bundle coordinates approved components; it does not bypass each tier&#39;s governance, and it does not change in-flight process snapshots." vertex="1">
+          <mxGeometry height="30" width="1220" x="217" y="802" as="geometry" />
+        </mxCell>
+        <mxCell id="sources" parent="1" style="text;html=1;fontSize=10;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#607D8B;" value="Sources: ADR-009 Policy Layer, ADR-015 Configuration Surface and Admin UI, MASTER-DESIGN-DOCUMENT" vertex="1">
+          <mxGeometry height="22" width="860" x="397" y="833" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

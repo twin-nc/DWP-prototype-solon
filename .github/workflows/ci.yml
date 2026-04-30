@@ -1,0 +1,86 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: [main]
+
+env:
+  REGISTRY: ufstpit-dev-docker.repo.netcompany.com
+  IMAGE_API: ufstpit-dev-docker.repo.netcompany.com/dcms_v0/dcms_v0-api
+  IMAGE_FRONTEND: ufstpit-dev-docker.repo.netcompany.com/dcms_v0/dcms_v0-frontend
+
+jobs:
+
+  backend:
+    name: Backend — build, test, scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: "21"
+          distribution: temurin
+          cache: maven
+
+      - name: Build and test
+        working-directory: backend
+        run: mvn verify -q
+
+      - name: Build Docker image
+        run: |
+          SHA=$(git rev-parse --short HEAD)
+          docker build -t ${{ env.IMAGE_API }}:${SHA} ./backend
+
+      - name: Trivy scan — API image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.IMAGE_API }}:${{ github.sha }}
+          format: table
+          exit-code: "1"
+          severity: CRITICAL,HIGH
+
+  frontend:
+    name: Frontend — build, test, scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Type check
+        working-directory: frontend
+        run: npx tsc --noEmit
+
+      - name: Run tests
+        working-directory: frontend
+        run: npm test
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build
+
+      - name: Build Docker image
+        run: |
+          SHA=$(git rev-parse --short HEAD)
+          docker build -t ${{ env.IMAGE_FRONTEND }}:${SHA} ./frontend
+
+      - name: Trivy scan — frontend image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.IMAGE_FRONTEND }}:${{ github.sha }}
+          format: table
+          exit-code: "1"
+          severity: CRITICAL,HIGH

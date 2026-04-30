@@ -1,0 +1,339 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram name="DIAG-11 Deceased Party Handling" id="diag-11">
+    <mxGraphModel dx="1868" dy="945" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="932" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- TITLE / SUBTITLE                                                   -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <mxCell id="title" parent="1"
+          style="text;html=1;fontSize=20;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A1A1A;"
+          value="DIAG-11 — Deceased Party Handling: Two-Phase Atomicity"
+          vertex="1">
+          <mxGeometry x="80" y="18" width="1494" height="32" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1"
+          style="text;html=1;fontSize=12;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;"
+          value="Phase 1 commits to DB first — legal protection is guaranteed regardless of what happens to the process engine."
+          vertex="1">
+          <mxGeometry x="80" y="52" width="1494" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- PHASE 1 SWIMLANE                                                   -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <mxCell id="phase1-lane" parent="1"
+          style="swimlane;startSize=40;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=2;align=left;spacingLeft=12;"
+          value="Phase 1 — Transactional (@Transactional)"
+          vertex="1">
+          <mxGeometry x="60" y="88" width="540" height="610" as="geometry" />
+        </mxCell>
+
+        <!-- Transactional boundary dashed box -->
+        <mxCell id="tx-boundary" parent="phase1-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#455A64;strokeWidth=2;dashed=1;dashPattern=8 4;fontColor=#455A64;fontSize=11;fontStyle=2;arcSize=4;align=right;spacingRight=10;verticalAlign=top;spacingTop=6;"
+          value="@Transactional boundary"
+          vertex="1">
+          <mxGeometry x="20" y="48" width="500" height="474" as="geometry" />
+        </mxCell>
+
+        <!-- Step 1 — Agent confirms deceased -->
+        <mxCell id="p1-step1" parent="phase1-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;strokeWidth=2;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=6;spacing=10;"
+          value="Agent confirms deceased"
+          vertex="1">
+          <mxGeometry x="145" y="80" width="250" height="54" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 1→2 -->
+        <mxCell id="arr-p1-1-2" parent="phase1-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#455A64;strokeWidth=2;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;"
+          edge="1" source="p1-step1" target="p1-step2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Step 2 — deceased_flag -->
+        <mxCell id="p1-step2" parent="phase1-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;align=center;"
+          value="&lt;b&gt;party.deceased_flag = true&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;deceased_flagged_at, deceased_flagged_by set&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="100" y="172" width="340" height="64" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 2→3 -->
+        <mxCell id="arr-p1-2-3" parent="phase1-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#455A64;strokeWidth=2;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;"
+          edge="1" source="p1-step2" target="p1-step3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Step 3 — suppressionLogService -->
+        <mxCell id="p1-step3" parent="phase1-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;align=center;"
+          value="&lt;b&gt;suppressionLogService.activate(&lt;br/&gt;accountIds, DECEASED_MANDATORY, confirmedBy)&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Blocks DEBT_COLLECTION and NON_COLLECTION.&lt;br/&gt;Only ESTATE_ADMINISTRATION permitted.&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="80" y="276" width="380" height="82" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 3→4 -->
+        <mxCell id="arr-p1-3-4" parent="phase1-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#455A64;strokeWidth=2;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;"
+          edge="1" source="p1-step3" target="p1-step4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Step 4 — AUDIT_EVENT -->
+        <mxCell id="p1-step4" parent="phase1-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;align=center;"
+          value="&lt;b&gt;AUDIT_EVENT(DECEASED_FLAG_SET) written&lt;/b&gt;"
+          vertex="1">
+          <mxGeometry x="100" y="398" width="340" height="54" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 4→commit -->
+        <mxCell id="arr-p1-4-commit" parent="phase1-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#2E7D32;strokeWidth=2;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;"
+          edge="1" source="p1-step4" target="p1-commit">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Commit callout (green) -->
+        <mxCell id="p1-commit" parent="phase1-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;strokeWidth=3;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=6;spacing=10;align=center;"
+          value="Transaction COMMITS&lt;br/&gt;— legally protected state persists"
+          vertex="1">
+          <mxGeometry x="95" y="492" width="350" height="62" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- PHASE 2 SWIMLANE                                                   -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <mxCell id="phase2-lane" parent="1"
+          style="swimlane;startSize=40;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=2;align=left;spacingLeft=12;"
+          value="Phase 2 — Non-Transactional"
+          vertex="1">
+          <mxGeometry x="640" y="88" width="740" height="610" as="geometry" />
+        </mxCell>
+
+        <!-- Step 1 — Iterate account IDs -->
+        <mxCell id="p2-step1" parent="phase2-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;strokeWidth=2;fontColor=#FFFFFF;fontSize=13;fontStyle=1;arcSize=6;spacing=10;align=center;"
+          value="Iterate account IDs"
+          vertex="1">
+          <mxGeometry x="245" y="62" width="250" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- Arrow 1→diamond -->
+        <mxCell id="arr-p2-1-d" parent="phase2-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#455A64;strokeWidth=2;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;"
+          edge="1" source="p2-step1" target="p2-diamond">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Diamond — Joint debt link active? -->
+        <mxCell id="p2-diamond" parent="phase2-lane"
+          style="rhombus;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;fontStyle=1;align=center;"
+          value="Joint debt&lt;br/&gt;link active?"
+          vertex="1">
+          <mxGeometry x="280" y="154" width="180" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- YES label -->
+        <mxCell id="lbl-yes" parent="phase2-lane"
+          style="text;html=1;fontSize=11;fontStyle=1;fontColor=#2E7D32;fillColor=none;strokeColor=none;align=center;"
+          value="YES"
+          vertex="1">
+          <mxGeometry x="120" y="183" width="50" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- NO label -->
+        <mxCell id="lbl-no" parent="phase2-lane"
+          style="text;html=1;fontSize=11;fontStyle=1;fontColor=#C62828;fillColor=none;strokeColor=none;align=center;"
+          value="NO"
+          vertex="1">
+          <mxGeometry x="570" y="183" width="40" height="22" as="geometry" />
+        </mxCell>
+
+        <!-- YES branch — create work queue task -->
+        <mxCell id="p2-yes-task" parent="phase2-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;align=center;"
+          value="&lt;b&gt;Create SPECIALIST_AGENT WORK_QUEUE task&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;Joint account holder deceased — review required&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="28" y="278" width="260" height="64" as="geometry" />
+        </mxCell>
+
+        <!-- YES branch — Add system case note -->
+        <mxCell id="p2-yes-note" parent="phase2-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;align=center;"
+          value="Add system case note"
+          vertex="1">
+          <mxGeometry x="28" y="378" width="260" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- YES branch — Do NOT suspend -->
+        <mxCell id="p2-yes-nosuspend" parent="phase2-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=12;arcSize=6;spacing=8;align=center;fontStyle=2;"
+          value="Do NOT suspend process instances"
+          vertex="1">
+          <mxGeometry x="28" y="458" width="260" height="48" as="geometry" />
+        </mxCell>
+
+        <!-- NO branch — Flowable suspend -->
+        <mxCell id="p2-no-suspend" parent="phase2-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B71C1C;strokeColor=#7F0000;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;align=center;"
+          value="&lt;b&gt;runtimeService.suspendProcessInstanceById()&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;for each active ProcessCaseLink&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="450" y="278" width="260" height="64" as="geometry" />
+        </mxCell>
+
+        <!-- NO branch — Repayment plan suspended -->
+        <mxCell id="p2-no-repayment" parent="phase2-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;strokeWidth=2;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=8;align=center;"
+          value="&lt;b&gt;Active REPAYMENT_ARRANGEMENT records&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;set to SUSPENDED (not CANCELLED)&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="450" y="378" width="260" height="64" as="geometry" />
+        </mxCell>
+
+        <!-- Exception handling box -->
+        <mxCell id="p2-exception" parent="phase2-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=12;arcSize=6;spacing=8;align=center;"
+          value="&lt;b&gt;FlowableObjectNotFoundException + any exception&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;→ log MANUAL_REVIEW_REQUIRED in AUDIT_EVENT&lt;br/&gt;→ NOT propagated&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="180" y="506" width="380" height="68" as="geometry" />
+        </mxCell>
+
+        <!-- Edges for Phase 2 YES path -->
+        <mxCell id="arr-p2-d-yes" parent="phase2-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#2E7D32;strokeWidth=2;exitX=0;exitY=0.5;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;"
+          edge="1" source="p2-diamond" target="p2-yes-task">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-p2-yes-task-note" parent="phase2-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#455A64;strokeWidth=2;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;"
+          edge="1" source="p2-yes-task" target="p2-yes-note">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-p2-yes-note-nosuspend" parent="phase2-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#455A64;strokeWidth=2;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;"
+          edge="1" source="p2-yes-note" target="p2-yes-nosuspend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Edges for Phase 2 NO path -->
+        <mxCell id="arr-p2-d-no" parent="phase2-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#C62828;strokeWidth=2;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;"
+          edge="1" source="p2-diamond" target="p2-no-suspend">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-p2-no-suspend-repay" parent="phase2-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#455A64;strokeWidth=2;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0.5;entryY=0;entryPerimeter=0;"
+          edge="1" source="p2-no-suspend" target="p2-no-repayment">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Edges converging into exception box -->
+        <mxCell id="arr-p2-yes-nosuspend-exc" parent="phase2-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#C62828;strokeWidth=1;dashed=1;dashPattern=6 3;exitX=0.5;exitY=1;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;"
+          edge="1" source="p2-yes-nosuspend" target="p2-exception">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="arr-p2-no-repay-exc" parent="phase2-lane"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#C62828;strokeWidth=1;dashed=1;dashPattern=6 3;exitX=0.5;exitY=1;exitPerimeter=0;entryX=1;entryY=0.5;entryPerimeter=0;"
+          edge="1" source="p2-no-repayment" target="p2-exception">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- PHASE CONNECTOR ARROW (Phase1 commit → Phase2)                    -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <mxCell id="arr-phase-link" parent="1"
+          style="edgeStyle=orthogonalEdgeStyle;strokeColor=#2E7D32;strokeWidth=3;exitX=1;exitY=0.5;exitPerimeter=0;entryX=0;entryY=0.5;entryPerimeter=0;startArrow=none;endArrow=block;endFill=1;"
+          edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="600" y="523" as="sourcePoint" />
+            <mxPoint x="640" y="523" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lbl-phase-link" parent="1"
+          style="text;html=1;fontSize=10;fontStyle=1;fontColor=#2E7D32;fillColor=none;strokeColor=none;align=center;"
+          value="then"
+          vertex="1">
+          <mxGeometry x="603" y="504" width="34" height="18" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- GUARANTEE PANEL (full width, green strip)                          -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <mxCell id="guarantee-panel" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=3;fontColor=#1B5E20;fontSize=13;fontStyle=1;arcSize=3;spacing=12;align=center;"
+          value="&lt;b&gt;Atomicity guarantee&lt;/b&gt; — This handler runs when an agent records a death notification. By the time Phase 2 touches Flowable, the deceased flag, communication suppression, and audit record are already committed to the database as a single atomic unit. If Phase 1 fails for any reason, nothing is saved and the agent can retry. If Phase 2 fails — including a Flowable crash or a race condition on a completing process instance — the legal protection written in Phase 1 remains intact. Flowable manages collection workflows, but it has no power to undo a database commit. The deceased flag cannot be un-set by process engine failure.&lt;br/&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px;font-style:normal;&quot;&gt;deceased_flagged_at / deceased_flagged_by are recorded in Phase 1 to support a future supervised unflag operation.&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="60" y="716" width="1020" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- OPEN QUESTION BOX (bottom-right)                                   -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <mxCell id="oq-box" parent="1"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=12;arcSize=6;spacing=10;align=left;spacingLeft=12;"
+          value="&lt;b&gt;Open Question — DDE-OQ-07&lt;/b&gt;&lt;br/&gt;Estate pursuit policy must be confirmed before deceased&lt;br/&gt;account management stories proceed past design.&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;(RULING-006)&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="1094" y="716" width="500" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- LEGEND (bottom-left)                                                -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <mxCell id="legend-panel" parent="1"
+          style="swimlane;startSize=28;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=2;fontColor=#263238;fontSize=12;fontStyle=1;arcSize=3;align=left;spacingLeft=10;"
+          value="Legend"
+          vertex="1">
+          <mxGeometry x="60" y="814" width="800" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-actor" parent="legend-panel"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=11;arcSize=8;"
+          value="Actor / Trigger"
+          vertex="1">
+          <mxGeometry x="12" y="38" width="120" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-domain" parent="legend-panel"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=11;arcSize=8;"
+          value="Domain entity / DB"
+          vertex="1">
+          <mxGeometry x="148" y="38" width="130" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-suppression" parent="legend-panel"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=11;arcSize=8;"
+          value="Suppression service"
+          vertex="1">
+          <mxGeometry x="294" y="38" width="130" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-flowable" parent="legend-panel"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B71C1C;strokeColor=#7F0000;fontColor=#FFFFFF;fontSize=11;arcSize=8;"
+          value="Flowable / process engine"
+          vertex="1">
+          <mxGeometry x="440" y="38" width="148" height="36" as="geometry" />
+        </mxCell>
+        <mxCell id="leg-safe" parent="legend-panel"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=11;arcSize=8;"
+          value="Safe path / commit"
+          vertex="1">
+          <mxGeometry x="604" y="38" width="130" height="36" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <!-- FOOTER                                                              -->
+        <!-- ═══════════════════════════════════════════════════════════════════ -->
+        <mxCell id="footer" parent="1"
+          style="text;html=1;fontSize=10;fontStyle=2;align=left;fillColor=none;strokeColor=none;fontColor=#607D8B;"
+          value="Constraint: DB commit is the legal protection — process engine failure is safe by design. | Sources: RULING-007, RULING-006, ADR-003, MASTER-DESIGN-DOCUMENT"
+          vertex="1">
+          <mxGeometry x="60" y="916" width="1534" height="16" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

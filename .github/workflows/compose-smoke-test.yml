@@ -1,0 +1,47 @@
+name: Compose smoke test
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  smoke-test:
+    name: docker compose up + health check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start full stack
+        working-directory: infrastructure
+        run: docker compose up -d --build
+
+      - name: Wait for stack to be healthy
+        run: |
+          echo "Waiting for services to become healthy..."
+          for i in $(seq 1 30); do
+            if curl -fs http://localhost:8081/health/live > /dev/null 2>&1 && \
+               curl -fs http://localhost:8081/health/ready > /dev/null 2>&1; then
+              echo "Stack is healthy"
+              exit 0
+            fi
+            echo "Attempt $i/30 — waiting..."
+            sleep 10
+          done
+          echo "Stack did not become healthy in time"
+          docker compose -f infrastructure/docker-compose.yml logs
+          exit 1
+
+      - name: Verify health endpoints
+        run: |
+          echo "Testing /health/live..."
+          curl -fs http://localhost:8081/health/live
+          echo ""
+          echo "Testing /health/ready..."
+          curl -fs http://localhost:8081/health/ready
+          echo ""
+
+      - name: Tear down
+        if: always()
+        working-directory: infrastructure
+        run: docker compose down -v

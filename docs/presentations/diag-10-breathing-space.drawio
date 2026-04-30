@@ -1,0 +1,336 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram name="DIAG-10 Breathing Space" id="diag-10">
+    <mxGraphModel dx="1868" dy="945" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="932" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- TITLE / SUBTITLE                                           -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="title" parent="1"
+          style="text;html=1;fontSize=20;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A1A1A;"
+          value="DIAG-10 — Breathing Space: Non-Interrupting Subprocess Pattern"
+          vertex="1">
+          <mxGeometry x="60" y="16" width="1534" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1"
+          style="text;html=1;fontSize=11;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;"
+          value="Non-interrupting BPMN event subprocess fires on breathing space start — main debt lifecycle continues; moratorium runs in parallel."
+          vertex="1">
+          <mxGeometry x="60" y="48" width="1534" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- LEFT PANEL — STANDARD Breathing Space                     -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="left-lane" parent="1"
+          style="swimlane;startSize=36;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=2;align=left;spacingLeft=12;"
+          value="STANDARD Breathing Space (60-day moratorium)"
+          vertex="1">
+          <mxGeometry x="60" y="76" width="580" height="726" as="geometry" />
+        </mxCell>
+
+        <!-- 1. Trigger -->
+        <mxCell id="std-trigger" parent="left-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=6;"
+          value="&lt;b&gt;BREATHING_SPACE_START&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;message received&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="165" y="54" width="250" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- arrow 1→2 -->
+        <mxCell id="e-std-1-2" edge="1" parent="left-lane" source="std-trigger" target="std-phase1"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=block;endFill=1;"
+          value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 2. Phase 1 transactional -->
+        <mxCell id="std-phase1" parent="left-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;arcSize=4;align=left;spacingLeft=12;spacing=6;"
+          value="&lt;b&gt;Phase 1 — @Transactional&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;• Set breathing_space_flag = true&lt;br/&gt;• Create LEGAL_HOLD (end_date = today + 60 days)&lt;br/&gt;• Activate BREATHING_SPACE_STATUTORY suppression&lt;br/&gt;• Write AUDIT_EVENT&lt;/font&gt;&lt;br/&gt;&lt;font style=&quot;font-size:10px;font-style:italic;&quot;&gt;DB commits — legally protected&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="60" y="140" width="460" height="98" as="geometry" />
+        </mxCell>
+
+        <!-- arrow 2→3 -->
+        <mxCell id="e-std-2-3" edge="1" parent="left-lane" source="std-phase1" target="std-phase2"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=block;endFill=1;"
+          value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 3. Phase 2 non-transactional -->
+        <mxCell id="std-phase2" parent="left-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;arcSize=4;align=left;spacingLeft=12;spacing=6;"
+          value="&lt;b&gt;Phase 2 — non-transactional&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;• Start non-interrupting event subprocess in Flowable&lt;br/&gt;• (failure here does NOT undo Phase 1 commit)&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="60" y="272" width="460" height="72" as="geometry" />
+        </mxCell>
+
+        <!-- arrow 3→4 -->
+        <mxCell id="e-std-3-4" edge="1" parent="left-lane" source="std-phase2" target="std-timer"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=block;endFill=1;"
+          value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 4. Intermediate Timer -->
+        <mxCell id="std-timer" parent="left-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=12;arcSize=6;spacing=6;"
+          value="&lt;b&gt;Intermediate Timer Catch Event&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;waits for ${breathingSpaceEndDateISO}&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="165" y="378" width="250" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- arrow 4→5 -->
+        <mxCell id="e-std-4-5" edge="1" parent="left-lane" source="std-timer" target="std-discard"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=block;endFill=1;"
+          value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 5. DiscardQueuedCollectionCommunicationsDelegate -->
+        <mxCell id="std-discard" parent="left-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;arcSize=4;spacing=6;"
+          value="&lt;b&gt;DiscardQueuedCollectionCommunicationsDelegate&lt;/b&gt;"
+          vertex="1">
+          <mxGeometry x="80" y="464" width="420" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- arrow 5→6 -->
+        <mxCell id="e-std-5-6" edge="1" parent="left-lane" source="std-discard" target="std-lift"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=block;endFill=1;"
+          value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 6. LiftBreathingSpaceSuppressionDelegate -->
+        <mxCell id="std-lift" parent="left-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;arcSize=4;spacing=6;"
+          value="&lt;b&gt;LiftBreathingSpaceSuppressionDelegate&lt;/b&gt;"
+          vertex="1">
+          <mxGeometry x="80" y="532" width="420" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- arrow 6→7 -->
+        <mxCell id="e-std-6-7" edge="1" parent="left-lane" source="std-lift" target="std-resume"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=block;endFill=1;"
+          value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 7. ResumeArrangementMonitoringDelegate -->
+        <mxCell id="std-resume" parent="left-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;arcSize=4;align=left;spacingLeft=12;spacing=6;"
+          value="&lt;b&gt;ResumeArrangementMonitoringDelegate&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;Extends arrangement end date by moratorium days&lt;br/&gt;for AWAITING_TIMER and CHECKING_PAYMENT steps&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="80" y="610" width="420" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- arrow 7→8 -->
+        <mxCell id="e-std-7-8" edge="1" parent="left-lane" source="std-resume" target="std-usertask"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=block;endFill=1;"
+          value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 8. Post-review User Task -->
+        <mxCell id="std-usertask" parent="left-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=12;arcSize=4;spacing=6;"
+          value="&lt;b&gt;Post-review User Task&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;Assignee: SPECIALIST_AGENT&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="165" y="706" width="250" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- RIGHT PANEL — MENTAL_HEALTH_CRISIS Path                   -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="right-lane" parent="1"
+          style="swimlane;startSize=36;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=14;fontStyle=1;arcSize=2;align=left;spacingLeft=12;"
+          value="MENTAL_HEALTH_CRISIS Path (open-ended moratorium)"
+          vertex="1">
+          <mxGeometry x="680" y="76" width="520" height="726" as="geometry" />
+        </mxCell>
+
+        <!-- 1. MH Trigger -->
+        <mxCell id="mh-trigger" parent="right-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;fontStyle=1;arcSize=6;spacing=6;"
+          value="&lt;b&gt;BREATHING_SPACE_START&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;(MH crisis variant)&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="135" y="54" width="250" height="52" as="geometry" />
+        </mxCell>
+
+        <!-- arrow mh 1→2 -->
+        <mxCell id="e-mh-1-2" edge="1" parent="right-lane" source="mh-trigger" target="mh-phase1"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=block;endFill=1;"
+          value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 2. MH Phase 1 -->
+        <mxCell id="mh-phase1" parent="right-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=12;arcSize=4;align=left;spacingLeft=12;spacing=6;"
+          value="&lt;b&gt;Phase 1 — @Transactional&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;• Activate MENTAL_HEALTH_CRISIS suppression&lt;br/&gt;• LEGAL_HOLD.end_date = NULL&lt;br/&gt;&amp;nbsp;&amp;nbsp;(non-null would be a data integrity violation)&lt;br/&gt;• Write AUDIT_EVENT&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="40" y="140" width="440" height="94" as="geometry" />
+        </mxCell>
+
+        <!-- arrow mh 2→3 -->
+        <mxCell id="e-mh-2-3" edge="1" parent="right-lane" source="mh-phase1" target="mh-usertask"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=block;endFill=1;"
+          value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- 3. Awaiting MH Confirmation User Task -->
+        <mxCell id="mh-usertask" parent="right-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=12;arcSize=4;align=left;spacingLeft=12;spacing=6;"
+          value="&lt;b&gt;Awaiting MH Confirmation — User Task&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;Assignee: SPECIALIST_AGENT&lt;br/&gt;No automatic timer — human decision required&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="40" y="272" width="440" height="72" as="geometry" />
+        </mxCell>
+
+        <!-- 4. Boundary escalation timer -->
+        <mxCell id="mh-escalation" parent="right-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=12;arcSize=4;align=left;spacingLeft=12;spacing=6;"
+          value="&lt;b&gt;Boundary Escalation Timer&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;${mhcEscalationDays}d — escalates to OPS_MANAGER&lt;br/&gt;if user task not actioned&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="40" y="386" width="440" height="68" as="geometry" />
+        </mxCell>
+
+        <!-- arrow: user task → escalation (boundary) -->
+        <mxCell id="e-mh-3-4" edge="1" parent="right-lane" source="mh-usertask" target="mh-escalation"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#6A1B9A;strokeWidth=2;endArrow=block;endFill=1;dashed=1;"
+          value="&lt;font style=&quot;font-size:10px;color:#6A1B9A;&quot;&gt;boundary timer&lt;/font&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- arrow mh 3→5 (confirmation path) -->
+        <mxCell id="e-mh-3-5" edge="1" parent="right-lane" source="mh-usertask" target="mh-sequence"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=block;endFill=1;"
+          value="&lt;font style=&quot;font-size:10px;&quot;&gt;confirmed&lt;/font&gt;">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="480" y="308" />
+              <mxPoint x="480" y="488" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- 5. Discard / Lift / Resume sequence -->
+        <mxCell id="mh-sequence" parent="right-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=12;arcSize=4;align=left;spacingLeft=12;spacing=6;"
+          value="&lt;b&gt;On confirmation: discard / lift / resume sequence&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size:11px&quot;&gt;• DiscardQueuedCollectionCommunicationsDelegate&lt;br/&gt;• LiftBreathingSpaceSuppressionDelegate&lt;br/&gt;• ResumeArrangementMonitoringDelegate&lt;/font&gt;"
+          vertex="1">
+          <mxGeometry x="40" y="480" width="440" height="82" as="geometry" />
+        </mxCell>
+
+        <!-- arrow mh 5→end -->
+        <mxCell id="e-mh-5-end" edge="1" parent="right-lane" source="mh-sequence" target="mh-end"
+          style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#37474F;strokeWidth=2;endArrow=block;endFill=1;"
+          value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- MH End -->
+        <mxCell id="mh-end" parent="right-lane"
+          style="ellipse;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=12;fontStyle=1;"
+          value="End"
+          vertex="1">
+          <mxGeometry x="210" y="604" width="100" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- BOTTOM PANEL — Transaction Boundary Rule                  -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="bottom-lane" parent="1"
+          style="swimlane;startSize=34;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=3;fontColor=#263238;fontSize=13;fontStyle=1;arcSize=2;align=left;spacingLeft=12;"
+          value="Transaction Boundary Rule"
+          vertex="1">
+          <mxGeometry x="60" y="820" width="1140" height="92" as="geometry" />
+        </mxCell>
+
+        <!-- Flowable failure box -->
+        <mxCell id="tx-flowable-fail" parent="bottom-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=11;arcSize=4;align=left;spacingLeft=10;spacing=5;"
+          value="&lt;b&gt;Flowable failure on subprocess start&lt;/b&gt;&lt;br/&gt;Logs MANUAL_REVIEW_REQUIRED in AUDIT_EVENT. Does NOT roll back Phase 1 DB commit. The moratorium IS legally active even if Flowable failed."
+          vertex="1">
+          <mxGeometry x="20" y="40" width="520" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- Criminal liability box -->
+        <mxCell id="tx-criminal" parent="bottom-lane"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=11;arcSize=4;align=left;spacingLeft=10;spacing=5;"
+          value="&lt;b&gt;Criminal liability note&lt;/b&gt;&lt;br/&gt;Sending a debt collection communication during an active breathing space moratorium is a criminal offence under the Debt Respite Scheme Regulations 2020. The non-interrupting subprocess model is the architectural guarantee."
+          vertex="1">
+          <mxGeometry x="560" y="40" width="560" height="44" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- LEGEND                                                     -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="legend-panel" parent="1"
+          style="swimlane;startSize=26;fillColor=#F7FAFC;strokeColor=#455A64;strokeWidth=2;fontColor=#263238;fontSize=12;fontStyle=1;arcSize=2;align=left;spacingLeft=8;"
+          value="Legend"
+          vertex="1">
+          <mxGeometry x="1240" y="76" width="354" height="250" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-trigger" parent="legend-panel"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=11;arcSize=6;"
+          value="BPMN Trigger / Delegate (crimson)"
+          vertex="1">
+          <mxGeometry x="16" y="40" width="322" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-domain" parent="legend-panel"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#283593;strokeColor=#1A237E;fontColor=#FFFFFF;fontSize=11;arcSize=4;"
+          value="Domain / Phase action (dark indigo)"
+          vertex="1">
+          <mxGeometry x="16" y="82" width="322" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-timer" parent="legend-panel"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#6A1B9A;strokeColor=#4A148C;fontColor=#FFFFFF;fontSize=11;arcSize=6;"
+          value="Timer / Escalation event (purple)"
+          vertex="1">
+          <mxGeometry x="16" y="124" width="322" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-actor" parent="legend-panel"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=11;arcSize=4;"
+          value="Actor / User task (slate)"
+          vertex="1">
+          <mxGeometry x="16" y="166" width="322" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="leg-warning" parent="legend-panel"
+          style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#C62828;strokeWidth=2;fontColor=#B71C1C;fontSize=11;arcSize=4;"
+          value="Warning / legal constraint (red)"
+          vertex="1">
+          <mxGeometry x="16" y="208" width="322" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <!-- FOOTER                                                     -->
+        <!-- ═══════════════════════════════════════════════════════════ -->
+        <mxCell id="footer-constraint" parent="1"
+          style="text;html=1;fontSize=11;fontStyle=1;align=left;fillColor=none;strokeColor=none;fontColor=#B71C1C;"
+          value="Constraint: Phase 1 DB commit is the legal protection. Flowable failure cannot un-protect an account."
+          vertex="1">
+          <mxGeometry x="60" y="898" width="900" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="footer-sources" parent="1"
+          style="text;html=1;fontSize=10;fontStyle=2;align=right;fillColor=none;strokeColor=none;fontColor=#455A64;"
+          value="Sources: RULING-001, ADR-007, ADR-003, Debt Respite Scheme Regulations 2020"
+          vertex="1">
+          <mxGeometry x="960" y="898" width="634" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

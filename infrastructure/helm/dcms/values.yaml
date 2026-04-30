@@ -1,0 +1,31 @@
+replicaCount: 1
+
+image:
+  api:
+    repository: ufstpit-dev-docker.repo.netcompany.com/dcms_v0/dcms_v0-api
+    tag: latest
+    pullPolicy: IfNotPresent
+  frontend:
+    repository: ufstpit-dev-docker.repo.netcompany.com/dcms_v0/dcms_v0-frontend
+    tag: latest
+    pullPolicy: IfNotPresent
+
+service:
+  api:
+    port: 8081
+  frontend:
+    port: 8080
+
+ingress:
+  enabled: true
+  host: ""
+
+env:
+  PORT: "8081"
+  LOG_LEVEL: "info"
+  SPRING_PROFILES_ACTIVE: "dev"
+  DATABASE_URL: ""
+  KEYCLOAK_ISSUER_URI: ""
+
+# To be configured by DevOps team - do not fill in
+secrets: {}

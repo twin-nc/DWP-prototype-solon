@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "myapp.fullname" . }}
+  labels:
+    {{- include "myapp.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "myapp.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "myapp.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "myapp.fullname" . }}
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          # Non-sensitive config from ConfigMap
+          envFrom:
+            - configMapRef:
+                name: {{ include "myapp.fullname" . }}
+          # Sensitive config from Secret — only mounted if secrets are defined in values.yaml
+          {{- if .Values.secrets }}
+            - secretRef:
+                name: {{ include "myapp.fullname" . }}
+          {{- end }}
+          # Liveness probe — checks if the process is alive.
+          # Do NOT check external dependencies here; it causes spurious restarts.
+          # Path /health/live is fixed — do not change without coordinating with DevOps.
+          livenessProbe:
+            httpGet:
+              path: /health/live
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+          # Readiness probe — checks if the app is ready to serve traffic.
+          # Kubernetes stops routing traffic to the pod if this returns non-2xx.
+          # Path /health/ready is fixed — do not change without coordinating with DevOps.
+          readinessProbe:
+            httpGet:
+              path: /health/ready
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 3

@@ -1,0 +1,37 @@
+name: Helm lint
+
+on:
+  push:
+    paths:
+      - "infrastructure/helm/**"
+  pull_request:
+    paths:
+      - "infrastructure/helm/**"
+
+jobs:
+  helm-lint:
+    name: Helm lint + template render
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Helm
+        uses: azure/setup-helm@v4
+        with:
+          version: "3.15.2"
+
+      - name: Lint chart
+        run: helm lint ./infrastructure/helm/dcms
+
+      - name: Template render (base values)
+        run: helm template dcms ./infrastructure/helm/dcms
+
+      - name: Template render (local values)
+        run: |
+          helm template dcms ./infrastructure/helm/dcms \
+            -f ./infrastructure/helm/dcms/values-local.yaml
+
+      - name: Template render (dev values)
+        run: |
+          helm template dcms ./infrastructure/helm/dcms \
+            -f ./infrastructure/helm/dcms/values-dev.yaml

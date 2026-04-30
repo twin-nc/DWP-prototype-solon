@@ -1,0 +1,160 @@
+<mxfile host="Electron" agent="Codex">
+  <diagram name="DIAG-01 Debt Lifecycle" id="diag-01">
+    <mxGraphModel dx="1884" dy="961" grid="0" gridSize="10" guides="1" tooltips="1" connect="0" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1654" pageHeight="932" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;fontSize=22;fontStyle=1;align=center;fillColor=none;strokeColor=none;fontColor=#1A1A1A;" value="DCMS - Debt Lifecycle with Capability Group Overlay" vertex="1">
+          <mxGeometry height="36" width="980" x="337" y="18" as="geometry" />
+        </mxCell>
+        <mxCell id="subtitle" parent="1" style="text;html=1;fontSize=13;align=center;fillColor=none;strokeColor=none;fontColor=#455A64;" value="442 functional requirements across 19 confirmed capability groups, mapped to the end-to-end DWP debt journey" vertex="1">
+          <mxGeometry height="24" width="1040" x="307" y="56" as="geometry" />
+        </mxCell>
+        <mxCell id="kpi-bg" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#263238;strokeColor=#263238;fontColor=#FFFFFF;fontSize=14;fontStyle=1;arcSize=6;" value="&lt;b&gt;Scope anchor:&lt;/b&gt; Identification - Assessment - Recovery - Enforcement - Write-Off" vertex="1">
+          <mxGeometry height="48" width="1250" x="202" y="92" as="geometry" />
+        </mxCell>
+        <mxCell id="stage-identification" parent="1" style="swimlane;startSize=44;whiteSpace=wrap;html=1;fillColor=#E3F2FD;strokeColor=#1565C0;strokeWidth=3;fontColor=#0D47A1;fontSize=15;fontStyle=1;arcSize=4;align=center;" value="1. Identification" vertex="1">
+          <mxGeometry height="430" width="275" x="84" y="178" as="geometry" />
+        </mxCell>
+        <mxCell id="stage-assessment" parent="1" style="swimlane;startSize=44;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#2E7D32;strokeWidth=3;fontColor=#1B5E20;fontSize=15;fontStyle=1;arcSize=4;align=center;" value="2. Assessment" vertex="1">
+          <mxGeometry height="430" width="275" x="389" y="178" as="geometry" />
+        </mxCell>
+        <mxCell id="stage-recovery" parent="1" style="swimlane;startSize=44;whiteSpace=wrap;html=1;fillColor=#FFF8E1;strokeColor=#F9A825;strokeWidth=3;fontColor=#5D4037;fontSize=15;fontStyle=1;arcSize=4;align=center;" value="3. Recovery" vertex="1">
+          <mxGeometry height="430" width="275" x="694" y="178" as="geometry" />
+        </mxCell>
+        <mxCell id="stage-enforcement" parent="1" style="swimlane;startSize=44;whiteSpace=wrap;html=1;fillColor=#FCE4EC;strokeColor=#AD1457;strokeWidth=3;fontColor=#880E4F;fontSize=15;fontStyle=1;arcSize=4;align=center;" value="4. Enforcement" vertex="1">
+          <mxGeometry height="430" width="275" x="999" y="178" as="geometry" />
+        </mxCell>
+        <mxCell id="stage-writeoff" parent="1" style="swimlane;startSize=44;whiteSpace=wrap;html=1;fillColor=#FFEBEE;strokeColor=#B71C1C;strokeWidth=3;fontColor=#7F0000;fontSize=15;fontStyle=1;arcSize=4;align=center;" value="5. Write-Off" vertex="1">
+          <mxGeometry height="430" width="275" x="1304" y="178" as="geometry" />
+        </mxCell>
+        <mxCell id="id-summary" parent="stage-identification" style="text;html=1;fontSize=11;align=center;whiteSpace=wrap;fillColor=none;strokeColor=none;fontColor=#0D47A1;" value="Debt referral, customer/account creation, evidence capture and source-system linkage." vertex="1">
+          <mxGeometry height="48" width="237" x="19" y="58" as="geometry" />
+        </mxCell>
+        <mxCell id="as-summary" parent="stage-assessment" style="text;html=1;fontSize=11;align=center;whiteSpace=wrap;fillColor=none;strokeColor=none;fontColor=#1B5E20;" value="Segment the account, assess circumstances, choose treatment path and allocate work." vertex="1">
+          <mxGeometry height="48" width="237" x="19" y="58" as="geometry" />
+        </mxCell>
+        <mxCell id="rec-summary" parent="stage-recovery" style="text;html=1;fontSize=11;align=center;whiteSpace=wrap;fillColor=none;strokeColor=none;fontColor=#5D4037;" value="Manage contact, repayment arrangements, payments, breach handling and ongoing actions." vertex="1">
+          <mxGeometry height="48" width="237" x="19" y="58" as="geometry" />
+        </mxCell>
+        <mxCell id="enf-summary" parent="stage-enforcement" style="text;html=1;fontSize=11;align=center;whiteSpace=wrap;fillColor=none;strokeColor=none;fontColor=#880E4F;" value="Progress eligible cases to DCA, legal, field-agent or other specialist enforcement routes." vertex="1">
+          <mxGeometry height="48" width="237" x="19" y="58" as="geometry" />
+        </mxCell>
+        <mxCell id="wo-summary" parent="stage-writeoff" style="text;html=1;fontSize=11;align=center;whiteSpace=wrap;fillColor=none;strokeColor=none;fontColor=#7F0000;" value="Approve, evidence and record closure outcomes, including controlled write-off and settlement." vertex="1">
+          <mxGeometry height="48" width="237" x="19" y="58" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-cas" parent="stage-identification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1565C0;strokeColor=#0D47A1;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;CAS&lt;/b&gt; Customer &amp;amp; Account Structure" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-dic" parent="stage-identification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1565C0;strokeColor=#0D47A1;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;DIC&lt;/b&gt; Data &amp;amp; Information Capture" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-mr" parent="stage-identification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1565C0;strokeColor=#0D47A1;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;MR&lt;/b&gt; Migration Requirements" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="232" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-sor-id" parent="stage-identification" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1565C0;strokeColor=#0D47A1;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;SoR&lt;/b&gt; source account record" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="284" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-bsf" parent="stage-assessment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;BSF&lt;/b&gt; Bureau &amp;amp; Scorecard Feeds" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-a" parent="stage-assessment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;A&lt;/b&gt; Analytics &amp;amp; Segmentation" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-iec" parent="stage-assessment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;IEC&lt;/b&gt; Income &amp;amp; Expenditure Capture" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="232" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-dw-as" parent="stage-assessment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;DW&lt;/b&gt; Decisions &amp;amp; Workflows" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="284" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-wam-as" parent="stage-assessment" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;WAM&lt;/b&gt; Work Allocation &amp;amp; Monitoring" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-rpf" parent="stage-recovery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F57F17;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;RPF&lt;/b&gt; Repayment Plan Functionality" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-cc" parent="stage-recovery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F57F17;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;CC&lt;/b&gt; Contact Channels" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-aad" parent="stage-recovery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F57F17;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;AAD&lt;/b&gt; Agent Actions &amp;amp; Dispositions" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="232" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-sor-rec" parent="stage-recovery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F57F17;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;SoR&lt;/b&gt; payments, ledger, audit facts" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="284" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-i3ps-rec" parent="stage-recovery" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F57F17;strokeColor=#E65100;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;I3PS&lt;/b&gt; gateway / portal interfaces" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="336" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-3pm" parent="stage-enforcement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;3PM&lt;/b&gt; 3rd Party Management" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-i3ps-enf" parent="stage-enforcement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;I3PS&lt;/b&gt; DCA / legal / field interfaces" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-dw-enf" parent="stage-enforcement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;DW&lt;/b&gt; disclosure and escalation paths" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="232" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-wam-enf" parent="stage-enforcement" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#AD1457;strokeColor=#880E4F;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;WAM&lt;/b&gt; specialist queues and oversight" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="284" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-dw-wo" parent="stage-writeoff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B71C1C;strokeColor=#7F0000;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;DW&lt;/b&gt; controlled outcome workflow" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="128" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-uacf" parent="stage-writeoff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B71C1C;strokeColor=#7F0000;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;UAAF&lt;/b&gt; role limits and approvals" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-sor-wo" parent="stage-writeoff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B71C1C;strokeColor=#7F0000;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;SoR&lt;/b&gt; write-off / closure record" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="232" as="geometry" />
+        </mxCell>
+        <mxCell id="chip-mir" parent="stage-writeoff" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B71C1C;strokeColor=#7F0000;fontColor=#FFFFFF;fontSize=10;arcSize=8;" value="&lt;b&gt;MIR&lt;/b&gt; MI &amp;amp; Reporting" vertex="1">
+          <mxGeometry height="42" width="225" x="25" y="284" as="geometry" />
+        </mxCell>
+        <mxCell id="e-id-as" edge="1" parent="1" source="stage-identification" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#263238;strokeWidth=3;fontSize=11;fontStyle=2;fontColor=#263238;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="stage-assessment" value="promote to case">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-as-rec" edge="1" parent="1" source="stage-assessment" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#263238;strokeWidth=3;fontSize=11;fontStyle=2;fontColor=#263238;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="stage-recovery" value="route treatment">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-rec-enf" edge="1" parent="1" source="stage-recovery" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#263238;strokeWidth=3;fontSize=11;fontStyle=2;fontColor=#263238;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="stage-enforcement" value="eligible escalation">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-enf-wo" edge="1" parent="1" source="stage-enforcement" style="edgeStyle=orthogonalEdgeStyle;html=1;strokeColor=#263238;strokeWidth=3;fontSize=11;fontStyle=2;fontColor=#263238;endArrow=block;endFill=1;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" target="stage-writeoff" value="closure decision">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cross-bg" parent="1" style="swimlane;startSize=34;whiteSpace=wrap;html=1;fillColor=#F5F5F5;strokeColor=#546E7A;strokeWidth=2;fontColor=#263238;fontSize=13;fontStyle=1;arcSize=4;align=left;spacingLeft=12;" value="Cross-lifecycle controls and user surfaces" vertex="1">
+          <mxGeometry height="148" width="1495" x="84" y="640" as="geometry" />
+        </mxCell>
+        <mxCell id="cross-ui" parent="cross-bg" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=11;arcSize=6;" value="&lt;b&gt;UI&lt;/b&gt;&lt;br/&gt;Staff screens and journeys across every stage" vertex="1">
+          <mxGeometry height="62" width="220" x="26" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="cross-cp" parent="cross-bg" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=11;arcSize=6;" value="&lt;b&gt;CP&lt;/b&gt;&lt;br/&gt;Change process and release controls" vertex="1">
+          <mxGeometry height="62" width="220" x="275" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="cross-sd" parent="cross-bg" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=11;arcSize=6;" value="&lt;b&gt;SD&lt;/b&gt;&lt;br/&gt;Roadmap and delivery governance" vertex="1">
+          <mxGeometry height="62" width="220" x="524" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="cross-uacf" parent="cross-bg" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=11;arcSize=6;" value="&lt;b&gt;UAAF&lt;/b&gt;&lt;br/&gt;Access control and admin boundaries" vertex="1">
+          <mxGeometry height="62" width="220" x="773" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="cross-audit" parent="cross-bg" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=11;arcSize=6;" value="&lt;b&gt;AAD / SoR / MIR&lt;/b&gt;&lt;br/&gt;Actions, audit facts and reporting evidence" vertex="1">
+          <mxGeometry height="62" width="250" x="1022" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="cross-dw" parent="cross-bg" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#37474F;strokeColor=#263238;fontColor=#FFFFFF;fontSize=11;arcSize=6;" value="&lt;b&gt;DW&lt;/b&gt;&lt;br/&gt;BPMN lifecycle control across the journey" vertex="1">
+          <mxGeometry height="62" width="175" x="1302" y="55" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-bg" parent="1" style="rounded=1;fillColor=#FFFFFF;strokeColor=#BDBDBD;strokeWidth=1;arcSize=5;" value="" vertex="1">
+          <mxGeometry height="76" width="644" x="84" y="812" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-title" parent="1" style="text;html=1;fontSize=11;fontStyle=1;fillColor=none;strokeColor=none;fontColor=#1A1A1A;" value="Reading the diagram" vertex="1">
+          <mxGeometry height="20" width="130" x="101" y="822" as="geometry" />
+        </mxCell>
+        <mxCell id="legend-text" parent="1" style="text;html=1;fontSize=10;align=left;whiteSpace=wrap;fillColor=none;strokeColor=none;fontColor=#455A64;" value="Capability chips show where each requirement family primarily operates. Repeated chips indicate groups that span multiple stages rather than a single handoff point." vertex="1">
+          <mxGeometry height="42" width="600" x="101" y="846" as="geometry" />
+        </mxCell>
+        <mxCell id="footer" parent="1" style="text;html=1;fontSize=10;fontStyle=2;align=center;fillColor=none;strokeColor=none;fontColor=#546E7A;" value="Lifecycle control is owned by BPMN process instances; account records hold audit facts and financial state. This keeps operational movement, legal evidence and reporting aligned from ingest through closure." vertex="1">
+          <mxGeometry height="26" width="1495" x="84" y="902" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

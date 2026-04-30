@@ -1,0 +1,72 @@
+---
+title: "DCMS — Debt Lifecycle and Event Handling (ADR-001, ADR-002)"
+---
+flowchart TD
+  subgraph INGEST["Ingest  (integration module)"]
+    REF["Debt referral received\nPOST /api/v1/integration/candidates"]
+    CAND["Candidate record created\nStatus: PENDING\n(immutable from ingest)"]
+    REF --> CAND
+  end
+
+  subgraph INITIATION["Case initiation — single @Transactional boundary"]
+    AGT["Agent reviews candidate\nand promotes to case"]
+    C1["1. Create / verify Customer record\n(customer module)"]
+    C2["2. Create DebtAccount record\n(account module)"]
+    C3["3. ProcessStartPort.startTreatment()\n→ Flowable process instance started\n(infrastructure/process)"]
+    AGT --> C1 --> C2 --> C3
+    ROLLBACK["❌ Entire transaction rolls back\nif any step fails"]
+    C3 -.->|on failure| ROLLBACK
+  end
+
+  subgraph SEGMENTATION["Segmentation  (strategy module / DMN)"]
+    SEG{"DMN decision table\nevaluates segment\nbased on customer attributes"}
+    S1["VULNERABLE_ON_BENEFIT\n→ treatment-vulnerable-on-benefit"]
+    S2["STANDARD_ON_BENEFIT\n→ treatment-standard-on-benefit"]
+    S3["VULNERABLE_OFF_BENEFIT\n→ treatment-vulnerable-off-benefit"]
+    S4["STANDARD_OFF_BENEFIT\n→ treatment-standard-off-benefit"]
+    SEG --> S1 & S2 & S3 & S4
+  end
+
+  subgraph TREATMENT["Active treatment process  (one Flowable instance per DebtAccount)"]
+    TREAT["Treatment steps\n(contact · assessment · arrangement · enforcement)"]
+
+    subgraph EVENTS["Monitoring event subprocesses  (always active at root scope)"]
+      direction LR
+      E1["BREATHING_SPACE_START ✋\n→ suspend comms\nwait for END"]
+      E2["BENEFIT_CEASED ✋\n→ terminate + RESEGMENT"]
+      E3["CIRCUMSTANCE_CHANGE\n→ re-evaluate, maybe RESEGMENT"]
+      E4["INSOLVENCY_REGISTERED ✋\n→ halt treatment"]
+      E5["DEATH_REGISTERED ✋\n→ halt + estate task"]
+      E6["PAYMENT_MISSED ⏱\n→ breach task"]
+      E7["SUPERVISOR_OVERRIDE\n→ move to specified step"]
+    end
+
+    TREAT --- EVENTS
+  end
+
+  subgraph OUTCOMES["Terminal outcomes"]
+    WO["Write-off"]
+    SETTLE["Settled / paid in full"]
+    DCA_OUT["DCA placement"]
+    INSOL["Insolvency handling"]
+    ESTATE["Estate handling"]
+  end
+
+  CAND -->|agent promotes| INITIATION
+  C3 --> SEGMENTATION
+  SEGMENTATION --> TREATMENT
+  E2 -->|RESEGMENT signal| SEGMENTATION
+  E3 -->|if segment changed| SEGMENTATION
+  TREATMENT --> WO & SETTLE & DCA_OUT
+  E4 --> INSOL
+  E5 --> ESTATE
+
+  NOTE["📝 account module records regulatory facts (dates, references) for audit.\n    Process engine owns the behavioural response. These are separate concerns."]
+  style NOTE fill:#fff8e1,stroke:#f9a825,color:#5d4037
+
+  classDef interrupt fill:#ffcdd2,stroke:#c62828,color:#b71c1c
+  classDef noninterrupt fill:#e8f5e9,stroke:#2e7d32,color:#1b5e20
+  classDef timer fill:#e3f2fd,stroke:#1565c0,color:#0d47a1
+  class E1,E2,E4,E5 interrupt
+  class E3,E7 noninterrupt
+  class E6 timer

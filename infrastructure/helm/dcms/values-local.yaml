@@ -1,0 +1,15 @@
+# Local (k3d) overrides
+image:
+  api:
+    pullPolicy: Never
+  frontend:
+    pullPolicy: Never
+
+env:
+  SPRING_PROFILES_ACTIVE: "local"
+  LOG_LEVEL: "debug"
+  DATABASE_URL: "postgresql://dcms:dcms@dcms-db:5432/dcms"
+  KEYCLOAK_ISSUER_URI: "http://dcms-keycloak:8080/realms/dcms"
+
+ingress:
+  host: "dcms.local"

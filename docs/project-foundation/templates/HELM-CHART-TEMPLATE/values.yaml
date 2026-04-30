@@ -1,0 +1,43 @@
+# ── Image ─────────────────────────────────────────────────────────────────────
+# Replace the repository with the project-specific registry path.
+# The tag is overridden at deploy time with the git SHA; 'latest' is only a
+# fallback for local helm template/lint runs.
+image:
+  repository: "{{REGISTRY}}/{{PROJECT_NAME}}"
+  tag: latest
+  pullPolicy: IfNotPresent
+
+# ── Replicas ──────────────────────────────────────────────────────────────────
+replicaCount: 1
+
+# ── Service ───────────────────────────────────────────────────────────────────
+service:
+  port: 8080
+
+# ── Ingress ───────────────────────────────────────────────────────────────────
+# TLS and ingress-class annotations are configured by the DevOps team.
+# Set host to the FQDN for the environment (configured by DevOps).
+ingress:
+  enabled: true
+  host: ""
+
+# ── Non-sensitive configuration ───────────────────────────────────────────────
+# All values here are wired into ConfigMap.yaml and injected as env vars.
+# Add every environment variable the application reads.
+# Leave sensitive values (credentials, API keys) empty — see 'secrets' below.
+env:
+  PORT: "8080"
+  LOG_LEVEL: "info"
+  # Add all application-specific env vars below.
+  # Example:
+  # DATABASE_URL: ""
+  # SOME_FEATURE_FLAG: "false"
+  # EXTERNAL_API_URL: ""
+
+# ── Secrets ───────────────────────────────────────────────────────────────────
+# To be configured by the DevOps team — do not fill in here.
+# Expected keys depend on the application. Common examples:
+#   DB_USERNAME: ""
+#   DB_PASSWORD: ""
+#   API_KEY: ""
+secrets: {}

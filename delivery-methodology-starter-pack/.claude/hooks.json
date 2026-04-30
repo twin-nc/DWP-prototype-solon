@@ -1,0 +1,137 @@
+{
+  "hooks": [
+    {
+      "name": "block-no-verify",
+      "description": "Blocks git --no-verify and --no-gpg-sign flags",
+      "event": "PreToolUse",
+      "tools": ["Bash"],
+      "script": ".claude/hooks/block-no-verify.js",
+      "profiles": ["minimal", "standard", "strict"],
+      "blocking": true
+    },
+    {
+      "name": "config-protection",
+      "description": "Blocks edits to linter, formatter, and build config files without human approval",
+      "event": "PreToolUse",
+      "tools": ["Edit", "Write"],
+      "script": ".claude/hooks/config-protection.js",
+      "profiles": ["standard", "strict"],
+      "blocking": true
+    },
+    {
+      "name": "gateguard-fact-force",
+      "description": "Forces fact declaration before high-consequence actions (blocking in strict mode)",
+      "event": "PreToolUse",
+      "tools": ["Edit", "Write", "Bash"],
+      "script": ".claude/hooks/gateguard-fact-force.js",
+      "profiles": ["strict"],
+      "blocking": false,
+      "note": "Set ECC_HOOK_PROFILE=strict to activate. Advisory in standard mode."
+    },
+    {
+      "name": "governance-capture",
+      "description": "Logs governance events (secrets, approval-required commands) to governance-log.jsonl",
+      "event": "PreToolUse",
+      "tools": ["Bash"],
+      "script": ".claude/hooks/governance-capture.js",
+      "profiles": ["standard", "strict"],
+      "blocking": false
+    },
+    {
+      "name": "pre-compact",
+      "description": "Logs a compaction boundary marker to session file before context is compacted",
+      "event": "PreCompact",
+      "tools": [],
+      "script": ".claude/hooks/pre-compact.js",
+      "profiles": ["standard", "strict"],
+      "blocking": false
+    },
+    {
+      "name": "session-end",
+      "description": "Persists session summary to session file for cross-session continuity",
+      "event": "Stop",
+      "tools": [],
+      "script": ".claude/hooks/session-end.js",
+      "profiles": ["standard", "strict"],
+      "blocking": false
+    },
+    {
+      "name": "suggest-compact",
+      "description": "Suggests /compact when tool call count crosses threshold (default 40)",
+      "event": "PostToolUse",
+      "tools": ["*"],
+      "script": ".claude/hooks/suggest-compact.js",
+      "profiles": ["standard", "strict"],
+      "blocking": false
+    },
+    {
+      "name": "quality-gate",
+      "description": "Runs formatter/linter after file edits; warns on failure",
+      "event": "PostToolUse",
+      "tools": ["Edit", "Write"],
+      "script": ".claude/hooks/quality-gate.js",
+      "profiles": ["standard", "strict"],
+      "blocking": false,
+      "note": "Set ECC_QUALITY_GATE_BLOCKING=true to make failures blocking"
+    },
+    {
+      "name": "mcp-health-check",
+      "description": "Probes MCP server health before any MCP tool call; blocks if unreachable",
+      "event": "PreToolUse",
+      "tools": ["mcp__*"],
+      "script": ".claude/hooks/mcp-health-check.js",
+      "profiles": ["standard", "strict"],
+      "blocking": true
+    },
+    {
+      "name": "cost-tracker",
+      "description": "Appends token usage and estimated cost to costs.jsonl after each session",
+      "event": "Stop",
+      "tools": [],
+      "script": ".claude/hooks/cost-tracker.js",
+      "profiles": ["standard", "strict"],
+      "blocking": false
+    }
+  ],
+  "profiles": {
+    "minimal": {
+      "description": "Only hard safety blocks (no-verify guard). Use for quick explorations.",
+      "active_hooks": ["block-no-verify"]
+    },
+    "standard": {
+      "description": "Full governance + observability. Recommended for all regular development.",
+      "active_hooks": [
+        "block-no-verify",
+        "config-protection",
+        "governance-capture",
+        "pre-compact",
+        "session-end",
+        "suggest-compact",
+        "quality-gate",
+        "mcp-health-check",
+        "cost-tracker"
+      ]
+    },
+    "strict": {
+      "description": "Everything in standard plus GateGuard pre-action gate. Use for Class A changes.",
+      "active_hooks": [
+        "block-no-verify",
+        "config-protection",
+        "gateguard-fact-force",
+        "governance-capture",
+        "pre-compact",
+        "session-end",
+        "suggest-compact",
+        "quality-gate",
+        "mcp-health-check",
+        "cost-tracker"
+      ]
+    }
+  },
+  "environment": {
+    "ECC_HOOK_PROFILE": "Profile tier selector. Values: minimal | standard | strict. Default: standard.",
+    "ECC_COMPACT_THRESHOLD": "Tool call count before suggest-compact fires. Default: 40.",
+    "ECC_QUALITY_GATE_BLOCKING": "Set to 'true' to make quality-gate failures block edits. Default: false.",
+    "MCP_SERVERS": "Comma-separated 'name=healthUrl' pairs for mcp-health-check. Example: github=http://localhost:3100/health"
+  }
+}

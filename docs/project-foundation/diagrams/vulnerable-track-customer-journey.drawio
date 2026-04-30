@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2026-04-22T00:00:00.000Z" agent="Claude/BA" version="21.0.0" type="device">
+  <diagram id="vulnerable-track-cj" name="Vulnerable Track Customer Journey">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="2320" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- MAIN COLUMN SHAPES -->
+
+        <!-- s1: START -->
+        <mxCell id="s1" value="&lt;b&gt;START&lt;/b&gt;&lt;br/&gt;Debtor selected from candidate list" style="ellipse;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="360" y="70" width="260" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- s2: Evaluate debtor -->
+        <mxCell id="s2" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Evaluate debtor: vulnerability level, fraud score, debt mix [DW.1, BSF.1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="360" y="160" width="260" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- s3: VULNERABLE segment confirmed -->
+        <mxCell id="s3" value="&lt;b&gt;VULNERABLE segment confirmed&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="270" width="260" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- c1: Breathing space diamond -->
+        <mxCell id="c1" value="&lt;b&gt;Compliance Officer&lt;/b&gt;&lt;br/&gt;⚠ Breathing space invoked? [RULING-002]" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="385" y="350" width="210" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- w1: Create case -->
+        <mxCell id="w1" value="&lt;b&gt;Welfare Queue Agent&lt;/b&gt;&lt;br/&gt;Create case, assign to Welfare Queue [WAM.1, WAM.20, UAAF.4]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="360" y="480" width="260" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- w3: Set primary contact -->
+        <mxCell id="w3" value="&lt;b&gt;Welfare Queue Agent&lt;/b&gt;&lt;br/&gt;Set primary contact (appointee if exists, otherwise debtor) [CAS.5, DIC.1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="360" y="580" width="260" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- w4: Issue initial SMS / letter -->
+        <mxCell id="w4" value="&lt;b&gt;Welfare Queue Agent&lt;/b&gt;&lt;br/&gt;Issue initial SMS / letter to primary contact [DIC.15, CC.1, RPF.27]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="360" y="680" width="260" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- sys-wait: Wait response window -->
+        <mxCell id="sys-wait" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Wait response window (configurable timer) [DW.3, DW.6]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="360" y="780" width="260" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- sys-resp: Response or engagement received? -->
+        <mxCell id="sys-resp" value="&lt;b&gt;System&lt;/b&gt;&lt;br/&gt;Response or engagement received?" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="385" y="880" width="210" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- w6: Assess affordability -->
+        <mxCell id="w6" value="&lt;b&gt;Welfare Queue Agent&lt;/b&gt;&lt;br/&gt;Assess affordability, policy limits, vulnerability indicators [IE.1, DW.14, FG21/1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1000" width="260" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- w7: Recommend reduced-rate -->
+        <mxCell id="w7" value="&lt;b&gt;Welfare Queue Agent&lt;/b&gt;&lt;br/&gt;Recommend reduced-rate deduction strategy [DW.14, RPF.1, RPF.3]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#ffe6cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1110" width="260" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- tl1: Team Leader approval gate -->
+        <mxCell id="tl1" value="&lt;b&gt;Team Leader — ⚠ RULING-001 APPROVAL GATE&lt;/b&gt;&lt;br/&gt;Review &amp; approve deduction recommendation [UAAF.25, WAM.24, FG21/1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1210" width="260" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- tl2: Deduction suitable? -->
+        <mxCell id="tl2" value="&lt;b&gt;Team Leader&lt;/b&gt;&lt;br/&gt;Deduction suitable within policy?" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="385" y="1320" width="210" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- c3: Compliance approval -->
+        <mxCell id="c3" value="&lt;b&gt;Compliance Officer — ⚠ RULING-001&lt;/b&gt;&lt;br/&gt;Approve vulnerability flag before enforcement action [FG21/1, DW.27, UAAF.25]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1440" width="260" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- sys-apply: Apply deduction -->
+        <mxCell id="sys-apply" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Apply / amend benefit deduction per DWP Payment Allocation [DW.14, DW.87, DW.23]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1550" width="260" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- sys-monitor: Monitor -->
+        <mxCell id="sys-monitor" value="&lt;b&gt;System / Rules Engine&lt;/b&gt;&lt;br/&gt;Monitor: deductions / payment behaviour / vulnerability / compliance [DW.25, SOR.1]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1660" width="260" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- om1: Ops Manager dashboard -->
+        <mxCell id="om1" value="&lt;b&gt;Operations Manager&lt;/b&gt;&lt;br/&gt;Monitor performance dashboard; review alerts [MIR.1, WAM.28]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="360" y="1770" width="260" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- om2: Change of circumstances? -->
+        <mxCell id="om2" value="&lt;b&gt;Operations Manager&lt;/b&gt;&lt;br/&gt;Change of circumstances?" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="385" y="1870" width="210" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- sys-benefit: Still on benefit? -->
+        <mxCell id="sys-benefit" value="&lt;b&gt;System&lt;/b&gt;&lt;br/&gt;Still on benefit? [DWP data feed, SOR.1]" style="rhombus;whiteSpace=wrap;html=1;fontSize=10;fillColor=#f0f0f0;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="385" y="1990" width="210" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- sys-end: END -->
+        <mxCell id="sys-end" value="&lt;b&gt;END — Recovery completed&lt;/b&gt;" style="ellipse;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="360" y="2110" width="260" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- EXCEPTION COLUMN SHAPES -->
+
+        <!-- c2: Breathing space moratorium -->
+        <mxCell id="c2" value="&lt;b&gt;Compliance Officer — RULING-002&lt;/b&gt;&lt;br/&gt;STOP: 60-day enforcement moratorium [Debt Respite Scheme 2020, Reg 7]. Review at moratorium end." style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="660" y="360" width="240" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- w5: Reminder / re-engage -->
+        <mxCell id="w5" value="&lt;b&gt;Welfare Queue Agent&lt;/b&gt;&lt;br/&gt;Issue reminder / re-engage strategy [DIC.29, CC.1, DW.6]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#ffe6cc;strokeColor=#d6b656;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="887" width="240" height="76" as="geometry" />
+        </mxCell>
+
+        <!-- tl-reject: Refer back for revision -->
+        <mxCell id="tl-reject" value="&lt;b&gt;Team Leader&lt;/b&gt;&lt;br/&gt;Refer back to WQA for revised recommendation [WAM.24, UAAF.25]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#d5e8d4;strokeColor=#82b366;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="1327" width="240" height="76" as="geometry" />
+        </mxCell>
+
+        <!-- om3: Escalate / re-triage -->
+        <mxCell id="om3" value="&lt;b&gt;Operations Manager&lt;/b&gt;&lt;br/&gt;Escalate / re-triage to WQA for reassessment [WAM.24, DW.25]" style="rounded=1;whiteSpace=wrap;html=1;fontSize=10;align=left;spacingLeft=8;verticalAlign=top;spacingTop=6;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="660" y="1877" width="240" height="76" as="geometry" />
+        </mxCell>
+
+        <!-- EDGES - FORWARD FLOW -->
+
+        <!-- s1 → s2 -->
+        <mxCell id="edge-s1-s2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s1" target="s2" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- s2 → s3 -->
+        <mxCell id="edge-s2-s3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s2" target="s3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- s3 → c1 -->
+        <mxCell id="edge-s3-c1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="s3" target="c1" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c1 → w1 (No - continue) -->
+        <mxCell id="edge-c1-w1" value="No — continue" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="c1" target="w1" parent="1" exitX="0.5" exitY="1" exitDx="0" exitDy="0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- w1 → w3 -->
+        <mxCell id="edge-w1-w3" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="w1" target="w3" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- w3 → w4 -->
+        <mxCell id="edge-w3-w4" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="w3" target="w4" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- w4 → sys-wait -->
+        <mxCell id="edge-w4-wait" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="w4" target="sys-wait" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- sys-wait → sys-resp -->
+        <mxCell id="edge-wait-resp" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sys-wait" target="sys-resp" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- sys-resp → w6 (Yes - engaged) -->
+        <mxCell id="edge-resp-w6" value="Yes — engaged" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sys-resp" target="w6" parent="1" exitX="0.5" exitY="1" exitDx="0" exitDy="0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- w6 → w7 -->
+        <mxCell id="edge-w6-w7" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="w6" target="w7" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- w7 → tl1 -->
+        <mxCell id="edge-w7-tl1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="w7" target="tl1" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- tl1 → tl2 -->
+        <mxCell id="edge-tl1-tl2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="tl1" target="tl2" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- tl2 → c3 (Yes) -->
+        <mxCell id="edge-tl2-c3" value="Yes" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="tl2" target="c3" parent="1" exitX="0.5" exitY="1" exitDx="0" exitDy="0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- c3 → sys-apply -->
+        <mxCell id="edge-c3-apply" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="c3" target="sys-apply" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- sys-apply → sys-monitor -->
+        <mxCell id="edge-apply-monitor" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sys-apply" target="sys-monitor" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- sys-monitor → om1 -->
+        <mxCell id="edge-monitor-om1" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sys-monitor" target="om1" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- om1 → om2 -->
+        <mxCell id="edge-om1-om2" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="om1" target="om2" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- om2 → sys-benefit (No) -->
+        <mxCell id="edge-om2-benefit" value="No" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="om2" target="sys-benefit" parent="1" exitX="0.5" exitY="1" exitDx="0" exitDy="0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- sys-benefit → sys-end (No - off benefit) -->
+        <mxCell id="edge-benefit-end" value="No — off benefit" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sys-benefit" target="sys-end" parent="1" exitX="0.5" exitY="1" exitDx="0" exitDy="0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- EDGES - EXCEPTION PATHS (to right column) -->
+
+        <!-- c1 → c2 (Yes - suppress) -->
+        <mxCell id="edge-c1-c2" value="Yes — suppress" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="c1" target="c2" parent="1" exitX="1" exitY="0.5" exitDx="0" exitDy="0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- sys-resp → w5 (No response) -->
+        <mxCell id="edge-resp-w5" value="No response" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sys-resp" target="w5" parent="1" exitX="1" exitY="0.5" exitDx="0" exitDy="0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- tl2 → tl-reject (No) -->
+        <mxCell id="edge-tl2-reject" value="No" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="tl2" target="tl-reject" parent="1" exitX="1" exitY="0.5" exitDx="0" exitDy="0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- om2 → om3 (Yes - CoC detected) -->
+        <mxCell id="edge-om2-om3" value="Yes — CoC detected" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="om2" target="om3" parent="1" exitX="1" exitY="0.5" exitDx="0" exitDy="0">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- EDGES - LOOP-BACKS (with waypoints) -->
+
+        <!-- w5 → sys-wait (Retry after re-engage) -->
+        <mxCell id="edge-w5-wait-loop" value="Retry after re-engage" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#d6b656;" edge="1" source="w5" target="sys-wait" parent="1" exitX="1" exitY="0.5" exitDx="0" exitDy="0" entryX="1" entryY="0.5" entryDx="0" entryDy="0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="920" y="925" />
+              <mxPoint x="940" y="925" />
+              <mxPoint x="940" y="815" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- tl-reject → w7 (Revise recommendation) -->
+        <mxCell id="edge-reject-w7-loop" value="Revise recommendation" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#82b366;" edge="1" source="tl-reject" target="w7" parent="1" exitX="1" exitY="0.5" exitDx="0" exitDy="0" entryX="1" entryY="0.5" entryDx="0" entryDy="0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="920" y="1365" />
+              <mxPoint x="955" y="1365" />
+              <mxPoint x="955" y="1145" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- om3 → w6 (Re-assess - CoC loop) -->
+        <mxCell id="edge-om3-w6-loop" value="Re-assess (CoC loop)" style="edgeStyle=orthogonalEdgeStyle;strokeColor=#9673a6;" edge="1" source="om3" target="w6" parent="1" exitX="1" exitY="0.5" exitDx="0" exitDy="0" entryX="1" entryY="0.5" entryDx="0" entryDy="0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="920" y="1915" />
+              <mxPoint x="970" y="1915" />
+              <mxPoint x="970" y="1040" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- sys-benefit "Yes" → sys-monitor (still on benefit - keep monitoring) -->
+        <mxCell id="edge-benefit-monitor-loop" value="Yes — still on benefit" style="edgeStyle=orthogonalEdgeStyle;" edge="1" source="sys-benefit" target="sys-monitor" parent="1" exitX="1" exitY="0.5" exitDx="0" exitDy="0" entryX="1" entryY="0.5" entryDx="0" entryDy="0">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="620" y="2035" />
+              <mxPoint x="650" y="2035" />
+              <mxPoint x="650" y="1700" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- NOTES AT BOTTOM -->
+
+        <!-- note1: RULING-001 -->
+        <mxCell id="note1" value="⚠ RULING-001: Four-eyes gate (WQA recommends → Team Leader approves) is MISSING from current COTS config. No builder may implement reduced-rate deduction or vulnerability flag without DWP client sign-off. [FG21/1, UAAF.25, WAM.24]" style="text;html=1;strokeColor=#b85450;fillColor=#fff2cc;align=left;fontSize=9;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="2200" width="510" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- note2: RULING-002 -->
+        <mxCell id="note2" value="⚠ RULING-002: 60-day enforcement moratorium requires system flag + Compliance Officer gate. Both MISSING from current design. See master-solution-design.md OQ-04. [Debt Respite Scheme 2020, Reg 7]" style="text;html=1;strokeColor=#b85450;fillColor=#fff2cc;align=left;fontSize=9;whiteSpace=wrap;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="550" y="2200" width="530" height="50" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

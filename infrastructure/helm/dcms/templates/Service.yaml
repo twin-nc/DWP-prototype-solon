@@ -1,0 +1,34 @@
+---
+# API Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dcms.fullname" . }}-api
+  labels:
+    {{- include "dcms.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.service.api.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dcms.api.selectorLabels" . | nindent 4 }}
+---
+# Frontend Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "dcms.fullname" . }}-frontend
+  labels:
+    {{- include "dcms.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.service.frontend.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "dcms.frontend.selectorLabels" . | nindent 4 }}
