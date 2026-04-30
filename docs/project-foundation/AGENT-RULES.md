@@ -12,6 +12,8 @@ Mandatory operating rules for all project agents. Your role file is self-contain
 2. `docs/memory.md` is the current project state. Read it when you need project context. Do not read it as a ritual — read it when your task requires it.
 3. If unsure about requirements or scope, ask one focused clarifying question before implementation. Do not ask multiple questions in sequence — consolidate.
 
+**Release 1 scope authority:** `docs/release/release-1-capabilities.md` is the authoritative product-design and delivery-scope baseline for Release 1. Read it before designing product behaviour, writing acceptance criteria, planning Release 1 work, or implementing Release 1 features.
+
 ### Ambiguity and missing inputs
 4. If a Required Input is missing or ambiguous, declare the gap explicitly before proceeding. Do not resolve a missing input with an undeclared assumption. Silently filled gaps are the most damaging handoff failure mode — they propagate baked-in assumptions that neither party declared.
 

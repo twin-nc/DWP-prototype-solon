@@ -4,7 +4,7 @@ Source architecture: [configuration-layer-architecture.drawio](./configuration-l
 
 ## Purpose
 
-This document defines the three-workspace model for the Business Control & Experience Layer. It is the primary reference for product scope, role separation, demo design, and delivery planning.
+This document defines the three-workspace model for the Business Control & Experience Layer. It is the primary reference for workspace structure, role separation, and workspace-level demo design. Release 1 product capability scope is governed by [`../release/release-1-capabilities.md`](../release/release-1-capabilities.md).
 
 ## Overview
 

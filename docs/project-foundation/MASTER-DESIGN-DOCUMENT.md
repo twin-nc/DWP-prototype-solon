@@ -5,6 +5,8 @@
 > **This document contains accumulated knowledge and analysis that remains relevant to the new design process. It does NOT represent the current or preferred direction.** All decisions and conclusions herein are open for renewed debate. Do not treat this document as a directive or default position.
 >
 > See [`CLAUDE.md`](../../CLAUDE.md) and [ADR-018](decisions/ADR-018-platform-pivot-solon-tax-confirmed.md) for the current direction.
+>
+> **Release 1 product scope:** Use [`../release/release-1-capabilities.md`](../release/release-1-capabilities.md) as the authoritative Release 1 product-design and delivery-scope baseline. This master design document provides background architecture context only while the platform-pivot design is unsettled.
 
 ---
 

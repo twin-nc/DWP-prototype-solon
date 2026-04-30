@@ -66,6 +66,7 @@ Required whenever a new tool, library, integration protocol, or external service
 ### Gate 3 — Scope Statement
 
 - [ ] Feature is explicitly confirmed **in scope** for the current release/phase
+- [ ] For Release 1 work, scope has been checked against `docs/release/release-1-capabilities.md`
 - [ ] Any adjacent features that are **out of scope** (deferred) are named
 - [ ] Rationale for the scope boundary is documented (legal, capacity, dependency, deliberate deferral)
 - [ ] The BA and Delivery Lead have confirmed the scope boundary
@@ -101,7 +102,7 @@ Before the first Builder commit, the issue must contain:
 ## Pre-Implementation Checkpoint
 - Gate 1 (ACs): ✅ Complete — all contexts covered
 - Gate 2 (Infrastructure): ✅ Complete / ⏭️ Not applicable (no new dependencies)
-- Gate 3 (Scope): ✅ Confirmed in scope for Release X
+- Gate 3 (Scope): ✅ Confirmed in scope for Release X (Release 1 checked against `docs/release/release-1-capabilities.md` where applicable)
 - Gate 4 (Domain pack): ✅ Complete / ⏭️ Not applicable (single-context feature)
 
 Ready for implementation: ✅

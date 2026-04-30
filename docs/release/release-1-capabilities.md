@@ -1,6 +1,6 @@
 # Release 1 Capabilities
 
-> **Status:** Authoritative Release 1 scope baseline.
+> **Status:** Authoritative Release 1 product-design and delivery-scope baseline.
 > **Date:** 2026-04-30
 > **Source trace:** Derived from the six demo flows in [`../working/demo-flow-capabilities.md`](../working/demo-flow-capabilities.md) and the gap rationale in [`../working/release-1-gap-analysis.md`](../working/release-1-gap-analysis.md).
 
@@ -9,6 +9,8 @@
 ## Scope Principles
 
 Release 1 is a prototype/demo release. It must demonstrate the DCMS-owned capability, workflow behaviour, state handling, audit trail, and integration boundaries needed to support the tender-relevant journeys.
+
+Product designs, acceptance criteria, build plans, UI flows, and implementation tasks for Release 1 must reference this document when confirming scope.
 
 Release 1 demonstrates DCMS-side integration and contact orchestration readiness through adapter boundaries, contracts, simulated responses, state transitions, and audit evidence. Live third-party integrations, production dialler operation, automated SMS/email sending, payment-link providers, and live bank-validation APIs are outside Release 1 scope unless access and delivery scope change.
 

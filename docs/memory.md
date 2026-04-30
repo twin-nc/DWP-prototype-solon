@@ -20,6 +20,7 @@ ADR-018 confirmed. DCMS will be built **on top of Solon Tax v2.3.0** as the base
 
 **Authority documents:**
 - `docs/project-foundation/decisions/ADR-018-platform-pivot-solon-tax-confirmed.md` — pivot authority record
+- `docs/release/release-1-capabilities.md` — authoritative Release 1 product-design and delivery-scope baseline
 - `docs/project-foundation/solon-tax-platform-reference.md` — what Solon Tax provides
 - `docs/project-foundation/amplio-process-engine-reference.md` — Amplio constraints (primary process engine candidate)
 - `docs/project-foundation/solon-tax-feasibility-analysis.md` — analysis only; conclusion superseded
@@ -48,6 +49,7 @@ DWP Debt Collection Management System — a debt collection platform for the UK 
 - **Phase:** New design process — platform pivot in effect
 - **Architecture baseline:** Under review. Solon Tax v2.3.0 is the base platform. All prior greenfield decisions are open for renewed debate.
 - **Requirements baseline:** v0.1, sourced from tender documents C8618-FDS-Attachment-4a (Functional) and C8618-FDS-Attachment-4b (Non-Functional)
+- **Release 1 scope baseline:** `docs/release/release-1-capabilities.md`
 - **Last updated:** 2026-04-30
 
 ---

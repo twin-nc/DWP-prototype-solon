@@ -21,6 +21,7 @@ Define what is authoritative when sources conflict (requirements vs standards vs
 ## Definitions
 
 - **Domain overlay:** approved rules, policy, or configuration that applies to a specific domain context and is effective-dated.
+- **Release scope baseline:** approved release-specific product capability baseline that defines what is in and out of scope for a release or phase.
 - **Canonical contract:** versioned OpenAPI/AsyncAPI schemas and associated JSON schemas that define service interfaces and events.
 - **Evidence pack:** append-only bundle of artifacts supporting a release decision (tests, mappings, signoffs, diffs, run IDs).
 
@@ -32,11 +33,12 @@ When sources conflict, the **highest-ranked** source is authoritative:
 
 1. **Applicable law and approved domain overlays** — includes legal references, policy mappings, and official interpretations adopted by the programme.
 2. **Master solution requirements baseline** and approved deviations.
-3. **This standards pack.**
-4. **Canonical contracts and schemas.**
-5. **Approved test suites and release evidence definitions.**
-6. **Code.**
-7. **Examples and prose.**
+3. **Approved release scope baselines** for release/phase inclusion decisions, including `docs/release/release-1-capabilities.md` for Release 1 product design and delivery scope.
+4. **This standards pack.**
+5. **Canonical contracts and schemas.**
+6. **Approved test suites and release evidence definitions.**
+7. **Code.**
+8. **Examples and prose.**
 
 ### Notes
 

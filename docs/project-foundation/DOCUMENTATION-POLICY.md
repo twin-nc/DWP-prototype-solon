@@ -24,6 +24,7 @@ Every agent must know what exists, who maintains it, and when Word publication i
 | Document | Location | Format | Audience | Maintained By | Word Published When |
 |---|---|---|---|---|---|
 | Master Requirements | `docs/project-foundation/SOLUTION-REQUIREMENTS.md` | MD + Word | Stakeholders & team | Traceability Steward | Requirements baseline, review, or audit |
+| Release 1 Capabilities | `docs/release/release-1-capabilities.md` | MD | Product design, delivery planning, agents | Product Owner / BA Lead | Stakeholder review, release scope approval, or audit |
 | Master Solution Design | `docs/project-foundation/master-solution-design.md` | MD + Word | Stakeholders & team | Solution Architect | Architecture baseline or stakeholder review |
 | Ways of Working | `docs/project-foundation/WAYS-OF-WORKING.md` | MD | Team & agents | Team | External audit or governance handover only |
 | Agent Rules | `docs/project-foundation/AGENT-RULES.md` | MD | Agents | Team | N/A |
@@ -47,6 +48,12 @@ Every agent must know what exists, who maintains it, and when Word publication i
 3. Before opening a PR: ensure docs reflect the final implemented behavior.
 4. Before merge: remove stale or contradictory doc text.
 5. When `docs/memory.md` content becomes stale: update it before closing the issue.
+
+## Product Design Scope Authority
+
+`docs/release/release-1-capabilities.md` is the authoritative product-design and delivery-scope baseline for Release 1. Product designs, acceptance criteria, build plans, UI flows, and implementation tasks must reference this document when confirming whether a capability is in Release 1 scope.
+
+Working notes such as `docs/working/demo-flow-capabilities.md` and `docs/working/release-1-gap-analysis.md` explain derivation and rationale. They do not override the release capabilities baseline.
 
 ---
 

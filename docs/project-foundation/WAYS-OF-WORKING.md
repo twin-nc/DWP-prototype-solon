@@ -50,7 +50,7 @@ This methodology is designed for a team of humans orchestrating AI agents. The c
 Before any Builder starts implementation on a non-trivial feature, the following must exist on the linked issue:
 1. Acceptance criteria covering **all** target contexts (not just the primary one).
 2. An infrastructure or technology decision record if any new dependency, tool, or protocol is introduced — including license, ecosystem fit, and operational constraint verification.
-3. A scope statement: explicitly in or out of the current release, with documented rationale.
+3. A scope statement: explicitly in or out of the current release, with documented rationale. Release 1 scope must be checked against `docs/release/release-1-capabilities.md`.
 4. For multi-language systems: i18n key catalogue entries pre-registered for any new user-facing strings.
 
 See `PRE-IMPLEMENTATION-CHECKPOINT.md` for the full checklist. The Delivery Designer and Business Analyst are responsible for ensuring the checkpoint is complete before handing off to a Builder.
