@@ -6,7 +6,7 @@
 
 This file exists so that Codex and other tools that cannot read .claude/ directly have access to the full agent and skill surface for this project.
 
-Last generated: 2026-04-29
+Last generated: 2026-04-30
 
 ---
 
@@ -29,6 +29,7 @@ Codex native sub-agent types are separate from these project roles; these defini
 | frontend-builder | Implement forms, pages, workflow screens, validation, and accessibility. Use when the main work is frontend delivery. |
 | integration-protocol-specialist | Own integration contracts, protocol design, payload signing, error semantics, and external system handoff. Use when the main concern is correctness and stability of a system boundary. |
 | refactorer | Restructure code for clarity and maintainability without changing behavior. Use when the main goal is internal cleanup. |
+| solon-tax-platform-expert | Interpret Solon Tax platform and Amplio process engine documentation. Use before any design, build, integration, or release decision is locked when the work connects to Solon Tax, uses a Solon Tax capability, or depends on Amplio process-engine behaviour documented in external_sys_docs. |
 | solution-architect | Lock final architecture decisions, boundaries, and guardrails after options are understood. Use when the team needs a final architecture call. |
 | sre-platform-engineer | Own platform reliability, observability, infrastructure-as-code, and operational runbooks. Use when reliability targets, alert thresholds, or platform health are the main concern. |
 | test-builder | Implement deterministic unit, integration, and end-to-end tests tied to requirements. Use when the main work is building tests. |
