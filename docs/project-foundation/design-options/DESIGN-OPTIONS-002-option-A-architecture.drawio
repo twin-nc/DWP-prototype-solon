@@ -1,0 +1,116 @@
+<mxfile host="app.diagrams.net" modified="2026-04-30T00:00:00.000Z" agent="Claude" version="24.0.0">
+  <diagram id="optionA" name="Option A — Minimal Custom Layer">
+    <mxGraphModel dx="1600" dy="1000" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="900" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="Option A — Minimal Custom Layer (Configure &amp; Extend Solon)&#10;DCMS lives INSIDE Solon: same JVM, modified Solon BPMN, JSONB data extensions" style="text;html=1;align=center;verticalAlign=middle;fontSize=16;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="10" width="1320" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="legend" value="LEGEND&#10;Green = Solon-owned    Blue = DCMS-owned    Amber = Shared/Extension seam    Red dashed = Distinguishing feature of this option" style="text;html=1;align=left;verticalAlign=middle;fontSize=11;fontStyle=2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="60" width="1320" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="user" value="DWP Agent" style="shape=umlActor;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+          <mxGeometry x="80" y="160" width="40" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ui" value="React UI&#10;(Solon visual language)&#10;&#10;Calls Solon REST APIs directly&#10;+ thin custom endpoints" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="180" y="150" width="220" height="100" as="geometry" />
+        </mxCell>
+
+        <mxCell id="solonBox" value="SOLON TAX v2.3.0  —  Single JVM (Java 17)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=top;fontStyle=1;fontSize=13;" vertex="1" parent="1">
+          <mxGeometry x="450" y="120" width="900" height="640" as="geometry" />
+        </mxCell>
+
+        <mxCell id="solonRest" value="Solon REST APIs" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="470" y="160" width="180" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="amplio" value="Amplio Process Engine&#10;&#10;Solon reference BPMN&#10;(MODIFIED for DWP)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="670" y="160" width="220" height="90" as="geometry" />
+        </mxCell>
+
+        <mxCell id="modBpmn" value="DIFF: Solon reference BPMN is FORKED &amp; MODIFIED&#10;(DEBT_RECOVERY, CASE_HANDOVER, CORRESPONDENCE)" style="text;html=1;align=center;fontSize=10;fontStyle=2;fontColor=#B22222;" vertex="1" parent="1">
+          <mxGeometry x="660" y="250" width="240" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="modBpmnHighlight" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#B22222;dashed=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="660" y="150" width="240" height="140" as="geometry" />
+        </mxCell>
+
+        <mxCell id="kafka" value="Kafka command bus&#10;(24-command catalogue)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="910" y="160" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="batch" value="Foundation Batch&#10;(Solon)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1130" y="160" width="200" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="customModule" value="revenue-management-be-custom  (Solon extension Maven module — same JVM)" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;verticalAlign=top;fontStyle=1;" vertex="1" parent="1">
+          <mxGeometry x="470" y="310" width="860" height="320" as="geometry" />
+        </mxCell>
+
+        <mxCell id="bsGate" value="BreathingSpace&#10;GatingService&#10;(thin Spring bean&#10;wraps Solon&#10;suppression query)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="490" y="350" width="160" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="cc" value="Champion/Challenger&#10;Service&#10;&#10;(awkward fit:&#10;squeezed into Solon&#10;extension seam)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;dashed=1;strokeColor=#B22222;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="670" y="350" width="160" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="ie" value="IE Assessment&#10;Service&#10;&#10;(awkward fit)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#B22222;dashed=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="850" y="350" width="160" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="vuln" value="Vulnerability&#10;Service&#10;&#10;(awkward fit)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#B22222;dashed=1;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="1030" y="350" width="160" height="110" as="geometry" />
+        </mxCell>
+
+        <mxCell id="drools" value="Drools KIE — DWP rules added to Solon's custom KIE container&#10;(no separate DCMS rule namespace; non-technical DMN authoring NOT met)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="490" y="490" width="700" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="diffBpmnNote" value="DIFF: champion/challenger, IE, vulnerability — DCMS domain services constrained by Solon entity model &amp; lifecycle" style="text;html=1;align=center;fontSize=10;fontStyle=2;fontColor=#B22222;" vertex="1" parent="1">
+          <mxGeometry x="670" y="465" width="540" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="db" value="PostgreSQL 16 — Solon schema&#10;DWP fields stored as Data Area JSONB on Solon Taxpayer / Case / Suppression / Task entities&#10;(only new table: champion_challenger_assignment)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="490" y="660" width="820" height="80" as="geometry" />
+        </mxCell>
+
+        <mxCell id="diffJsonb" value="DIFF: NO separate dcms schema. DWP fields live as JSONB on Solon entities." style="text;html=1;align=center;fontSize=10;fontStyle=2;fontColor=#B22222;" vertex="1" parent="1">
+          <mxGeometry x="490" y="745" width="820" height="20" as="geometry" />
+        </mxCell>
+
+        <mxCell id="auth" value="Keycloak + OPA (Solon)&#10;DWP realm config" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="80" y="380" width="220" height="60" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" style="endArrow=classic;html=1;" edge="1" parent="1" source="user" target="ui">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" style="endArrow=classic;html=1;" edge="1" parent="1" source="ui" target="solonRest">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" style="endArrow=classic;html=1;" edge="1" parent="1" source="solonRest" target="amplio">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e4" style="endArrow=classic;html=1;dashed=1;" edge="1" parent="1" source="amplio" target="bsGate">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e5" style="endArrow=classic;html=1;dashed=1;" edge="1" parent="1" source="amplio" target="cc">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e6" style="endArrow=classic;html=1;" edge="1" parent="1" source="customModule" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e7" style="endArrow=classic;html=1;" edge="1" parent="1" source="ui" target="auth">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
