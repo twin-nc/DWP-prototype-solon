@@ -9,142 +9,135 @@
 
 ---
 
+## ⚠ CRITICAL: Platform Pivot in Effect (2026-04-30)
+
+ADR-018 confirmed. DCMS will be built **on top of Solon Tax v2.3.0** as the base platform. This supersedes the previous greenfield direction.
+
+- All prior ADRs (ADR-001 through ADR-017) are **UNDER REVIEW** — their analysis is retained but decisions are not locked.
+- ADR-016 is **SUPERSEDED** — its conclusion (reject platform pivot) is overturned; its analysis remains valuable.
+- ADR-018 is the authority anchor. Read it before making any architecture decision.
+- A new design process is underway. No decisions from the greenfield phase should be treated as current direction.
+
+**Authority documents:**
+- `docs/project-foundation/decisions/ADR-018-platform-pivot-solon-tax-confirmed.md` — pivot authority record
+- `docs/project-foundation/solon-tax-platform-reference.md` — what Solon Tax provides
+- `docs/project-foundation/amplio-process-engine-reference.md` — Amplio constraints (primary process engine candidate)
+- `docs/project-foundation/solon-tax-feasibility-analysis.md` — analysis only; conclusion superseded
+
+---
+
 ## Repository
 
 - **Remote:** `https://github.com/nctct/DWP-system-prototype`
 - **Default branch:** `main`
-- **CI/CD:** Implemented in `.github/workflows/` and still evolving
+- **Active branch:** `docs/platform-pivot-solon-tax`
+- **CI/CD:** Implemented in `.github/workflows/`
 
 ---
 
 ## Project Overview
 
-DWP Debt Collection Management System - a greenfield COTS debt collection platform implementation for the UK Department for Work and Pensions. The system manages the full debt collection lifecycle: customer and account management, automated workflow and decisioning, repayment plans, multi-channel communications (SMS, email, letter, IVR, dialler), third-party placements, income and expenditure capture, and management information. Primary users are DWP collections agents, team leaders, operations managers, and compliance staff (~4,000 concurrent users).
+DWP Debt Collection Management System — a debt collection platform for the UK Department for Work and Pensions. The system manages the full debt collection lifecycle: customer and account management, automated workflow and decisioning, repayment plans, multi-channel communications, third-party placements, income and expenditure capture, and management information.
 
-Netcompany designs and delivers the implementation from scratch around a selected COTS platform. The COTS vendor manages platform internals (workflow runtime, decisioning runtime, core UI/data internals), while Netcompany owns integration adapters, configuration governance, and bespoke extension services.
+**Platform direction (ADR-018):** Built on top of Solon Tax v2.3.0. Solon Tax is used where it satisfies requirements. A new custom React UI is built on top, styled to resemble Solon Tax's visual language but built fresh (not Solon Tax's own Angular UI). New code fills gaps where Solon Tax does not satisfy requirements.
 
 ---
 
 ## Current State
 
-- **Phase:** Foundation
-- **Architecture baseline:** Greenfield COTS implementation (no pre-existing workflow configuration in place)
+- **Phase:** New design process — platform pivot in effect
+- **Architecture baseline:** Under review. Solon Tax v2.3.0 is the base platform. All prior greenfield decisions are open for renewed debate.
 - **Requirements baseline:** v0.1, sourced from tender documents C8618-FDS-Attachment-4a (Functional) and C8618-FDS-Attachment-4b (Non-Functional)
-- **Last updated:** 2026-04-22
+- **Last updated:** 2026-04-30
 
 ---
 
 ## Tech Stack
 
+**Confirmed (from Solon Tax v2.3.0 base platform):**
+
 | Layer | Technology | Notes |
 |---|---|---|
-| COTS platform | Vendor/product TBC | Vendor-managed SaaS core workflow and decisioning runtime |
-| Integration adapters | Java/Spring (TBC final profile) | Netcompany-owned APIs, adapters, and extensions |
-| Auth | DWP SSO / OAuth 2.0 | Mandatory - INT01 |
-| Payment gateway | WorldPay | Mandatory - RPF.21, DW.21 |
-| File transfer | FTPS + TLS 1.2 + PGP | Mandatory - INT07, INT17-INT25 |
-| Data integration | DWP Data Integration Platform / Power BI | Mandatory - INT06, MIR.1 |
-| Container runtime | TBC | Must align with STD-PLAT-009/010 for Netcompany-owned services |
-| Secrets | TBC | Must align with DWP Key Vault approach |
-| Observability | TBC | Must align with DWP monitoring and alerting strategy (SER16) |
-| CI/CD | GitHub Actions | Present, continue hardening |
+| Base platform | Solon Tax v2.3.0 | Netcompany ERP — revenue management platform |
+| Language | Java 17 | Solon Tax ships on Java 17 |
+| Framework | Spring Boot microservices | Solon Tax architecture |
+| Database | PostgreSQL 14+ or Oracle 19c+ | Solon Tax data stores |
+| DB migrations | Liquibase | Solon Tax standard (replaces Flyway from greenfield) |
+| Process engine | Amplio (primary) / Camunda 7 (legacy) | Camunda 8 deprecated in 2.3.0 |
+| Business rules | Drools KIE | No native DMN — see known constraints |
+| Auth | Keycloak 24 (OAuth 2.0 + OIDC) | Solon Tax standard |
+| Authorisation | OPA (Open Policy Agent) + Rego | Replaces simple RBAC-via-JWT from greenfield |
+| Messaging | Apache Kafka + Outbox Pattern | Solon Tax event bus |
+| Frontend | React + TypeScript (new, custom-built) | NOT Solon Tax's Angular UI — new build |
+| Design system | GOV.UK Design System | Mandatory (styled to resemble Solon Tax) |
+| Container | Kubernetes + Helm 3 | Customer-hosted |
+| Observability | ELK Stack (Elasticsearch, Logstash, Kibana, APM) | Solon Tax standard |
+
+**Mandatory integrations (unchanged from requirements):**
+
+| Integration | Standard | Notes |
+|---|---|---|
+| DWP SSO | OAuth 2.0 (INT01) | 100+ domains (INT28) |
+| WorldPay | REST/API (RPF.21, DW.21) | Mandatory payment gateway |
+| DWP IVR | API (RPF.27) | Self-service payment |
+| DWP Notifications | API (DIC.15, DIC.29) | SMS and email |
+| DWP Data Integration Platform / Power BI | API (INT06, MIR.1) | MI and reporting |
+| FTPS bulk file exchange | FTPS + TLS 1.2 + PGP (INT07, INT17-INT25) | Files >2GB split |
+| DWP Payment Allocation | API (DW.23, DW.87) | Allocation instructions must be followed |
+| DM6 (legacy system) | Migration (I3PS.12, I3PS.13) | Migration and back-out |
 
 ---
 
 ## Key Decisions
 
-| Date | Decision | Rationale | Decision Log link |
+| Date | Decision | Rationale | Link |
 |---|---|---|---|
-| 2026-04-22 | Architecture baseline clarified as greenfield COTS implementation | Solution is built from scratch, but COTS internals remain vendor-managed after selection | `docs/project-foundation/standards/deviations/DEV-001-cots-scope.md` |
-| TBC | COTS vendor and product selection | Confirm workflow/decisioning platform and contract constraints | N/A |
-| TBC | Integration adapter stack profile finalization | Confirm exact versions and deployment profile for Netcompany-owned services | N/A |
+| 2026-04-30 | Platform pivot: DCMS built on Solon Tax v2.3.0 | Programme-level decision; confirmed in ADR-018 | `docs/project-foundation/decisions/ADR-018-platform-pivot-solon-tax-confirmed.md` |
+| 2026-04-30 | All ADR-001–ADR-017 reopened for debate | Prior decisions were greenfield-first; must be reassessed against Solon Tax base | ADR-018 §Consequences |
+| 2026-04-30 | New React UI (not Solon Tax Angular UI) | GOV.UK Design System required; Solon Tax UI is Angular | ADR-018 §Decision |
 
 ---
 
-## Active Work
+## Known Constraints (Platform Pivot Layer)
 
-| Item | Owner | Status | Notes |
-|---|---|---|---|
-| Repo setup - install manifest (issue #1) | tct | Merged | CLAUDE.md, .claude/, .github/, docs/project-foundation/ in place |
-| docs/memory.md baseline update | tct | In progress | Greenfield baseline aligned |
+### Amplio Process Engine Constraints
+- **Non-interrupting message boundary events: NOT supported.** Required for DCMS Debt Respite Scheme (Breathing Space) compliance. This is the primary design gap — must be resolved in architecture.
+- **Parallel Gateway: sequential-only.** Any DCMS flow requiring true concurrent branch execution cannot use Amplio Parallel Gateway natively.
+- **Multi-Instance Activity: sequential-only.** Parallel multi-instance not available.
+- **No native DMN.** Business rules require Drools KIE — non-technical rule authoring (ADR-008 requirement) must be reassessed.
 
----
+### Platform Constraints
+- Java 17 (Solon Tax) vs Java 21 (previous greenfield requirement — ADR-014). Must resolve.
+- Liquibase (Solon Tax) vs Flyway (previous greenfield choice — ADR-011). Must resolve.
+- OPA + Rego authorisation model replaces simple RBAC-via-JWT; complexity is higher.
+- Solon Tax is microservices; previous greenfield was a single monolith. Must resolve.
 
-## Open Risks and Blockers
+### Regulatory (Unchanged)
+- Consumer Credit Act 1974 — disclosure obligations, CCA-governed collections
+- UK GDPR / Data Protection Act 2018 — DPIA required
+- FCA Vulnerability Guidance FG21/1 — mandatory vulnerable customer treatment
+- Debt Respite Scheme (Breathing Space) — mandatory; conflicts with Amplio constraint above
+- UK Insolvency Rules 2016
 
-| Risk / Blocker | Owner | Status |
-|---|---|---|
-| COTS vendor not yet confirmed and no contracted runtime profile is available | Solution Architect | Open |
-| Tech stack decisions for Netcompany-owned adapters and extensions not yet finalized | Solution Architect | Open |
-| COTS health endpoint format compatibility with platform runbooks not yet verified | SRE / Platform Engineer | Open - due before first remote deployment |
-| COTS log format compatibility with DWP observability not yet verified | SRE / Platform Engineer | Open - due before first remote deployment |
-| `docs/project-foundation/remote-environment-spec.md` does not yet exist | DevOps / RE | Open - mandatory before any remote deployment |
-| `gh` CLI not installed on developer machine | tct | Open - document `gh` path in CLAUDE.md when resolved |
+### Infrastructure (Unchanged)
+- All hosting and data storage must be in the UK (OPP01, OPP03)
+- DWP Payment Allocation instructions must be followed without local override (DW.23, DW.87)
 
----
-
-## Known Constraints
-
-### Regulatory
-- Consumer Credit Act 1974 - governs credit agreements, disclosure obligations, CCA-governed collections processes
-- UK GDPR / Data Protection Act 2018 - data handling, DPIA required before any personal data is processed (COM11d)
-- FCA Vulnerability Guidance FG21/1 - mandatory vulnerable customer treatment requirements
-- Debt Respite Scheme (Breathing Space) - mandatory breathing space handling
-- UK Insolvency Rules 2016 - insolvency treatment requirements
-- DWP-specific debt recovery policies
-
-### Infrastructure
-- All hosting and data storage must be in the UK - no exceptions (OPP01, OPP03)
-- COTS platform internals are vendor-managed; Netcompany standards apply fully to Netcompany-owned adapters, extensions, and integration boundary components
-- DWP Payment Allocation system provides payment-to-account allocation instructions - COTS and integration services must follow these instructions and must not derive conflicting allocation logic (DW.23, DW.87)
-
-### Performance and Scale
+### Performance and Scale (Unchanged)
 - 4,000 concurrent users (SCA)
-- 99.9% availability target (AVA)
-- P1 incident resolution within 2 hours, 24/7 (SER)
-- Recovery Time Objective (RTO): 4 hours; Recovery Point Objective (RPO): 4 hours (REC)
-
-### UI and Accessibility
-- WCAG 2.x AA compliance mandatory (ACC01-ACC03, COM11c)
-- GDS Open Standards
-- DWP Digital Design Authority governance
-
-### Governance gates (mandatory - must not be bypassed)
-- Digital Design Authority approval (COM11a) - before first production deployment
-- Security risk assessment sign-off (COM11b) - before first production deployment
-- Accessibility compliance assessment (COM11c) - before any UI goes to UAT
-- DPIA (COM11d) - before any personal data is processed
-- Service Assessment (COM11e) - before go-live
-- Place Code of Connectivity (CoCo) policy (SER17) - before any DWP network connection
+- 99.9% availability (AVA)
+- RTO: 4 hours; RPO: 4 hours (REC)
 
 ---
 
 ## Critical Requirement Notes
 
-- **DW.9:** Business rule versioning is managed in COTS tooling and associated governance controls.
 - **DW.23 / DW.87:** Payment allocation must follow DWP Payment Allocation instructions without local override.
-- **SoR.1:** COTS platform is the system of record for collections data.
-- **AAD.5:** Full audit history remains Class A and legally sensitive.
-- **RPF.21 / DW.21:** WorldPay integration remains mandatory.
-
----
-
-## Integration Points
-
-| Integration | Standard | Direction | Notes |
-|---|---|---|---|
-| DWP SSO | OAuth 2.0 (INT01) | Inbound auth | 100+ domains (INT28); user provisioning via DWP Place (UAAF.1) |
-| WorldPay | REST/API (RPF.21, DW.21) | Outbound payment | Removes manual copy-paste; future-dated payment possible (AAD.8) |
-| DWP IVR | API (RPF.27) | Bi-directional | Self-service payment via IVR |
-| DWP Notifications | API (DIC.15, DIC.29) | Outbound | SMS and email via DWP strategic platform |
-| DWP Data Integration Platform / Power BI | API (INT06, MIR.1) | Outbound MI | Management information and reporting |
-| FTPS bulk file exchange | FTPS + TLS 1.2 + PGP (INT07, INT17-INT25) | Bi-directional | Files >2GB split with sequential naming; SHA-256 checksums |
-| DWP Payment Allocation | API (DW.23, DW.87) | Inbound instructions | COTS and integration services follow allocation instructions and do not derive independent allocation logic |
-| DM6 (legacy system) | Migration (I3PS.12, I3PS.13) | Bi-directional | Migration and back-out capability required |
-| Credit bureaus (Experian, Equifax, TransUnion) | API (BSF.3) | Inbound data | Should have - not mandatory |
-| General ledger | API (I3PS.9, SoR.8/9) | Bi-directional | Must have for financial reconciliation |
-| Document scanning | API (I3PS.10) | Inbound | Must have |
-| DCAs / legal firms / field agents | Batch or API (AAD.21/22, 3PM) | Bi-directional | Should have for 3PM; could have for real-time DCA |
+- **CAS.10:** Breathing Space (Debt Respite Scheme 2020) — non-interrupting suppression required. Amplio supports interrupting only — this is the primary architecture blocker to resolve.
+- **ADR-008:** Non-technical DMN authoring requirement. Drools KIE does not satisfy this as written. Must be resolved.
+- **AAD.5:** Full audit history — Class A, legally sensitive.
+- **RPF.21 / DW.21:** WorldPay mandatory.
+- **COM11a–e:** Governance gates (DDA, security, accessibility, DPIA, Service Assessment) — unchanged.
 
 ---
 
@@ -153,10 +146,24 @@ Netcompany designs and delivers the implementation from scratch around a selecte
 The following areas require DWP Debt Domain Expert consultation before any behavior change is merged:
 
 - Disclosure obligations under CCA 1974
-- Vulnerability customer treatment (FCA FG21/1) - CAS.6, WAM.20, AAD.18/19
-- Breathing space / debt respite scheme - CAS.10
-- Insolvency handling - CAS.12, BSF.12
-- Payment allocation logic - DW.23, DW.87
-- Audit trail fields required by COM06/COM07 - AAD.5
-- Any change to payment processing flows - RPF.21, DW.21
-- Agent action controls and RBAC - AAD.4, AAD.11, AAD.13
+- Vulnerability customer treatment (FCA FG21/1) — CAS.6, WAM.20, AAD.18/19
+- Breathing space / debt respite scheme — CAS.10
+- Insolvency handling — CAS.12, BSF.12
+- Payment allocation logic — DW.23, DW.87
+- Audit trail fields required by COM06/COM07 — AAD.5
+- Any change to payment processing flows — RPF.21, DW.21
+- Agent action controls and RBAC — AAD.4, AAD.11, AAD.13
+
+---
+
+## Open Risks and Blockers
+
+| Risk / Blocker | Owner | Status |
+|---|---|---|
+| Amplio non-interrupting boundary events absent — Breathing Space compliance path not yet designed | Solution Architect | Open — primary design gap |
+| Amplio sequential parallel gateway — concurrent flow requirements need architecture solution | Solution Architect | Open |
+| No native DMN — non-technical rule authoring requirement (ADR-008) may not be satisfiable with Drools | Solution Architect | Open |
+| Java 17 vs Java 21 (ADR-014 exhaustive switch) — must pick one and lock | Solution Architect | Open |
+| Liquibase vs Flyway (ADR-011) — must confirm with Solon Tax base | Solution Architect | Open |
+| New design process not yet formally initiated — no new ADRs beyond ADR-018 | Architecture team | Open |
+| `docs/project-foundation/remote-environment-spec.md` does not yet exist | DevOps / RE | Open — mandatory before remote deployment |

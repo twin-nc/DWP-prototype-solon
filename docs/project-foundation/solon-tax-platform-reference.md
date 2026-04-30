@@ -1,3 +1,9 @@
+> ## STATUS: PRIMARY DESIGN INPUT — PLATFORM PIVOT IN EFFECT
+>
+> Following ADR-018 (2026-04-30), Solon Tax is now the confirmed base platform for DCMS. This document is a **primary design input** for the new design process — it describes what the base platform provides. Read it to understand what Solon Tax offers; use it to determine where Solon Tax satisfies requirements natively and where new code must be written on top.
+
+---
+
 # Solon Tax v2.3.0 Platform Reference
 
 **Source docs:** `external_sys_docs/solon/solon_tax_2.3.0_integration_guide.md`, `external_sys_docs/solon/solon_tax_2.3.0_operations_guide.md`

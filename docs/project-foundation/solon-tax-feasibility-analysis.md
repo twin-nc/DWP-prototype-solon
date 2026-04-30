@@ -1,3 +1,15 @@
+> ## ⚠ STATUS: CONCLUSION SUPERSEDED — ANALYSIS IS A PRIMARY DESIGN INPUT
+>
+> **The conclusion of this document — that Option C (greenfield) is the only viable option — is superseded by ADR-018 (2026-04-30).** The programme has confirmed that DCMS will be built on top of Solon Tax.
+>
+> **The analysis within this document is a primary input to the new design process.** The module-by-module capability assessment, the blocker analysis (particularly the breathing space / non-interrupting event problem), the Drools vs DMN analysis, and the forced-choice appendix all contain knowledge that must inform how DCMS is built on Solon Tax.
+>
+> Read this document for its analysis. Do not read it for its conclusion.
+>
+> See [`CLAUDE.md`](../../CLAUDE.md) and [ADR-018](decisions/ADR-018-platform-pivot-solon-tax-confirmed.md) for the current direction.
+
+---
+
 # Solon Tax v2.3.0 Platform Feasibility Analysis
 # DCMS Build Strategy Assessment
 

@@ -1,31 +1,47 @@
 # Architecture Decision Records
 **DWP Debt Collection Management System (DCMS)**
-Version 1.0 | April 2026
+Version 2.0 | April 2026
+
+---
+
+> ## ⚠ PLATFORM PIVOT IN EFFECT — ADR-018
+>
+> A confirmed programme-level decision (ADR-018, 2026-04-30) has pivoted the project from a greenfield build to building on top of **Solon Tax** as the base platform.
+>
+> **All ADRs listed below are UNDER REVIEW.** No prior ADR may be treated as a locked constraint or default building block without re-evaluation in the context of the Solon Tax platform. The analysis and reasoning within each ADR remains valuable as design input — the decisions themselves are open for renewed debate.
+>
+> **ADR-016 is SUPERSEDED** by ADR-018.
+>
+> See [ADR-018](decisions/ADR-018-platform-pivot-solon-tax-confirmed.md) for the full pivot record.
+
+---
 
 ## ADR Index
 
 | ADR | Title | Status |
 |---|---|---|
-| ADR-001 | CommunicationSuppressionService — boundary and interface | LOCKED |
-| ADR-002 | StatuteBarredEvaluator — boundary and guardrails | LOCKED |
-| ADR-003 | Platform-wide transaction boundary rule | LOCKED |
-| ADR-004 | Write-off self-approval — three-layer defence | LOCKED |
-| ADR-005 | DeceasedPartyHandler — two-phase atomicity | LOCKED |
-| ADR-006 | Flowable Admin UI — access control and audit | LOCKED |
-| ADR-007 | Breathing space BPMN — single definition, dual path | LOCKED |
-| ADR-008 | Champion/Challenger — vulnerable exclusion and analytics | LOCKED |
-| ADR-009 | Process variable live state rule | LOCKED |
-| ADR-010 | Sprint migration sequence and numbering convention | LOCKED |
-| ADR-011 | DISPUTE entity suppression column removal | LOCKED |
-| ADR-012 | Statute-barred schema fields | LOCKED |
-| ADR-013 | ResumeArrangementMonitoringDelegate design | LOCKED |
-| ADR-014 | Champion/Challenger analytics architecture | LOCKED |
+| ADR-001 | CommunicationSuppressionService — boundary and interface | UNDER REVIEW |
+| ADR-002 | StatuteBarredEvaluator — boundary and guardrails | UNDER REVIEW |
+| ADR-003 | Platform-wide transaction boundary rule | UNDER REVIEW |
+| ADR-004 | Write-off self-approval — three-layer defence | UNDER REVIEW |
+| ADR-005 | DeceasedPartyHandler — two-phase atomicity | UNDER REVIEW |
+| ADR-006 | Flowable Admin UI — access control and audit | UNDER REVIEW |
+| ADR-007 | Breathing space BPMN — single definition, dual path | UNDER REVIEW |
+| ADR-008 | Champion/Challenger — vulnerable exclusion and analytics | UNDER REVIEW |
+| ADR-009 | Process variable live state rule | UNDER REVIEW |
+| ADR-010 | Sprint migration sequence and numbering convention | UNDER REVIEW |
+| ADR-011 | DISPUTE entity suppression column removal | UNDER REVIEW |
+| ADR-012 | Statute-barred schema fields | UNDER REVIEW |
+| ADR-013 | ResumeArrangementMonitoringDelegate design | UNDER REVIEW |
+| ADR-014 | Champion/Challenger analytics architecture | UNDER REVIEW |
+| ADR-016 | Platform pivot to Solon Tax rejected — greenfield confirmed | SUPERSEDED by ADR-018 |
+| ADR-018 | Platform pivot — Solon Tax confirmed as base platform | ACCEPTED |
 
 ---
 
 ## ADR-001 — CommunicationSuppressionService
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -123,7 +139,7 @@ WHERE is_active = true;
 
 ## ADR-002 — StatuteBarredEvaluator
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -171,7 +187,7 @@ Events that do NOT reset the clock:
 
 ## ADR-003 — Platform-Wide Transaction Boundary Rule
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -229,7 +245,7 @@ application transaction, leaving the customer unprotected.
 
 ## ADR-004 — Write-Off Self-Approval Prevention
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -282,7 +298,7 @@ task creation time.
 
 ## ADR-005 — DeceasedPartyHandler Two-Phase Atomicity
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -377,7 +393,7 @@ private void suspendFlowableInstances(List<UUID> accountIds) {
 
 ## ADR-006 — Flowable Admin UI Access Control and Audit
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -474,7 +490,7 @@ occurred_at  = timestamp from Flowable history event
 
 ## ADR-007 — Breathing Space BPMN Pattern
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -544,7 +560,7 @@ Service Tasks (activate flags, suppression, suspend arrangement)
 
 ## ADR-008 — Champion/Challenger Vulnerable Customer Policy
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -596,7 +612,7 @@ outcomes panel only under the current approved policy.
 
 ## ADR-009 — Process Variable Live State Rule
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -656,7 +672,7 @@ deceased, statute-barred) is a regulatory risk.
 
 ## ADR-010 — Sprint Migration Sequence and Numbering Convention
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -737,7 +753,7 @@ all schema migrations.
 
 ## ADR-011 — DISPUTE Entity Suppression Column Removal
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -780,7 +796,7 @@ On dispute resolution:
 
 ## ADR-012 — Statute-Barred Schema Fields
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -833,7 +849,7 @@ flagged for manual review.
 
 ## ADR-013 — ResumeArrangementMonitoringDelegate Design
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
@@ -980,7 +996,7 @@ public void extendArrangementEndDate(
 
 ## ADR-014 — Champion/Challenger Analytics Architecture
 
-**Status:** LOCKED  
+**Status:** UNDER REVIEW — platform pivot in effect (ADR-018). Analysis retained as design input; decision open for renewed debate.  
 **Date:** April 2026
 
 ### Decision
