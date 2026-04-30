@@ -77,7 +77,7 @@ jobs:
           version: "3.15.2"
 
       - name: Set up kubectl
-        uses: azure/setup-kubectl@v4
+        uses: azure/setup-kubectl@v5
 
       - name: Configure kubeconfig
         run: echo "${{ secrets.DEV_KUBECONFIG }}" | base64 -d > $HOME/.kube/config
