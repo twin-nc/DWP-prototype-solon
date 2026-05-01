@@ -1,5 +1,46 @@
 # DESIGN-OPTIONS-002: Layer Thickness and Boundary Placement
 
+## What this document is for
+
+This is a **Delivery Designer options pass** that frames the central post-pivot architecture question for DCMS: *how thick should the DCMS custom layer be on top of Solon Tax, and where should the boundary between DCMS code and Solon platform sit?* It puts three end-to-end options on the table (A: minimal extension, B: medium custom layer, C: heavy custom layer with Solon as financial primitives only), names the decision levers that would flip the choice, and surfaces the blockers and compliance issues that must be resolved before a Solution Architect locks the answer.
+
+It is **not** an architecture decision (that is the SA's job, recorded as a successor ADR to ADR-018), and it is **not** an implementation plan. Downstream artefacts — domain-pack design, integration contracts, BPMN authoring, build plans, trace map updates — are gated on the option lock that follows this document.
+
+**Audience:** Solution Architect (primary), Design Critic, platform expert reviewers, Delivery Lead, DWP client-side reviewers for the open questions section.
+
+## Summary
+
+- **Recommendation:** **Option B — Medium Custom Layer.** Reuse Solon's Amplio process engine, ledger, batch engine, Kafka bus, suppression model, and task tray. A dedicated `BreathingSpaceGatingService` lives in the DCMS custom layer and guards every Amplio step that produces a debtor-facing effect (RULING-016 gate-at-effect). DWP-specific BPMN processes deploy into the same Amplio engine alongside Solon's reference processes.
+- **For Release 1 specifically:** **Option B-Demo** — Option B's architecture delivered at demo-depth implementation matched to Release 1's prototype/demo scope. Option A is no longer recommended for Release 1 (R2 review showed Release 1 capabilities cannot be cleanly delivered through Option A's extension model). Option C remains the fallback if integration-contract surface cannot be stabilised or if a DCMS-side Flyway-on-shared-schema constraint is imposed.
+- **Status:** PROPOSED. **Integration design lock is BLOCKED** pending resolution of four blockers and one compliance contradiction (see Action Items).
+- **Decision levers still live:** (1) Java version (Java 17 vs Java 21 — potentially dissolved if Solon ships on Java 25, see Forward-Looking Note); (2) Strategy-authoring application scope (broadened from DMN sidecar per R3); ~~(3) Champion/challenger and IE engine scope — CLOSED 2026-05-01, both confirmed in scope per `release-1-capabilities.md`~~.
+- **Mandatory conditions on Option B (from Solon platform expert review):** (i) default DCMS→Solon commands to REST until Kafka topic externalisation is confirmed; (ii) `suspendActiveInstancesSW = false` for all DCMS suppression types; (iii) Blocker 3 widened from MHCM-only to also cover Vulnerability suppressions.
+
+## Action Items
+
+Owned by **Solution Architect** unless otherwise noted. The first four items gate integration design lock.
+
+| # | Action | Owner | Gates |
+|---|---|---|---|
+| 1 | **Resolve Blocker 1** — verify whether the platform-reference 24-command catalogue (`PostPaymentCommand`, `WriteOffDebtCommand`, …) maps to externally-publishable Kafka topics in integration guide §5, including payload schemas, response-event existence, and consumer-group isolation. Not a name-mapping task. | SA → Solon platform team | Inter-layer contract design (Options A and B) |
+| 2 | **Resolve Blocker 2** — obtain Solon REST API stability guarantees for the sync queries the BFF depends on (account balance, active suppressions, task state) under Solon upgrades. | SA → Solon platform team | Option B BFF; Option C ACL |
+| 3 | **Resolve Blocker 3 (widened)** — verify by test how `SuppressionExpiryJob` interprets `maximumNumberDays: 0` for both MHCM and Vulnerability `SuppressionType`s. Wrong interpretation auto-expires MHCM without professional sign-off (Reg 21 breach / criminal-liability exposure). | SA → Solon platform team (verify by test) | MHCM and Vulnerability detailed design under Options A and B |
+| 4 | **Resolve `suspendActiveInstancesSW` compliance contradiction** — declare the setting for every DCMS `SuppressionType` and reconcile with RULING-016 gate-at-effect. Recommended: `false` for all DCMS suppression types. | SA | Option B compliance design |
+| 5 | Confirm Option B-Demo as the Release 1 delivery framing, or call out specific service-depth concerns (most likely strategy authoring). | SA | Release 1 build plan |
+| 6 | Resolve the three live decision levers (Java version; strategy-authoring application scope; CLOSED champion/challenger/IE) and update this document accordingly. | SA → DWP client | Final option lock |
+| 7 | Produce the closed enumeration of gated effect categories from RULING-005, RULING-010, RULING-011, RULING-014, RULING-016 (Design Critic S1). | SA → Domain Expert | DCMS BPMN authoring under Options A and B |
+| 8 | Decide vulnerability-flag access path: Data Area mirroring (with staleness window) vs direct in-process service call (Design Critic S2; RULING-010 immediacy). | SA | Option B vulnerability/champion-challenger interaction |
+| 9 | Define on-lift disposition flow for queued correspondence under split Solon-transport / DCMS-classification ownership (Design Critic S4). | SA | Option B `CommunicationSuppressionService` design |
+| 10 | Define OPA / Rego policy deployment model and Solon-upgrade survival for DCMS-specific authz rules (Design Critic S5). | SA → Solon platform team | All three options' authz design |
+| 11 | Declare the layer that gates `createArrangement` against active suppressions (Design Critic A5; RULING-014 guardrail 2). | SA | Options A and B compliance design |
+| 12 | Decide the Maven-module deployment boundary between DCMS beans and Solon `revenue-management-be-custom` beans (Design Critic A2) — same module or separate module in shared Spring context. | SA | Option A vs Option B differentiation |
+| 13 | Resolve open DWP policy questions: DDE-OQ-BS-PROCESS-01 (moratorium comms scope), DDE-OQ-BS-PROCESS-02 (deduction-from-benefit suspension ownership), DDE-OQ-12 / DDE-OQ-13 (champion/challenger thresholds, vulnerable-customer policy). | Delivery Lead → DWP client | Detail design of comms/moratorium/champion-challenger services |
+| 14 | If Solon GA confirms Java 25, apply the changes listed in "Action if Java 25 is confirmed at GA" (CLAUDE.md tables; strike Lever 1; reduce Option A risk row 4). | SA | Document hygiene only — recommendation strengthens, no re-lock needed |
+
+**Next role after action items 1–6 are resolved:** Solution Architect locks the option in a successor ADR to ADR-018; downstream artefacts (domain-pack designs, integration contracts, BPMN authoring, build plans, trace map updates) then proceed.
+
+---
+
 **Document ID:** DESIGN-OPTIONS-002
 **Date:** 2026-04-30 (revised 2026-05-01)
 **Status:** PROPOSED — Design Critic review complete (2026-04-30); Release 1 capability review complete (2026-05-01); awaiting Solution Architect lock. **Integration design lock BLOCKED** pending resolution of three platform-reality questions, the compliance contradiction surfaced by the Design Critic, and the structural reframing required by the Release 1 capability review (see "Platform-Reality Review Findings", "Design Critic Review Findings", and "Release 1 Capability Review Findings" below).
