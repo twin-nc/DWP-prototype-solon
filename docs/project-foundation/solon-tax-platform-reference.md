@@ -30,7 +30,7 @@
 | Authorisation | OPA (Open Policy Agent) with Rego policies + JPA row-level security |
 | Messaging | Apache Kafka + Outbox Pattern |
 | Cache | Redis (session), Hazelcast (distributed process state across Amplio nodes) |
-| Frontend | Angular (revenue-management-ui + self-service-ui) |
+| Frontend | Angular per vendor docs — **believed to actually be React, needs confirmation** (revenue-management-ui + self-service-ui) |
 | Reporting | Jasper Reports |
 | Container | Kubernetes (customer-hosted), Helm v3.x |
 | Observability | ELK Stack (Elasticsearch, Logstash, Kibana, Filebeat, Metricbeat, APM) |
@@ -63,73 +63,73 @@
 - Case handover to collection agencies (CASE_HANDOVER_COLLECTION_AGENCY_PROCESS)
 - Suppression / breathing space handling (CreateSuppression → SuspendCaseActivity → ReleaseSuppression → ResumeCaseActivity)
 
-## 28 BPMN Reference Processes
+## BPMN Reference Processes
 
-All processes are in `revenue-management-bpmn` and are triggerable via Kafka command or API.
+> **CORRECTED 2026-05-01.** Earlier versions of this document listed 28 invented BPMN filenames (e.g. `AUDIT_PROCESS.bpmn`, `COMPLIANCE_CHECK_PROCESS.bpmn`, `RISK_ASSESSMENT_PROCESS.bpmn`, `BATCH_MONITORING_PROCESS.bpmn`) that do not exist in the Solon Tax distribution. The list below is the actual file inventory from `external_sys_docs/solon/bpmn/irm/` (Amplio process definitions). The authoritative source is the BPMN files themselves and the process descriptions in the Solon Tax integration guide.
 
-| # | Process File | Purpose | Primary Trigger |
-|---|---|---|---|
-| 1 | REGISTRATION_PROCESS.bpmn | Taxpayer registration, KYC, approval | Manual / API |
-| 2 | ASSESSMENT_PROCESS.bpmn | Tax assessment calculation and issuance | Scheduled / API |
-| 3 | BILL_GENERATION_PROCESS.bpmn | Bill segment creation and delivery | Bill cycle scheduler |
-| 4 | PAYMENT_PLAN_PROCESS.bpmn | Instalment plan setup and lifecycle | Manual / API |
-| 5 | DEBT_RECOVERY_PROCESS.bpmn | Demand letter → suppression check → warrant letter | Overdue trigger |
-| 6 | CASE_HANDOVER_COLLECTION_AGENCY_PROCESS.bpmn | Hand debt to external DCA | Manual / escalation |
-| 7 | WRITE_OFF_PROCESS.bpmn | Write-off authorisation and posting | Manual / automated |
-| 8 | OBJECTION_PROCESS.bpmn | Taxpayer objection / dispute handling | Taxpayer submission |
-| 9 | APPEAL_PROCESS.bpmn | Formal appeal to tribunal | Objection escalation |
-| 10 | REFUND_PROCESS.bpmn | Overpayment refund calculation and payment | Credit balance trigger |
-| 11 | AUDIT_PROCESS.bpmn | Compliance audit lifecycle | Scheduled / manual |
-| 12 | CORRESPONDENCE_PROCESS.bpmn | Outbound letter/email/SMS generation | Event-driven |
-| 13 | NOTIFICATION_PROCESS.bpmn | Real-time alert and notification dispatch | Event-driven |
-| 14 | DOCUMENT_MANAGEMENT_PROCESS.bpmn | Document upload, classification, storage | User action |
-| 15 | TASK_ASSIGNMENT_PROCESS.bpmn | Work item routing and queue assignment | Event-driven |
-| 16 | ESCALATION_PROCESS.bpmn | SLA breach and supervisor escalation | Timer boundary |
-| 17 | DATA_VALIDATION_PROCESS.bpmn | Inbound data quality and completeness checks | API / batch |
-| 18 | REPORTING_PROCESS.bpmn | Jasper report generation and distribution | Scheduled |
-| 19 | INTEGRATION_SYNC_PROCESS.bpmn | External system data synchronisation | Scheduled / event |
-| 20 | USER_MANAGEMENT_PROCESS.bpmn | User onboarding, role assignment | Admin action |
-| 21 | BATCH_MONITORING_PROCESS.bpmn | Batch job status and failure alerting | Batch engine events |
-| 22 | RISK_ASSESSMENT_PROCESS.bpmn | Risk scoring via external risk engine | Assessment trigger |
-| 23 | COMPLIANCE_CHECK_PROCESS.bpmn | Regulatory compliance verification | Periodic / event |
-| 24 | PAYMENT_ALLOCATION_PROCESS.bpmn | Payment received → allocate to accounts | Payment event |
-| 25 | INSTALMENT_BREACH_PROCESS.bpmn | Payment plan breach detection and response | Payment missed |
-| 26 | ENFORCEMENT_PROCESS.bpmn | Legal enforcement action lifecycle | Warrant issued |
-| 27 | INSOLVENCY_PROCESS.bpmn | Insolvency event handling and suspension | Insolvency signal |
-| 28 | CASE_CLOSURE_PROCESS.bpmn | End-to-end case closure and archival | Zero balance / write-off |
+All processes ship as `*_AMPLIO.bpmn` files in `revenue-management-bpmn` and are triggerable via Kafka command or API.
 
-**Note:** DEBT_RECOVERY_PROCESS flow is demand letter → SUSPEND_PROCESS_CHECK (suppression check) → warrant letter. DCA handover is a SEPARATE process (CASE_HANDOVER_COLLECTION_AGENCY_PROCESS).
+| Process File | Purpose |
+|---|---|
+| BILL_SEGMENT_APPROVAL_AMPLIO.bpmn | Bill segment approval workflow |
+| BILL_SEGMENT_CANCELLATION_AMPLIO.bpmn | Bill segment cancellation workflow |
+| BUS_REG_AMPLIO.bpmn | Business registration |
+| CASE_DEMAND_LETTER_AMPLIO.bpmn | Demand letter step within debt recovery |
+| CASE_HANDOVER_COLLECTION_AGENCY_PROCESS_AMPLIO.bpmn | Hand debt to external DCA |
+| CASE_WARRANT_LETTER_AMPLIO.bpmn | Warrant letter step within debt recovery |
+| CIT_RETURN_AMPLIO.bpmn | Corporate income tax return |
+| DEBT_RECOVERY_PROCESS_AMPLIO.bpmn | Top-level debt recovery: demand → suppression check → warrant |
+| DIRECT_DEPOSIT_AMPLIO.bpmn | Direct deposit handling |
+| HUMAN_TASK_BEHAVIOUR_TEST_AMPLIO.bpmn | Test/reference process for human task behaviour |
+| MUNICIPAL_TAX_EXAMPLE_AMPLIO.bpmn | Municipal tax example process |
+| NOTIFY_GDPR_EXPIRATION_AMPLIO.bpmn | GDPR data expiration notification |
+| NOTIFY_OVERDUE_DEBTORS_AMPLIO.bpmn | Overdue debtor notification |
+| OBJECTION_PROCESS_AMPLIO.bpmn | Taxpayer objection / dispute handling |
+| OSS_REG_AMPLIO.bpmn | OSS (One-Stop-Shop) registration |
+| OSS_VAT_AMPLIO.bpmn | OSS VAT process |
+| O_PLN_PRVL_AMPLIO.bpmn | Payment plan privilege / approval |
+| PAYMENT_DEFERRAL_AMPLIO.bpmn | Payment deferral handling |
+| P_ROLE_LIN_AMPLIO.bpmn | Party role linkage |
+| SCHEDULED_OPERATIONAL_REPORT_AMPLIO.bpmn | Scheduled operational report generation |
+| SUSPEND_PROCESS_CHECK_AMPLIO.bpmn | Suppression check invoked from debt recovery |
+| TAX_RETURN_LATE_FILLER_CASE_ACTIVITY_PROCESS_AMPLIO.bpmn | Late tax return filer case activity |
+| VAT_EU_AMPLIO.bpmn | EU VAT process |
+| VAT_OVERPAYMENT_PROCESS_AMPLIO.bpmn | VAT overpayment / refund |
+| VAT_RETURN_AMPLIO.bpmn | VAT return |
 
-## Kafka Command Catalogue (24 commands)
+**Self-service (ISS) processes** also ship under `bpmn/iss/` (e.g. `AGREEMENT_AMPLIO_ISS.bpmn`, `BUS_REG_AMPLIO_ISS.bpmn`).
 
-All async commands use Outbox Pattern. Topics follow pattern: `solon.{domain}.commands`.
+**Note:** DEBT_RECOVERY_PROCESS_AMPLIO flow is demand letter → SUSPEND_PROCESS_CHECK_AMPLIO (suppression check) → warrant letter. DCA handover is a SEPARATE process (CASE_HANDOVER_COLLECTION_AGENCY_PROCESS_AMPLIO).
 
-| Command | Topic | Response Mechanism |
+## Kafka Command Catalogue
+
+> **CORRECTED 2026-05-01.** Earlier versions of this document used an invented topic naming pattern `solon.{domain}.commands`. The authoritative pattern is `irm.{service}.{event-type}` per `external_sys_docs/solon/KAFKA_EVENT_CATALOG.md` and `external_sys_docs/solon/solon_tax_2.3.0_integration_guide.md` §5. Inbound BPMN engine commands use the `irm.bpmn-engine.*` namespace. The full topic catalogue is in `KAFKA_EVENT_CATALOG.md` — that file is authoritative; the table below is a representative sample.
+
+All async commands use Outbox Pattern. Topic naming convention: `irm.{service-name}.{event-type}`.
+
+> **Important architectural note:** The `irm.bpmn-engine.*` topics are the BPMN engine's *private* internal command channel between the Amplio engine and Solon services. The DCMS additional layer does NOT publish to those topics. The additional layer integrates with Solon Tax via REST APIs (see `external_sys_docs/solon/api-usage-guide.md`). DCMS may *consume* selected outbound `irm.{service}.*` event topics for reactive flows, but command issuance to Solon is REST-only.
+
+Representative topic samples (full list in `KAFKA_EVENT_CATALOG.md`):
+
+| Topic | Direction | Purpose |
 |---|---|---|
-| StartProcessCommand | solon.process.commands | ProcessStartedEvent |
-| CompleteTaskCommand | solon.task.commands | TaskCompletedEvent |
-| CreateSuppressionCommand | solon.suppression.commands | SuppressionCreatedEvent |
-| ReleaseSuppressionCommand | solon.suppression.commands | SuppressionReleasedEvent |
-| CreateBillCommand | solon.billing.commands | BillCreatedEvent |
-| PostPaymentCommand | solon.payment.commands | PaymentPostedEvent |
-| AllocatePaymentCommand | solon.payment.commands | PaymentAllocatedEvent |
-| InitiateRefundCommand | solon.refund.commands | RefundInitiatedEvent |
-| WriteOffDebtCommand | solon.writeoff.commands | DebtWrittenOffEvent |
-| CreatePaymentPlanCommand | solon.paymentplan.commands | PaymentPlanCreatedEvent |
-| BreachPaymentPlanCommand | solon.paymentplan.commands | PaymentPlanBreachedEvent |
-| ClosePaymentPlanCommand | solon.paymentplan.commands | PaymentPlanClosedEvent |
-| SendCorrespondenceCommand | solon.correspondence.commands | CorrespondenceSentEvent |
-| AssignTaskCommand | solon.workallocation.commands | TaskAssignedEvent |
-| EscalateTaskCommand | solon.workallocation.commands | TaskEscalatedEvent |
-| RegisterTaxpayerCommand | solon.registration.commands | TaxpayerRegisteredEvent |
-| IssueAssessmentCommand | solon.assessment.commands | AssessmentIssuedEvent |
-| RaiseObjectionCommand | solon.objection.commands | ObjectionRaisedEvent |
-| HandoverToDCACommand | solon.collections.commands | HandoverCompletedEvent |
-| ExecuteEnforcementCommand | solon.enforcement.commands | EnforcementExecutedEvent |
-| RecordInsolvencyCommand | solon.insolvency.commands | InsolvencyRecordedEvent |
-| CloseCaseCommand | solon.case.commands | CaseClosedEvent |
-| RiskRequestCommand | solon.risk.commands | RISK_RESULT_SIGNAL (Amplio signal) |
-| ExecuteKieRulesCommand | SYNCHRONOUS HTTP (not Kafka) | Drools rule result in response body |
+| `irm.bpmn-engine.create-suppression` | Inbound (engine → suppression-mgmt) | Create a suppression |
+| `irm.bpmn-engine.release-suppression` | Inbound | Release a suppression |
+| `irm.bpmn-engine.suspend-case-activity` | Inbound | Suspend case activity (`SuspendCaseActivityCommand`) |
+| `irm.bpmn-engine.resume-case-activity` | Inbound | Resume case activity (`ResumeCaseActivityCommand`) |
+| `irm.bpmn-engine.create-human-task` | Inbound | Create a human task |
+| `irm.bpmn-engine.create-contact` | Inbound | Trigger contact via correspondence |
+| `irm.bpmn-engine.case-creation` | Inbound | Start a new case |
+| `irm.bpmn-engine.send-data-to-collection-agency` | Inbound | DCA handover data |
+| `irm.bpmn-engine.screen-risk` | Inbound | Risk screening request |
+| `irm.process-management.process-flow-status-changed` | Outbound | Process flow status change event |
+| `irm.suppression-management.suppression-status-changed` | Outbound | Suppression status change (consumed by `taxpayer-accounting-custom`, `case-management-custom`, `process-management-custom`) |
+| `irm.case-management.entity-version` | Outbound | Entity version change event |
+| `irm.taxpayer-accounting.balance-updated` | Outbound | Account balance updated |
+| `irm.taxpayer-accounting.signal-process-flow` | — | Signal a process flow node |
+| `irm.taxpayer-accounting.trigger-allocation` | Outbound | Trigger payment allocation |
+
+**Synchronous (non-Kafka) integration:** Drools KIE rule execution — `POST /drools-runtime/execute-stateless/{containerId}` (HTTP), result returned in response body. Latency and availability of this endpoint are part of any DCMS request path that depends on it.
 
 **Risk engine integration:** RiskRequestCommand → external risk service → RISK_RESULT_SIGNAL back to Amplio. Risk threshold = 40; IBAN change frequency >5/month triggers high-risk flag.
 
@@ -169,12 +169,14 @@ JSONB (PostgreSQL) or BLOB (Oracle) custom field extension on 18 entities across
 
 ## Infrastructure (Kubernetes)
 
+> **CORRECTED 2026-05-01.** Earlier versions of this document used invented namespace names (`solon-core`, `solon-process`, `solon-infra`, `solon-batch`, `solon-monitoring`). The actual namespace pattern, per `external_sys_docs/solon/solon_tax_2.3.0_operations_guide.md` §3.1, uses an `[env]-` prefix and is shown below.
+
 **Namespace model:**
-- `solon-core` — domain microservices
-- `solon-process` — Amplio engine pods
-- `solon-infra` — Kafka, Redis, Hazelcast, Keycloak, Config server
-- `solon-batch` — batch engine pods
-- `solon-monitoring` — ELK stack, APM
+- `[env]-platform-ms` — Core microservices (`revenue-management-be`)
+- `[env]-aux-camunda-platform` — Camunda 7/8 / Amplio process engine pods
+- `[env]-platform-adapters` — Integration adapter services
+- `[env]-platform-batch` — Batch processing services (SCDF, Revenue Management Batch)
+- `[env]-platform-infra` — Infrastructure components (Kafka, Redis, Keycloak, Hazelcast, Config server, ELK)
 
 **HA configuration (key components):**
 
