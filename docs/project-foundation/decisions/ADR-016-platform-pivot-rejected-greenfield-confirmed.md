@@ -5,6 +5,8 @@
 > **The analysis and reasoning within this document remains valuable design input** and must not be discarded. The module-by-module capability assessment, the blocker analysis, and the forced-choice appendix all inform the new design process on the Solon Tax platform. Read for knowledge; do not read for direction.
 >
 > See [ADR-018](ADR-018-platform-pivot-solon-tax-confirmed.md) for the current direction.
+>
+> **Factual correction flagged 2026-05-01 — Hard Blocker 5 (Angular frontend):** The Solon Tax v2.3.0 operations guide §2 lists `revenue-management-ui` as Angular, and that is what this ADR's Blocker 5 relied on. Subsequent indication is that Solon Tax's frontend is actually **React, not Angular** — pending vendor confirmation. If confirmed, Blocker 5 dissolves entirely (no Angular/React technology divergence; GOV.UK Design System on React aligns with Solon's stack rather than conflicting with it). This does not change the superseded status of this ADR — ADR-018 has already pivoted the project — but it removes one of the seven blockers that were used to argue against the pivot, and is worth recording for completeness of the decision audit trail.
 
 ---
 
