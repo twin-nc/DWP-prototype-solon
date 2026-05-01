@@ -5,15 +5,20 @@
 **Date:** 2026-04-30 (updated 2026-05-01 with Solon Tax platform expert review)
 **Status:** PROPOSED — for Solution Architect review. Option 2 approved with constraints by Solon Tax platform expert; Option 1 eliminated on platform grounds; Option 3 conditionally approved.
 **Author:** Delivery Designer
+**Status clarification:** No decomposition option is locked. The platform-expert verdicts in this document are design inputs, not final decisions.
 **Reviewer:** Solon Tax platform expert (2026-05-01)
 **Scope:** Decomposition strategy for the DCMS custom layer ("Business Control & Experience Layer") that sits on top of Solon Tax. Does not address Solon Tax internal architecture — Solon is microservices and that is fixed.
 **Related:** DESIGN-OPTIONS-002 (layer thickness — recommends Option B medium layer); `configuration-layer-architecture v3.drawio`.
 
 ---
 
-## Recommendation (read this first)
+## Provisional Recommendation (not locked)
 
-**Recommend a modular monolith for the DCMS custom layer, with a small number (2–3) of deliberately extracted satellite services where operational drivers force it.** Build internal module boundaries strictly from day one so a service can be carved out later without a rewrite. Do not adopt the ~20-service decomposition implied by the v3 architecture diagram.
+This document evaluates decomposition candidates for an Option B-style DCMS custom-domain layer. It does not lock modular monolith, coarse services, or microservices.
+
+The recommendation language below is provisional design input. It must be re-tested against the still-open Option B architecture decisions: runtime placement, workflow ownership, interaction style, data ownership, security boundary, and Solon contract stability.
+
+**Candidate recommendation:** modular monolith for the DCMS custom layer, with a small number (2-3) of deliberately extracted satellite services where operational drivers force it. Build internal module boundaries strictly from day one so a service can be carved out later without a rewrite. Do not adopt the ~20-service decomposition implied by the v3 architecture diagram unless the open decomposition decision lands on fine-grained microservices.
 
 The argument for Option 2 rests on **compliance invariant atomicity** (RULING-010, 014, 016 require in-process gate evaluation), **change-coupling of capabilities** (most non-trivial changes touch many capabilities at once), and **the platform already providing the macro service boundaries** (Solon Tax owns ledger, payment, BPMN, suppression model). These properties hold regardless of the delivery team's size or shape. Per ADR-018, team size is not used as an architectural constraint in this recommendation.
 
@@ -71,11 +76,13 @@ This boundary must be documented in a separate ADR (proposed: ADR-019) before bu
 
 ## Options
 
+The labels below are decomposition candidates. Do not treat the "recommended" marker on Option 2 as a locked decision; it is a provisional recommendation pending the open Option B architecture questions.
+
 ### Option 1 — Full microservices (one service per capability box)
 
 Each box on the v3 diagram becomes its own deployable service: Contact Orchestration, Channel Adapters, Dialler Integration, Suppression, Template Mgmt, Queue Distribution, SLA Tracking, Agent Scripting, Work Item Assignment, Real-time Queue State, Vulnerability Protocol, Breathing Space Handler, I&E Capture, CRA Integration, Vulnerability Review Scheduler, Split Assignment, Outcome Aggregation, Metrics Collection, Third-Party Placement, Third-Party Reconciliation — plus the workspaces and BFFs.
 
-### Option 2 — Modular monolith with satellite services *(recommended)*
+### Option 2 — Modular monolith with satellite services *(candidate)*
 
 A single Spring Boot application containing all capabilities, organised as strict internal modules (hexagonal / package-by-feature, enforced by ArchUnit or Spring Modulith). Separate PostgreSQL schemas per module within one database instance. **Plus 2–3 satellite services** carved out for genuine operational reasons (see "Recommended satellites" below).
 
@@ -190,7 +197,7 @@ If steps 2–4 cannot be done in a single sprint, the modular boundaries were no
 
 ## Tradeoff summary
 
-| Dimension | Option 1 — Full Microservices | Option 2 — Modular Monolith + Satellites *(recommended)* | Option 3 — Coarse Services |
+| Dimension | Option 1 — Full Microservices | Option 2 — Modular Monolith + Satellites *(candidate)* | Option 3 — Coarse Services |
 |---|---|---|---|
 | Time to first working system | Slowest | Fastest | Medium |
 | Operational cost | Highest (~20 pipelines, dashboards, alerts) | Lowest (1 + 2–3 satellites) | Medium (~4) |
@@ -258,9 +265,11 @@ This avoids the architectural-aspiration trap where boxes on a diagram are quiet
 
 ---
 
-## Recommendation restated
+## Recommendation Restated - Provisional
 
-**Adopt Option 2 (provisional): a modular monolith for the DCMS custom layer, with strict module discipline enforced at build time, separate PostgreSQL schemas per module, and 2–3 satellite services extracted only where operational drivers genuinely justify them. The recommendation is contingent on resolving the two blockers above — the (a)/(b) boundary ADR and the RULING-016 fallback confirmation. Reassess the decomposition at the end of v1 against actual operational pain, not against architectural fashion.**
+This section is not a lock. It records the current decomposition candidate to be tested after the Option B runtime placement, interaction style, workflow ownership, and data ownership decisions are made.
+
+**Keep Option 2 as a candidate:** a modular monolith for the DCMS custom layer, with strict module discipline enforced at build time, separate PostgreSQL schemas per module, and 2-3 satellite services extracted only where operational drivers genuinely justify them. Do not adopt it until the open Option B architecture decisions are resolved. Reassess the decomposition against actual operational and compliance forces, not architectural fashion.
 
 ---
 

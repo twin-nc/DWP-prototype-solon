@@ -27,7 +27,11 @@ Before proceeding: the following inputs are absent or unresolved and affect deta
 
 **Recommend Option B: Medium Custom Layer — DWP Domain Services Orchestrating Solon Primitives.**
 
-RULING-016 changed the design problem from "how do we freeze the engine" to "where does the gating service live." That reframe favours a medium layer: Solon's process engine (Amplio), ledger (billing/payment/write-off), batch engine, Kafka bus, suppression model, and task tray are reused as-is. A dedicated `BreathingSpaceGatingService` lives in the DCMS custom layer, called as a Spring bean guard before every Amplio step that produces a debtor-facing effect. DWP-specific BPMN processes are new process definitions deployed into the same Amplio engine alongside Solon's reference processes. Solon's financial primitives are addressed via Kafka commands and the documented 24-command catalogue; the DCMS layer does not call Solon repositories directly.
+RULING-016 changed the design problem from "how do we freeze the engine" to "which DCMS-owned domain must evaluate and enforce gates at the point of effect." That reframe favours Option B as a domain-thick layer: DWP-specific domains such as Breathing Space gating, vulnerability, champion/challenger, income and expenditure, communication suppression, and strategy lifecycle are too substantial to remain thin Solon configuration.
+
+This recommendation is a domain-ownership recommendation, not a locked runtime or deployment decision. Option B means DCMS owns meaningful custom domains on top of Solon. It does not, by itself, decide whether those domains run inside Solon's JVM, outside Solon, as a monolith, as microservices, or using a particular CQRS/event/process style. Those open sub-decisions are now tracked in [DESIGN-OPTIONS-002B-OAD](./DESIGN-OPTIONS-002B-open-architecture-decisions.md).
+
+Candidate implementation shapes include reusing Solon's process engine (Amplio), ledger (billing/payment/write-off), batch engine, Kafka bus, suppression model, and task tray while DCMS owns the DWP decision logic and persistence. The current in-process Spring bean and Amplio BPMN model is one candidate, not the locked meaning of Option B.
 
 Option A (minimal) is tempting for speed but cedes too much DWP-specific behaviour to Solon configuration, leaving champion/challenger, income and expenditure, vulnerability governance, and the gating service structurally awkward. Option C (heavy) rebuilds components — ledger, payment allocation, batch — that Solon provides adequately, removing the platform value with no corresponding gain.
 
@@ -453,16 +457,16 @@ This is closest to the pre-pivot greenfield direction (ADR-016 Option C), with S
 | Dimension | Option A (Minimal) | Option B (Medium) | Option C (Heavy) |
 |---|---|---|---|
 | Time to first working system | Fastest | Medium | Slowest |
-| DWP domain control | Low — Solon dictates structure | High — DCMS owns DWP logic | Highest |
+| DWP domain control | Low — Solon dictates structure | High — DCMS owns DWP custom domains | Highest |
 | Solon internals learning curve | High | Medium | Low |
-| Solon upgrade blast radius | High | Medium | Low |
-| Java 17 / Liquibase constraint | Hard constraint — cannot escape | Hard constraint unless separated JVM | Escapable — own JVM, own DB |
-| Breathing Space gating placement | In-process custom bean, calls Solon suppression | In-process custom bean with own schema, reads Solon suppression | Fully DCMS-owned, no Solon suppression use |
+| Solon upgrade blast radius | High | Open — depends on runtime placement | Low |
+| Java 17 / Liquibase constraint | Hard constraint — cannot escape | Open — hard if inside Solon, escapable if outside | Escapable — own JVM, own DB |
+| Breathing Space gating placement | In-process custom bean, calls Solon suppression | DCMS-owned gate; runtime placement open | Fully DCMS-owned, no Solon suppression use |
 | Platform value retained | Most | Substantial | Minimal |
 | Champion/challenger / IE / vulnerability governance | Awkward — squeezed into custom module | Clean — own services with own schemas | Full rebuild |
 | Non-technical DMN authoring | Not met (Drools only) | Not met unless a DMN sidecar is added | Not met unless a DMN sidecar is added |
-| Complexity | Low (layer), High (Solon knowledge) | Medium | High (rebuild scope) |
-| Risk profile | Solon coupling, Drools governance, Flow 3 BPMN authoring complexity | Integration contract, dual-write | Rebuild scope, financial state divergence |
+| Complexity | Low (layer), High (Solon knowledge) | Medium domain complexity; runtime/decomposition complexity open | High (rebuild scope) |
+| Risk profile | Solon coupling, Drools governance, Flow 3 BPMN authoring complexity | Depends on selected runtime/decomposition; integration contract and source-of-truth risks remain | Rebuild scope, financial state divergence |
 
 ---
 
@@ -560,7 +564,7 @@ No change. The options pass above stands as written.
 2. **Flow 3 BPMN authoring complexity underestimated** — `dcms-breach-to-placement.bpmn` contains the most complex process logic (PTP loop, supervisor branching, inter-process message correlation). Mitigation: design and Amplio-constraint-validate this process definition before the build sprint begins; timebox two days for design. Note: the original "Solon BPMN modification scope" risk is dissolved — DWP BPMN processes are authored from scratch, not modified Solon reference processes.
 3. **Drools rule governance is developer-gated** — mitigation: accept for v1 with a planned authoring UI in v2; document as a known constraint with DWP sign-off.
 
-### Option B (recommended)
+### Option B (domain-thick candidate)
 
 1. **Dual-write to Solon Data Area (vulnerability flag mirroring) fails silently** — mitigation: Outbox Pattern for the write-through; idempotent update; alerting on update failures.
 2. **BreathingSpaceGatingService not called at all debtor-facing tasks** — mitigation: mandatory base class; integration test that asserts every DCMS BPMN process has a registered gate for each task marked `debtor_facing = true`.
@@ -594,6 +598,18 @@ No change. The options pass above stands as written.
 | OPA / Rego policy deployment model and Solon-upgrade survival for DCMS-specific authorisation rules (Design Critic S5) | Solution Architect → Solon platform team | All three options' authz design |
 | Arrangement-creation gating allocation (Design Critic A5, RULING-014 guardrail 2) — declare layer that gates `createArrangement` against active suppressions | Solution Architect | Options A and B compliance design |
 | Maven-module deployment boundary between DCMS beans and Solon `revenue-management-be-custom` beans (Design Critic A2) — same module or separate module in shared Spring context? | Solution Architect | Option A vs. Option B differentiation |
+
+---
+
+Additional Option B architecture questions now tracked in [DESIGN-OPTIONS-002B-OAD](./DESIGN-OPTIONS-002B-open-architecture-decisions.md):
+
+| Question | Owner | Blocks |
+|---|---|---|
+| Option B runtime placement - inside Solon JVM, outside Solon, or split | Solution Architect | Option B architecture lock |
+| Option B decomposition - single deployable, coarse services, fine-grained microservices, or hybrid | Solution Architect | Option B architecture lock |
+| Option B interaction style - process-led, event-led, CQRS-style, synchronous service-led, or hybrid | Solution Architect | Option B architecture lock |
+| Option B workflow ownership - Solon/Amplio, DCMS orchestration, or split | Solution Architect -> Solon platform team where Amplio support is unclear | Option B architecture lock |
+| Option B data ownership - single `dcms` schema, per-domain schemas, separate DB, Solon Data Area, or mixed model | Solution Architect -> DB Designer | Option B architecture lock |
 
 ---
 

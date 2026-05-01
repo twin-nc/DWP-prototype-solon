@@ -2,7 +2,7 @@
 
 **Document ID:** DESIGN-OPTIONS-002B
 **Date:** 2026-05-01
-**Status:** PROPOSED - RECOMMENDED, but integration design lock BLOCKED pending resolution of Blocker 1, Blocker 2, Blocker 3, and the `suspendActiveInstancesSW` compliance contradiction.
+**Status:** PROPOSED - domain-thick Option B framing. Runtime placement, decomposition, and interaction style are NOT LOCKED. Integration design lock remains BLOCKED pending resolution of Blocker 1, Blocker 2, Blocker 3, the `suspendActiveInstancesSW` compliance contradiction, and the open architecture decisions in [DESIGN-OPTIONS-002B-OAD](./DESIGN-OPTIONS-002B-open-architecture-decisions.md).
 **Parent document:** [DESIGN-OPTIONS-002: Layer Thickness and Boundary Placement](./DESIGN-OPTIONS-002-layer-thickness-and-boundary.md)
 **Architecture diagram:** [DESIGN-OPTIONS-002-option-B-architecture.drawio](./DESIGN-OPTIONS-002-option-B-architecture.drawio)
 **Author:** Derived from Delivery Designer + Platform Expert + Design Critic reviews
@@ -11,27 +11,31 @@
 
 ## What This Document Is
 
-Option B is one of three layer-thickness options evaluated in DESIGN-OPTIONS-002. This document extracts the full Option B design into a standalone reference. It covers architecture, boundary placement, BPMN approach, service ownership, data ownership, UI capabilities, open blockers, risks, and builder guardrails.
+Option B is one of three layer-thickness options evaluated in DESIGN-OPTIONS-002. This document extracts the Option B domain-thickness design into a standalone reference. It covers candidate architecture, boundary placement, BPMN approach, service ownership, data ownership, UI capabilities, open blockers, risks, and builder guardrails.
 
 The parent document (DESIGN-OPTIONS-002) retains the three-way tradeoff analysis, decision levers, and option-flip conditions. This document is for teams building or reviewing Option B specifically.
 
-**Current recommendation:** Option B. It is the preferred architecture because DWP-specific domain services - champion/challenger, income and expenditure, vulnerability governance, communication suppression, strategy management, and Breathing Space gating - are large enough to warrant their own schemas and internal service contracts while still reusing Solon's financial, process, task, batch, auth, and observability capabilities.
+**Current framing:** Option B means DCMS owns meaningful custom domains on top of Solon. DWP-specific domain services - champion/challenger, income and expenditure, vulnerability governance, communication suppression, strategy management, and Breathing Space gating - are large enough to warrant their own domain model, persistence, contracts, and UI-facing behaviour while still reusing appropriate Solon capabilities.
+
+Option B does **not** by itself decide whether those domains run inside Solon's JVM, outside Solon, as a monolith, as microservices, or using a particular CQRS/event/process style. Those are open sub-decisions captured in [DESIGN-OPTIONS-002B-OAD](./DESIGN-OPTIONS-002B-open-architecture-decisions.md).
 
 ---
 
 ## Summary
 
-DCMS is a medium custom layer running inside Solon's JVM and application context. Solon contributes the financial ledger, payment and write-off primitives, batch engine, Kafka command bus, Amplio process engine, Keycloak/OPA auth, and ELK observability stack. DCMS contributes DWP-owned BPMN process definitions, DWP-owned domain services, a dedicated `dcms` PostgreSQL schema, and a custom React application exposed through a richer BFF.
+DCMS is a medium custom-domain layer on top of Solon. Solon may contribute the financial ledger, payment and write-off primitives, batch engine, Kafka command bus, Amplio process engine, Keycloak/OPA auth, and ELK observability stack. DCMS contributes DWP-owned domain services, DWP-specific workflow/orchestration behaviour, DWP-owned persistence, and a custom React application exposed through a richer BFF.
 
-DWP-specific BPMN processes are authored from scratch and deployed into Amplio alongside Solon's unmodified reference processes. DCMS service tasks call DCMS-owned Spring beans for domain decisions, and those beans orchestrate Solon primitives through the supported Kafka and REST surfaces where available.
+DWP-specific BPMN processes being authored from scratch and deployed into Amplio is one candidate implementation shape, not yet a locked decision. Another candidate is DCMS-owned orchestration outside Solon, with Solon used through governed contract surfaces. The architecture must decide this explicitly before build.
 
-The main design value is ownership clarity: DCMS owns the DWP domain model and schema while Solon remains the substrate for reusable tax-platform capabilities. The main design risk is that Option B still runs in-process. Its upgrade blast radius is reduced by discipline and boundary rules, not by a hard runtime boundary.
+The main design value is ownership clarity: DCMS owns the DWP domain model and custom-domain decisions while Solon remains the substrate for reusable tax-platform capabilities. The main design risk depends on the runtime placement selected: in-process placement creates Solon upgrade blast radius; outside-Solon placement creates contract, latency, and consistency risks.
 
 ---
 
-## Architecture
+## Candidate Architecture
 
-### Layer structure
+The diagram below records the original in-process candidate architecture. It remains useful design input, but it is not the locked Option B architecture.
+
+### Candidate layer structure - in-process Solon custom layer
 
 ```text
 +------------------------------------------------------------------+
@@ -71,15 +75,27 @@ The main design value is ownership clarity: DCMS owns the DWP domain model and s
 +------------------------------------------------------------------+
 ```
 
-### Key architectural properties
+### Candidate architectural properties
 
-- DCMS is not a separate service tier. It is a custom layer inside Solon's JVM.
-- DCMS domain services have dedicated internal APIs and tables in a dedicated `dcms` schema.
-- DCMS BPMN processes are new process definitions deployed into Amplio. Solon reference BPMN is read for patterns and is not modified.
+- DCMS is not a separate service tier in this candidate. It is a custom layer inside Solon's JVM.
+- DCMS domain services have dedicated internal APIs and tables in a dedicated `dcms` schema in this candidate.
+- DCMS BPMN processes are new process definitions deployed into Amplio in this candidate. Solon reference BPMN is read for patterns and is not modified.
 - Solon financial primitives are reused through Kafka commands and documented REST query APIs, subject to Blocker 1 and Blocker 2.
-- DCMS custom beans are registered in Solon's application context, using the Solon customisation model.
+- DCMS custom beans are registered in Solon's application context, using the Solon customisation model in this candidate.
 - The BFF is richer than Option A. It aggregates Solon and DCMS responses and shields the React UI from raw Solon API shapes.
-- The architecture remains in-process. Solon internal refactors can still break DCMS if boundary discipline is not enforced.
+- The candidate remains in-process. Solon internal refactors can still break DCMS if boundary discipline is not enforced.
+
+### Open architecture alternatives
+
+Option B must still compare this in-process candidate against:
+
+| Alternative | Description |
+|---|---|
+| Outside-Solon DCMS application | DCMS custom domains run as one or more separate deployables and call Solon through governed REST/Kafka/API surfaces. |
+| Split placement | Only narrowly justified Solon-transactional hooks run inside `revenue-management-be-custom`; DCMS-owned domains run outside Solon. |
+| Coarse services | DCMS custom domains are grouped into a small number of deployables by ownership, runtime, or security boundary. |
+| Fine-grained microservices | Custom domains are independently deployed services. This remains an open option, not a default. |
+| Hybrid | Core domains use one deployment shape, with satellites for integrations, analytics, or batch-like workloads where justified. |
 
 ---
 
@@ -390,8 +406,13 @@ The following blockers must be resolved before integration design is locked. The
 4. Declare `suspendActiveInstancesSW` per DCMS suppression type and reconcile with RULING-016.
 5. Decide the vulnerability access path: Data Area mirroring versus direct in-process service call.
 6. Design the correspondence on-lift disposition flow for queued communications.
-7. Decide the Maven-module deployment boundary: same `revenue-management-be-custom` module with package boundaries or separate module in the shared Spring context.
-8. Confirm whether Drools-only parameterised authoring is acceptable for Release 1, or whether a DMN sidecar is required.
+7. Decide runtime placement: inside Solon JVM, outside Solon, or split.
+8. Decide decomposition: single deployable, coarse services, fine-grained microservices, or hybrid.
+9. Decide interaction style: process-led, event-led, CQRS-style, synchronous service-led, or hybrid.
+10. Decide workflow ownership: Solon/Amplio, DCMS orchestration, or split.
+11. Decide data ownership: `dcms` schema, per-domain schemas, separate DB, Solon Data Area, or mixed model.
+12. If any logic remains inside Solon, decide the Maven-module deployment boundary: same `revenue-management-be-custom` module with package boundaries or separate module in the shared Spring context.
+13. Confirm whether Drools-only parameterised authoring is acceptable for Release 1, or whether a DMN sidecar is required.
 
 ## Required Actions Before BPMN Authoring Begins
 
@@ -405,12 +426,12 @@ The following blockers must be resolved before integration design is locked. The
 
 ## Comparison with Option A
 
-Option A and Option B share the same runtime: Solon's JVM, Amplio, Kafka, Drools, Keycloak/OPA, and PostgreSQL. They differ in ownership depth.
+Option A and Option B differ first in ownership depth. Option A is a thin extension/configuration approach. Option B gives DCMS first-class custom domains. Runtime and decomposition remain open sub-decisions under Option B.
 
 | Dimension | Option A | Option B |
 |---|---|---|
-| DCMS service beans | Minimal extension beans inside Solon custom module | Explicit DWP domain services with internal contracts |
-| Data ownership | Mostly Solon Data Area JSONB plus a small number of tables | Dedicated `dcms` schema with domain-owned tables |
+| DCMS service beans | Minimal extension beans inside Solon custom module | Explicit DWP domain services with internal contracts; runtime placement open |
+| Data ownership | Mostly Solon Data Area JSONB plus a small number of tables | Domain-owned persistence; exact schema/database shape open |
 | Champion/challenger / IE / vulnerability | Structurally awkward | First-class DCMS domain services |
 | BFF | Thin Solon REST proxy | Rich aggregation layer |
 | UI coupling | More constrained by Solon API shape | Better insulated by BFF and DCMS read models |
@@ -423,11 +444,11 @@ Option B is preferred when champion/challenger, IE assessment, vulnerability gov
 
 ## Comparison with Option C
 
-Option B and Option C both give DCMS stronger domain ownership than Option A. Option C adds a hard process/database boundary and rebuilds more platform capability.
+Option B and Option C both give DCMS stronger domain ownership than Option A. Option C assumes a hard process/database boundary and rebuilds more platform capability. Option B is domain-thick but deployment-neutral until its open architecture decisions are resolved.
 
 | Dimension | Option B | Option C |
 |---|---|---|
-| Runtime | Same JVM as Solon | Separate DCMS JVM/process |
+| Runtime | Open: inside Solon, outside Solon, or split | Separate DCMS JVM/process |
 | Financial primitives | Reused from Solon | Potentially wrapped or rebuilt |
 | Data model | Dedicated `dcms` schema co-located with Solon | DCMS-owned database with anti-corruption layer |
 | Upgrade isolation | Medium | High |
@@ -460,7 +481,7 @@ The React application calls the DCMS BFF. The BFF shields the UI from raw Solon 
 
 ## Constraints Summary
 
-- **Single JVM:** Option B runs inside Solon's JVM. The documented baseline is Java 17 until Solon GA release notes confirm otherwise.
+- **Runtime placement open:** Option B does not yet decide whether DCMS custom domains run inside Solon's JVM, outside Solon, or split. If inside Solon, the documented baseline is Java 17 until Solon GA release notes confirm otherwise.
 - **Liquibase:** Solon uses Liquibase. DCMS schema changes must use compatible migration discipline unless separately scoped.
 - **Drools DRL:** DMN is not available by default. New structural rule types remain developer-gated unless a DMN sidecar is added.
 - **Kafka topics:** Only confirmed topics may be used. Blocker 1 must be resolved before relying on abstracted command names.
@@ -468,6 +489,6 @@ The React application calls the DCMS BFF. The BFF shields the UI from raw Solon 
 - **Amplio Parallel Gateway:** Sequential-only.
 - **Amplio Script Tasks:** FEEL-only.
 - **BPMN compensation:** Not implemented; use explicit error paths.
-- **Solon reference BPMN:** Must not be modified. DCMS deploys new process definitions.
+- **Solon reference BPMN:** Must not be modified. Whether DCMS deploys new process definitions into Amplio or owns orchestration outside Solon remains open.
 - **MHCM:** Do not assume `maximumNumberDays: 0` is safe until `SuppressionExpiryJob` is inspected.
 - **Gating:** All debtor-facing effects must pass through the DCMS gate before execution.
