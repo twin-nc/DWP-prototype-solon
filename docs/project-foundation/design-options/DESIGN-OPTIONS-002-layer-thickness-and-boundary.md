@@ -41,10 +41,10 @@ A platform-expert review against `external_sys_docs/solon/solon_tax_2.3.0_integr
 
 ### Blockers (must resolve before integration design lock)
 
-| # | Blocker | Owner | Blocks |
-|---|---|---|---|
-| 1 | **Kafka command-name discrepancy.** The "24-command catalogue" cited in the platform reference uses abstracted financial-primitive names (`PostPaymentCommand`, `WriteOffDebtCommand`, `CreatePaymentPlanCommand`, `SendCorrespondenceCommand`, etc.). The integration guide §5 catalogue is dominated by engine-internal `irm.bpmn-engine.*` commands (`CreateHumanTaskCommand`, `TriggerDebtRecoveryProcessCommand`, `SuspendCaseActivityCommand`). It is not confirmed that the abstracted names are externally-publishable Kafka commands. Options A and B treat the 24-command catalogue as the primary inter-layer contract — if the names do not map to externally-triggerable topics, that contract model collapses. | Solution Architect → Solon platform team (or `revenue-management-adapters` source inspection) | Inter-layer contract design under Options A and B |
-| 2 | **Solon REST API stability for sync queries.** The integration guide's synchronous HTTP section is thin (only `ExecuteKieRulesCommand` is documented as a sync API). Option B's BFF assumes Solon REST APIs (`account balance`, `active suppressions`, `task state`) are a stable external contract. Their stability guarantees under Solon upgrades are not documented. | Solution Architect → Solon platform team | Option B BFF layer; Option C ACL contract |
+| # | Blocker | Owner | Blocks | Resolution path |
+|---|---|---|---|---|
+| 1 | **Kafka command-name discrepancy.** The "24-command catalogue" cited in the platform reference uses abstracted financial-primitive names (`PostPaymentCommand`, `WriteOffDebtCommand`, `CreatePaymentPlanCommand`, `SendCorrespondenceCommand`, etc.). The integration guide §5 catalogue is dominated by engine-internal `irm.bpmn-engine.*` commands (`CreateHumanTaskCommand`, `TriggerDebtRecoveryProcessCommand`, `SuspendCaseActivityCommand`). It is not confirmed that the abstracted names are externally-publishable Kafka commands. Options A and B treat the 24-command catalogue as the primary inter-layer contract — if the names do not map to externally-triggerable topics, that contract model collapses. | Solution Architect → Solon codebase inspection | Inter-layer contract design under Options A and B | **Resolved by reading the Solon codebase.** Inspect the Kafka producer configuration for actual topic name strings; inspect the `revenue-management-be-custom` module to see how existing extensions publish commands. If the abstracted commands are not externally publishable, redesign the inter-layer contract around the actual publishable surface found in the codebase. |
+| 2 | **Solon REST API stability for sync queries.** The integration guide's synchronous HTTP section is thin (only `ExecuteKieRulesCommand` is documented as a sync API). Option A's BFF assumes Solon REST APIs (`account balance`, `active suppressions`, `task state`) are a stable external contract. Their stability guarantees under Solon upgrades are not documented. | Solution Architect → Solon codebase inspection + Solon platform team | Option A BFF endpoints; Option B BFF layer; Option C ACL contract | **Partially resolved by reading the Solon codebase.** Codebase inspection confirms which endpoints exist and what they return. Stability guarantee (whether the Solon team treats these as a versioned external contract) still requires a governance commitment from the Solon platform team. Go into that conversation with a specific list of endpoints derived from codebase inspection. |
 
 ### Factual corrections to existing options
 
@@ -115,6 +115,8 @@ The doc currently lists "MHCM `SuppressionType` configuration" as a sub-question
 - The job interprets it as "no maximum" and skips MHCM records correctly.
 If the first interpretation is correct, an MHCM debtor would have their moratorium silently lifted without professional sign-off — a breach of Regulation 21 of the Debt Respite Scheme Regulations 2020 with criminal-liability consequence. **Promote to standalone blocker (Blocker 3 below).**
 
+**S3 resolution path (updated 2026-05-01):** Solon codebase read access resolves the verification question. Read `SuppressionExpiryJob` source directly to determine which conditional branch it enters when `maximumNumberDays: 0`. If it interprets zero as "already expired" (worst case), the mitigation is: never configure an MHCM `SuppressionType` with `maximumNumberDays: 0`. Instead set `maximumNumberDays: 36500` (100 years as a practical ceiling) and `overrideEndDateSW: true`, so that `MHCM_RELEASE_PROCESS.bpmn` can set an explicit end date on professional sign-off. The DCMS-owned release path — professional sign-off → 30-day post-treatment tail calculation → `ReleaseSuppressionCommand` with calculated expiry date → Solon `SuppressionExpiryJob` handles cleanup — becomes the sole mechanism for MHCM suppression end. This is documented as a known operational risk (configuration workaround, not a clean semantic design) and must be recorded in the MHCM operational runbook.
+
 **S4. Split correspondence ownership under Option B leaves on-lift disposition of queued communications unspecified.**
 RULING-011 requires `DEBT_COLLECTION` communications queued during statutory suppression to be discarded on lift, while those queued during internal policy suppression are held for agent review. Under Option B, transport runs through Solon's `CORRESPONDENCE_PROCESS.bpmn` (Solon owns the queued correspondence entries) but category evaluation and suppression-reason classification live in DCMS's `CommunicationSuppressionService`. The flow on suppression lift — how DCMS inspects Solon's queued correspondence, classifies each entry by the suppression reason that caused it to be queued, and instructs Solon to discard or hold — is not described. The suppression API exposes status, not correspondence queues. Options A and C have cleaner ownership stories on this point (A: pre-dispatch guard inside Solon's process; C: DCMS owns transport too). Option B's split ownership is a structural coupling problem that must be designed out before lock.
 
@@ -123,7 +125,7 @@ DCMS-specific authorisation rules — `OPS_MANAGER`-only champion/challenger pol
 
 ### Advisory findings
 
-- **A1. Option A's "fastest" rating in the Tradeoff Summary is contingent.** It assumes Solon's reference BPMN processes can be re-used with light modification. Integration guide §13 shows the actual BPMN files are tax-authority-named (`VAT_RETURN.bpmn`, `BUS_REG.bpmn`, `CIT_RETURN.bpmn`); only `DEBT_RECOVERY_PROCESS.bpmn`, `CASE_HANDOVER_COLLECTION_AGENCY_PROCESS.bpmn`, `SUSPEND_PROCESS_CHECK.bpmn`, and `PAYMENT_DEFERRAL.bpmn` are debt-relevant. The "fastest" rating depends on the BPMN fit-gap spike returning a favourable result, which is not yet evidence.
+- **A1. Option A's "fastest" rating in the Tradeoff Summary is contingent but the BPMN modification risk has been resolved.** The original framing assumed Solon's reference BPMN processes would be modified. **This has been superseded**: the confirmed approach is to author all DWP-specific BPMN process definitions from scratch (`dcms-intake-and-first-contact.bpmn`, `dcms-vulnerability-to-resolution.bpmn`, `dcms-payment-monitoring.bpmn`, `dcms-breach-to-placement.bpmn`, `dcms-strategy-review.bpmn`) and deploy them into Amplio alongside Solon's unmodified reference processes. This dissolves the "BPMN modification scope underestimated" risk. The "fastest" rating now depends on Amplio authoring effort for the five new process definitions — Flow 3 (`dcms-breach-to-placement.bpmn`) is the highest-complexity process; Flows 4 and 6 add no BPMN authoring effort at all.
 - **A2. Options A and B may collapse to the same architecture in practice.** Both use `revenue-management-be-custom`, run in the same JVM, use the same Kafka topics and Amplio runtime, and share Blocker 1. The stated difference is logical schema separation under B (`dcms` schema vs. shared) — not physical isolation. The SA should declare whether DCMS's beans live in the same Maven module as Solon's `revenue-management-be-custom` beans or in a separate Maven module participating in the same Spring context. If the former, A and B's blast radius and coupling are essentially the same.
 - **A3. Java 25 bytecode compatibility ≠ dependency compatibility.** The Forward-Looking Note correctly states JVM-level backward compatibility but does not address whether Solon's transitive dependencies (Drools KIE, Liquibase, Hazelcast) have been tested against Java 25. JVM compatibility is necessary but not sufficient.
 - **A4. The recommendation's flip-to-C condition is inconsistent with Lever 1.** The recommendation states the flip requires "Java 21 mandate + Flyway in the DCMS custom tier on a shared database schema." Lever 1 says Java 21 alone flips B to C (because in-process model requires single JVM). One of these statements is wrong. The recommendation summary should be reconciled with Lever 1 before lock.
@@ -131,9 +133,9 @@ DCMS-specific authorisation rules — `OPS_MANAGER`-only champion/challenger pol
 
 ### New blocker (added by Design Critic)
 
-| # | Blocker | Owner | Blocks |
-|---|---|---|---|
-| 3 | **MHCM `SuppressionType` behaviour under `maximumNumberDays: 0`.** Whether `SuppressionExpiryJob` interprets this value as "no maximum" or "already expired" is undocumented. The wrong interpretation auto-expires MHCM suppressions without professional sign-off, breaching Reg 21 of the Debt Respite Scheme Regulations 2020. Cannot be inferred from available source docs and cannot be left to detailed design. | Solution Architect → Solon platform team (verify via test or platform-team confirmation, not by reading docs) | MHCM detailed design under Options A and B; criminal-liability exposure |
+| # | Blocker | Owner | Blocks | Resolution path |
+|---|---|---|---|---|
+| 3 | **MHCM `SuppressionType` behaviour under `maximumNumberDays: 0`.** Whether `SuppressionExpiryJob` interprets this value as "no maximum" or "already expired" is undocumented. The wrong interpretation auto-expires MHCM suppressions without professional sign-off, breaching Reg 21 of the Debt Respite Scheme Regulations 2020. Cannot be inferred from available source docs and cannot be left to detailed design. | Solution Architect → Solon codebase inspection | MHCM detailed design under Options A and B; criminal-liability exposure | **Resolved by reading the Solon codebase.** Inspect `SuppressionExpiryJob` source to determine the conditional logic for `maximumNumberDays: 0`. If the "already expired" interpretation is confirmed, the mitigation is: set `maximumNumberDays: 36500` and `overrideEndDateSW: true` on the MHCM `SuppressionType`; make `MHCM_RELEASE_PROCESS.bpmn` the sole release path via `ReleaseSuppressionCommand` with a calculated expiry date. Document as a known operational risk (configuration workaround). If the "no maximum" interpretation is confirmed, `maximumNumberDays: 0` is safe and no workaround is needed. |
 
 ### Compliance contradiction requiring resolution
 
@@ -143,7 +145,7 @@ DCMS-specific authorisation rules — `OPS_MANAGER`-only champion/challenger pol
 
 1. Resolve **C1** (Blocker 1) as a complete Kafka contract verification — names, payloads, response events, isolation guarantees.
 2. Resolve **C3** by declaring `suspendActiveInstancesSW` per DCMS suppression type and reconciling with RULING-016.
-3. Resolve **S3** (Blocker 3 above) — verify `SuppressionExpiryJob` behaviour against `maximumNumberDays: 0`.
+3. Resolve **S3** (Blocker 3 above) — verify `SuppressionExpiryJob` behaviour against `maximumNumberDays: 0` by reading the Solon codebase. If the "already expired" interpretation is confirmed, apply the `maximumNumberDays: 36500` + `overrideEndDateSW: true` + DCMS-owned release path mitigation and document as an operational risk.
 4. Reconcile **C2** — drop the "contained upgrade blast radius via Kafka/REST" containment claim or shift the recommendation rationale to the (sound) domain-service ownership argument.
 5. Reconcile **A4** — align the recommendation's flip-to-C condition with Lever 1.
 
@@ -176,48 +178,143 @@ Two open DWP sign-off questions remain (DDE-OQ-BS-PROCESS-01 and DDE-OQ-BS-PROCE
 
 ### Layer thickness
 
-Thin. DCMS is a set of Solon extensions: Drools rule additions in the custom KIE container, Data Area JSONB extensions on Solon entities, a small number of custom Spring beans registered via component scan in `revenue-management-be-custom`, and a new React UI calling Solon's existing REST APIs. Solon's reference BPMN processes are used substantially as-is, with light modification for DWP-specific routing.
+Thin. DCMS is a set of Solon extensions: Drools rule additions in the custom KIE container, Data Area JSONB extensions on Solon entities, a small number of custom Spring beans registered via component scan in `revenue-management-be-custom`, new DWP-specific BPMN process definitions deployed into the shared Amplio engine, and a new React UI calling Solon's existing REST APIs. Solon's reference BPMN processes are **not modified**; instead, DWP-specific processes are authored from scratch as new BPMN definitions and deployed into Amplio alongside Solon's.
+
+### BPMN approach under Option A
+
+DWP-specific collection workflows are new BPMN process definitions authored by the DCMS team and deployed into Amplio — not forks or modifications of Solon's tax-authority reference processes (`VAT_RETURN.bpmn`, `BUS_REG.bpmn`, etc.). This decision was taken because Solon's reference processes are tax-authority-named and do not map cleanly to benefit debt without substantial rework; authoring from scratch is faster and removes the Solon-upgrade re-validation burden on modified reference processes.
+
+The six demo flows map to the following new BPMN process definitions:
+
+| Process definition | Demo flow | Amplio complexity |
+|---|---|---|
+| `dcms-intake-and-first-contact.bpmn` | Flow 1 — Intake to first contact | Low — linear sequence, no parallel gateways |
+| `dcms-vulnerability-to-resolution.bpmn` | Flow 2 — Vulnerability to resolution | Medium — suppression atomicity; child process spawn for payment monitoring |
+| `dcms-payment-monitoring.bpmn` | Flows 2 and 3 — spawned on arrangement creation | Low — timer + REST poll pattern |
+| `dcms-breach-to-placement.bpmn` | Flow 3 — Breach to third-party placement | High — PTP loop, supervisor branching, inter-process message correlation |
+| `dcms-strategy-review.bpmn` | Flow 5 — Strategy change approval workflow | Low — three-to-five task sequence |
+
+Flows 4 (complex household) and 6 (executive dashboard) require no new BPMN processes. Flow 4's restriction enforcement is a pre-execution guard Spring bean called from within service task delegates; Flow 6 is a pure read path against Solon REST APIs.
+
+**Solon reference processes used as read-only design reference only.** No Solon reference process is deployed with DCMS modifications. `DEBT_RECOVERY_PROCESS.bpmn`, `CASE_HANDOVER_COLLECTION_AGENCY_PROCESS.bpmn`, `SUSPEND_PROCESS_CHECK.bpmn`, and `PAYMENT_DEFERRAL.bpmn` are studied for Amplio variable scoping patterns and Kafka command usage, but DCMS deploys its own equivalent processes.
+
+**Amplio authoring constraints (builder guardrails — apply to all DCMS BPMN):**
+
+1. All gateways are exclusive. Parallel Gateway branches execute sequentially in Amplio; do not design for concurrent execution.
+2. Script Tasks are FEEL-only. No Groovy or JavaScript. All imperative logic goes in Java delegate classes.
+3. Business Rule Tasks must be Service Tasks wired to Drools KIE (`POST /drools-runtime/execute-stateless/{containerId}`). DMN is not supported.
+4. Compensation events are not implemented. Error boundary events routing to compensation logic are the pattern.
+5. Use only Kafka topics confirmed in integration guide §5 — subject to Blocker 1.
 
 ### Boundary placement
 
 | Responsibility | Lives in Solon | Lives in DCMS custom layer |
 |---|---|---|
-| Case lifecycle BPMN | Solon reference processes (modified) | Minor DWP-specific sub-processes |
-| Financial ledger, payment, write-off | Solon core | — |
-| Debt recovery workflow | DEBT_RECOVERY_PROCESS.bpmn (modified) | — |
-| DCA handover | CASE_HANDOVER_COLLECTION_AGENCY_PROCESS.bpmn | DWP-specific pre-placement disclosure gate |
+| Case lifecycle BPMN | Solon reference processes (unmodified, used as design reference) | New DWP BPMN process definitions deployed into Amplio |
+| Financial ledger, payment, write-off | Solon core | Calls via Solon Kafka commands |
+| Debt recovery workflow | Solon DEBT_RECOVERY_PROCESS.bpmn (unmodified) | `dcms-intake-and-first-contact.bpmn`, `dcms-breach-to-placement.bpmn` |
+| DCA handover | Solon CASE_HANDOVER_COLLECTION_AGENCY_PROCESS.bpmn (called as sub-process if needed) | DWP-specific pre-placement disclosure gate in `dcms-breach-to-placement.bpmn` |
 | Business rules (segmentation, strategy) | Drools KIE (DWP rules added to custom KIE module) | — |
 | Suppression model | Solon CreateSuppression / ReleaseSuppression | Thin wrapper Spring bean |
-| Breathing Space gating service | Near-Solon: a Spring bean in the custom layer calling Solon's suppression query | Called from within modified Solon BPMN service tasks |
+| Breathing Space gating service | Near-Solon: a Spring bean in the custom layer calling Solon's suppression query | Called from within DCMS BPMN service task delegates |
 | Champion/challenger | Not present in Solon — new custom Spring bean | Champion/challenger assignment service |
 | Income and expenditure | Not present in Solon — new custom Spring bean | IE capture service |
 | Vulnerability governance | Not present in Solon — custom Spring bean | VulnerabilityClassificationService |
-| Communication suppression | Solon CORRESPONDENCE_PROCESS.bpmn with a pre-dispatch guard | CommunicationSuppressionService bean |
-| UI | — | New React app, calling Solon REST APIs + custom endpoints |
+| Communication suppression | Solon CORRESPONDENCE_PROCESS.bpmn for transport | CommunicationSuppressionService bean — pre-dispatch guard |
+| UI | — | New React app — three-workspace model (Case Worker, Operations, Configuration); calls Solon REST APIs + thin custom BFF endpoints |
 | Auth | Solon Keycloak + OPA | DWP realm configuration |
 
 **Breathing Space gating service location under Option A:** Spring bean in the DCMS custom layer (`revenue-management-be-custom`), in-process with Solon, registered via component scan. Called as a pre-execution guard within service task Java delegate overrides. Solon's existing suppression query (`CreateSuppression` / active suppression check) is the underlying source of truth. The gating bean wraps this check and enforces RULING-016 guardrail 2 (check at point of effect, not at case intake). The interrupting-vs-non-interrupting constraint is dissolved by RULING-016: Amplio does not need to non-interrupt; the gate stops the prohibited effect before it exits the service task.
 
-**Data ownership under Option A:** DCMS extends Solon entities almost entirely through Data Area JSONB. DWP-specific fields (vulnerability flags, breathing space hold type, IE assessment reference, champion/challenger variant, DWP debt type, deduction-from-benefit flag) land in the `data_area` column of Solon's Taxpayer, Case, Suppression, and Task entities. No parallel schema tables are introduced except for the champion/challenger assignment log (a new table, needed because Solon has no analogue).
+**Data ownership under Option A:** DCMS extends Solon entities almost entirely through Data Area JSONB. DWP-specific fields (vulnerability flags, breathing space hold type, IE assessment reference, champion/challenger variant, DWP debt type, deduction-from-benefit flag) land in the `data_area` column of Solon's Taxpayer, Case, Suppression, and Task entities. One additional table is introduced: `dcms_strategy_version` — a narrow table in Solon's PostgreSQL schema used for strategy versioning, peer review state, and rollback (see Strategy Versioning section below). The champion/challenger assignment log is a second new table, needed because Solon has no analogue.
 
 **Contract between layers:** In-process Spring beans. No HTTP boundary. The DCMS custom layer is a Maven module (`revenue-management-be-custom`) that runs inside the same JVM as Solon. Solon's Kafka command catalogue is used for all async operations (CreateSuppressionCommand, PostPaymentCommand, SendCorrespondenceCommand, etc.).
 
+### UI under Option A
+
+The user interface is a new, custom-built React application following the three-workspace model: Case Worker Workspace, Operations Workspace, and Configuration Workspace. The three-workspace model is a UI-layer decision independent of backend architecture option — it exists under Option A exactly as described in [`../three-workspace-model.md`](../three-workspace-model.md).
+
+Under Option A the UI is thinner and more constrained than under Option B or C, because it calls Solon REST APIs directly (with a thin BFF for DCMS-specific endpoints) rather than a rich aggregation layer.
+
+#### What the UI can do under Option A
+
+| Capability | How it works |
+|---|---|
+| Case Worker Workspace — case screen, account timeline, linked accounts | BFF queries Solon Case Management + Registration REST APIs; rendered in React |
+| Case Worker Workspace — ID&V panel, vulnerability capture form, I&E form | Custom DCMS endpoints in `revenue-management-be-custom`; data written to Solon Data Area JSONB |
+| Case Worker Workspace — arrangement creation and payment schedule display | BFF calls Solon Taxpayer Accounting REST API; arrangement written via Kafka `CreatePaymentPlanCommand` |
+| Case Worker Workspace — restriction flag display and runtime action blocking | Pre-execution guard Spring bean; UI shows explicit block alert when guard fires |
+| Case Worker Workspace — transfer with full context carried forward | Solon Human Task Management API — reassign task; notes and suppression state carried on Solon entities |
+| Operations Workspace — queue volumes, SLA health, breach count | BFF queries Solon Human Task Management (task counts) and Case Management (case stage counts) |
+| Operations Workspace — bulk reassignment | BFF calls Solon Human Task Management — reassign task; writes audit event |
+| Operations Workspace — vulnerability exception report | BFF queries Solon Suppression Management — active suppression counts and flag age |
+| Operations Workspace — third-party placement performance | BFF reads from DCMS JSONB extension on placement case entities |
+| Configuration Workspace — strategy version authoring, diff, peer review, approve, rollback | Custom DCMS endpoints reading and writing `dcms_strategy_version` table |
+| Configuration Workspace — segmentation threshold editing | Custom DCMS endpoints; parameter changes write to Drools KIE container configuration JSONB |
+| Configuration Workspace — vulnerability type reference list | Solon Reference Data API (codelists) |
+| Configuration Workspace — RBAC and user management | Keycloak admin API, called via custom DCMS BFF endpoint |
+| Champion/challenger configuration and results view | Custom DCMS endpoints; results read from `champion_challenger_assignment` table and DCMS JSONB |
+| Historical simulation results view | Pre-computed simulation results stored in JSONB; rendered as static comparison view |
+
+#### What the UI cannot do under Option A (hard constraints)
+
+| Capability | Reason |
+|---|---|
+| Live champion/challenger results from real operational data pipeline | No analytics pipeline in Option A. C/C results are seeded from pre-computed historical data (Gap 1 workaround A4). A real-time operational pipeline is out of scope for Release 1 under Option A. |
+| Fully interactive historical simulation against live process replay | No sandbox process engine. Simulation results are pre-computed from a historical snapshot (Gap 2 workaround A3) — not live replay of selected accounts through a proposed strategy. |
+| Non-technical strategy authoring for new rule types | Structural Drools DRL changes require a developer. The UI provides a parameterised template library where business users can adjust parameters of existing rule templates. New rule types are developer-gated (Gap 3 hybrid workaround A2/A3). |
+| Strategy diff across arbitrary version pairs without developer involvement | Strategy diff is visible in the UI for consecutive versions held in `dcms_strategy_version`. Comparing non-consecutive versions or rendering complex structural diffs may require developer tooling (Gap 4 constraint). |
+| UI shape fully decoupled from Solon API response structure | The BFF under Option A is thin — mostly a proxy. If Solon's REST API for a given entity does not expose a field DCMS needs, a custom endpoint must be added to `revenue-management-be-custom`. API gaps are discovered iteratively and resolved flow by flow. |
+| Dashboard drill-down backed by a separate analytics database | No dedicated analytics or operational DB under Option A. All dashboard data is read from Solon REST APIs and DCMS JSONB at query time. Complex aggregations (time-series for breach trend, segment performance over time) may require materialised views or a small read-model table, added incrementally as gaps surface. |
+
+#### Three-workspace model under Option A
+
+All three workspaces are present and navigable under Option A. The shared product shell (single SPA, Keycloak-backed session, role-based workspace routing) is unchanged. What changes relative to the full Option B vision is the data surface behind each workspace:
+
+- **Case Worker Workspace** — fully functional. All six demo flows that touch case worker actions (Flows 1–4) are served from Solon REST + DCMS JSONB with no structural gaps.
+- **Operations Workspace** — functional for live queue, SLA, and breach data. Dashboard read performance is the main risk — aggregation queries against Solon REST under concurrent dashboard loads must be validated early (Blocker 2).
+- **Configuration Workspace** — functional for parameterised strategy editing, version management, peer review, and RBAC. Non-technical authoring of new rule types is not possible without developer involvement.
+
 ### Consequences for delivery
 
-- Fastest to initial working system. Solon's reference processes run from day one; DWP customisation is additive.
-- Highest Solon-internals learning curve. Modifying Solon reference BPMN processes requires understanding Solon's process model, Drools posting rules, and Amplio's variable scoping — before any DWP logic is written.
-- Solon upgrades carry high blast radius: modified reference BPMN processes must be re-validated against each Solon version. The DCMS team becomes a downstream consumer of Solon's release cadence.
+- BPMN authoring scope is bounded and predictable: five new process definitions for six demo flows. Flows 4 and 6 add no BPMN authoring effort. Flow 3 (`dcms-breach-to-placement.bpmn`) is the highest-complexity process and must be designed carefully before build begins.
+- No Solon reference BPMN process is modified, which eliminates the Solon-upgrade re-validation burden on modified reference processes. DCMS processes are new definitions and are not affected by Solon's reference process changes.
+- Solon-internals learning curve is still present but narrower than originally framed: the team must understand Amplio's deployment model, Java delegate patterns, and variable scoping — but not the internals of Solon's tax-authority process definitions.
+- Solon upgrades carry moderate blast radius: DCMS processes call Solon via Kafka commands and REST APIs; only those surface areas need re-validation. Solon reference process changes do not affect DCMS processes.
 - Champion/challenger, IE engine, and vulnerability governance are structurally awkward: they are significant domain services that have no Solon scaffold, yet they live inside the Solon custom extension module, constrained by Solon's entity model and lifecycle.
-- Non-technical DMN authoring (ADR-008 requirement, UNDER REVIEW) cannot be met. Drools DRL requires developer involvement for rule changes. This must be re-confirmed as acceptable or resolved before Option A can be locked.
-- DWP UX is constrained by what Solon's REST APIs expose. If DWP agents need task views, account timelines, or investigation screens that Solon's Angular UI serves, the React UI must reconstruct these from Solon's API surface. API gaps require custom endpoints added to the custom layer.
+- Non-technical DMN authoring (ADR-008 requirement, UNDER REVIEW) cannot be met. Drools DRL requires developer involvement for new rule types. Parameterised template editing is the Release 1 workaround. This must be re-confirmed as acceptable or resolved before Option A can be locked.
+- DWP UX is constrained by what Solon's REST APIs expose. API gaps require custom endpoints added to the custom layer; these are discovered iteratively as UI screens are built against actual Solon API responses.
+
+### Strategy versioning under Option A
+
+Strategy version state is held in a narrow `dcms_strategy_version` table co-located in Solon's PostgreSQL schema:
+
+```
+dcms_strategy_version (
+  version_id        UUID PRIMARY KEY,
+  strategy_id       UUID NOT NULL,
+  version_number    INTEGER NOT NULL,
+  status            VARCHAR NOT NULL,  -- draft | pending-review | approved | live | archived
+  configuration     JSONB NOT NULL,
+  created_by        VARCHAR NOT NULL,
+  created_at        TIMESTAMPTZ NOT NULL,
+  reviewed_by       VARCHAR,
+  reviewed_at       TIMESTAMPTZ,
+  promoted_at       TIMESTAMPTZ
+)
+```
+
+The Configuration Workspace UI reads and writes this table via custom DCMS BFF endpoints. The peer review approval workflow runs as `dcms-strategy-review.bpmn` in Amplio. Rollback is a status update on the target prior version plus a new `live` row. All strategy lifecycle events are written to the DCMS audit trail.
 
 ### Risks unique to Option A
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| Solon BPMN modification scope underestimated — tax authority processes do not map cleanly to benefit debt without substantial change | High | Run a BPMN fit-gap spike against each Solon reference process before committing; classify each as use-as-is, light-modify, or replace |
-| Drools rule authoring lock-in — DWP policy team cannot make rule changes without a developer | High | Accept as a constraint for v1, plan a Drools authoring UI for v2; or replace with a DMN engine (Option B solves this differently) |
-| Solon Data Area JSONB fields are schema-less — querying them for reporting requires jsonb operators; complex queries degrade | Medium | Materialise DWP-specific fields into a read-model (reporting DB or event-sourced projection) from day one |
+| BPMN authoring effort for Flow 3 (`dcms-breach-to-placement.bpmn`) is underestimated — PTP loop, supervisor branching, and inter-process message correlation are the highest-complexity BPMN in the six flows | High | Design `dcms-breach-to-placement.bpmn` and `dcms-payment-monitoring.bpmn` in full before build sprint begins; timebox two days per process for design and Amplio constraint validation |
+| Blocker 1 (Kafka topic names) blocks `dcms-intake-and-first-contact.bpmn` start event — if intake trigger topic is not externally publishable, the intake process cannot be triggered via Kafka | High | Resolve Blocker 1 before authoring begins; use REST polling as a fallback trigger if Kafka topics are not available |
+| Solon REST API performance under dashboard query load — Operations Workspace aggregates multiple REST endpoints at query time with no analytics DB buffer | Medium | Early performance spike against Solon REST APIs for queue count, case count, and suppression count queries; add read-model tables incrementally if latency is unacceptable |
+| Drools rule authoring lock-in — DWP policy team cannot make new rule types without a developer | High | Accept as a constraint for Release 1; parameterised template library is the workaround; document as a known constraint with DWP sign-off |
+| Solon Data Area JSONB fields are schema-less — querying them for reporting requires jsonb operators; complex queries degrade | Medium | Materialise DWP-specific fields into a read-model from day one for any field queried in dashboard aggregations |
 | Option A carries the Java 17 / Liquibase constraints with no practical escape path — custom modules must use Java 17 in-process | High | Confirm Java version decision before committing to Option A |
 | Champion/challenger and IE engine are significant domain services; embedding them in the Solon custom module constrains their evolution | Medium | Define clear internal hexagonal boundaries within the custom module from day one |
 
@@ -365,7 +462,7 @@ This is closest to the pre-pivot greenfield direction (ADR-016 Option C), with S
 | Champion/challenger / IE / vulnerability governance | Awkward — squeezed into custom module | Clean — own services with own schemas | Full rebuild |
 | Non-technical DMN authoring | Not met (Drools only) | Not met unless a DMN sidecar is added | Not met unless a DMN sidecar is added |
 | Complexity | Low (layer), High (Solon knowledge) | Medium | High (rebuild scope) |
-| Risk profile | Solon coupling, Drools governance | Integration contract, dual-write | Rebuild scope, financial state divergence |
+| Risk profile | Solon coupling, Drools governance, Flow 3 BPMN authoring complexity | Integration contract, dual-write | Rebuild scope, financial state divergence |
 
 ---
 
@@ -460,7 +557,7 @@ No change. The options pass above stands as written.
 ### Option A
 
 1. **Breathing Space gating not enforced at every service task** — mitigation: a mandatory base class for all service task delegates that calls the gating service. Fail-fast if not registered.
-2. **Solon BPMN modification scope larger than expected** — mitigation: BPMN fit-gap spike before committing (one-week timebox per reference process).
+2. **Flow 3 BPMN authoring complexity underestimated** — `dcms-breach-to-placement.bpmn` contains the most complex process logic (PTP loop, supervisor branching, inter-process message correlation). Mitigation: design and Amplio-constraint-validate this process definition before the build sprint begins; timebox two days for design. Note: the original "Solon BPMN modification scope" risk is dissolved — DWP BPMN processes are authored from scratch, not modified Solon reference processes.
 3. **Drools rule governance is developer-gated** — mitigation: accept for v1 with a planned authoring UI in v2; document as a known constraint with DWP sign-off.
 
 ### Option B (recommended)
@@ -489,7 +586,7 @@ No change. The options pass above stands as written.
 | DDE-OQ-12 / DDE-OQ-13: Champion/challenger thresholds and vulnerable-customer policy | Delivery Lead → DWP client | ChampionChallengerService configuration detail |
 | **BLOCKER 1** — Kafka command-name discrepancy: do the platform-reference 24 commands map to externally-publishable topics in integration guide §5? | Solution Architect → Solon platform team | Inter-layer contract design (Options A and B) |
 | **BLOCKER 2** — Solon REST API stability guarantees for sync queries used by the BFF (account balance, active suppressions, task state) | Solution Architect → Solon platform team | Option B BFF; Option C ACL |
-| **BLOCKER 3** (added by Design Critic) — MHCM `SuppressionType` behaviour: does `SuppressionExpiryJob` interpret `maximumNumberDays: 0` as "no maximum" or "already expired"? Wrong interpretation auto-expires MHCM without professional sign-off (Reg 21 breach). | Solution Architect → Solon platform team (verify by test) | MHCM detailed design under Options A and B; criminal-liability exposure |
+| **BLOCKER 3** (added by Design Critic) — MHCM `SuppressionType` behaviour: does `SuppressionExpiryJob` interpret `maximumNumberDays: 0` as "no maximum" or "already expired"? Wrong interpretation auto-expires MHCM without professional sign-off (Reg 21 breach). **Resolution path:** Read `SuppressionExpiryJob` source from Solon codebase. If "already expired" is confirmed, mitigation is `maximumNumberDays: 36500` + `overrideEndDateSW: true` + DCMS-owned release path via `ReleaseSuppressionCommand`. | Solution Architect → Solon codebase inspection | MHCM detailed design under Options A and B; criminal-liability exposure |
 | **COMPLIANCE CONTRADICTION** (added by Design Critic) — `suspendActiveInstancesSW` setting per DCMS `SuppressionType` must be declared and reconciled with RULING-016's gate-at-effect model. `true` halts the process (RULING-016 §3 violation); `false` makes DCMS gating service the sole effect-suppression mechanism and degrades the "Solon natively enforces 60-day ceiling" claim. | Solution Architect | Option B compliance design |
 | Closed enumeration of gated effect categories (Design Critic S1) — required from RULING-005, RULING-010, RULING-011, RULING-014, RULING-016 before any DCMS BPMN authoring | Solution Architect → Domain Expert | DCMS BPMN authoring under Options A and B |
 | Vulnerability-flag access path (Design Critic S2) — Data Area mirroring (with staleness window) vs. direct in-process service call. RULING-010 requires immediate reassignment; staleness window may breach. | Solution Architect | Option B vulnerability/champion-challenger interaction |
